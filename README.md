@@ -28,8 +28,12 @@ npm install
 npm run dev
 ```
 
-The optional `VITE_API_BASE_URL` defaults to `/api/v1`. Copy `.env.example` to
-`.env.local` to override it.
+The default development URL is `http://localhost:3001`. Copy
+`.env.dev.example` to `.env.dev` for local development or `.env.prod.example`
+to `.env.prod` for a production-mode preview. Both local files are ignored.
+
+`VITE_APP_ENV` selects the application profile, `VITE_API_BASE_URL` defaults to
+`/api/v1`, and the development/preview ports default to `3001`.
 
 ## Quality checks
 
@@ -46,10 +50,10 @@ nginx proxies `/api/` to `requestpulse-server:3100`.
 
 ```powershell
 docker build -t requestpulse .
-docker run --rm -p 8080:80 requestpulse
+docker run --rm -p 3001:80 requestpulse
 ```
 
-Open `http://localhost:8080`. The container health endpoint is `/healthz`.
+Open `http://localhost:3001`. The container health endpoint is `/healthz`.
 
 ## Log recognition
 
