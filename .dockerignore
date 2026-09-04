@@ -1,0 +1,17 @@
+.git
+.gitignore
+node_modules
+dist
+coverage
+.env
+.env.*
+!.env.example
+*.log
+*.dmp
+*.hdmp
+*.mdmp
+*.evtx
+*.etl
+*.blg
+logs
+README.md
