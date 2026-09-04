@@ -62,3 +62,6 @@ test-results/
 *.local
 *.bak
 *.tmp
+
+# Local deployment notes
+AZURE_VM_DEPLOYMENT_GUIDE.md
