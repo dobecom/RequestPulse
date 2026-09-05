@@ -64,4 +64,4 @@ test-results/
 *.tmp
 
 # Local deployment notes
-AZURE_VM_DEPLOYMENT_GUIDE.md
+/guide/
