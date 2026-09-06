@@ -51,7 +51,7 @@ Desktop.ini
 *.pcap
 *.pcapng
 *.zip
-logs/
+/logs/
 samples/private/
 
 # Test artifacts
