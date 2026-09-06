@@ -46,7 +46,7 @@ npm run build
 ## Container
 
 The image uses Node 24 Alpine to build and nginx 1.29 Alpine to serve the SPA.
-nginx proxies `/api/` to `requestpulse-server:3100`.
+nginx proxies `/api/` to `core-server:3100`.
 
 ```powershell
 docker build -t requestpulse .
