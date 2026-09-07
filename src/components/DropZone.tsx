@@ -1,4 +1,4 @@
-import { FilePlus2, LoaderCircle, UploadCloud } from 'lucide-react'
+import { AlertTriangle, FilePlus2, LoaderCircle, UploadCloud } from 'lucide-react'
 import { useRef, useState } from 'react'
 import type { LogKind } from '../features/logs/types'
 
@@ -6,6 +6,7 @@ interface DropZoneProps {
   kind: LogKind
   title: string
   description: string
+  notice?: string
   accent: 'blue' | 'teal'
   busy: boolean
   onFiles: (files: FileList, expected: LogKind) => void
@@ -16,6 +17,7 @@ export function DropZone({
   kind,
   title,
   description,
+  notice,
   accent,
   busy,
   onFiles,
@@ -23,6 +25,12 @@ export function DropZone({
 }: DropZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isOver, setIsOver] = useState(false)
+
+  const openFilePicker = () => {
+    void onPickFiles(kind).then((handled) => {
+      if (!handled) inputRef.current?.click()
+    })
+  }
 
   return (
     <section
@@ -53,16 +61,18 @@ export function DropZone({
       <button
         type="button"
         className="button button--secondary"
-        onClick={() => {
-          void onPickFiles(kind).then((handled) => {
-            if (!handled) inputRef.current?.click()
-          })
-        }}
+        onClick={openFilePicker}
         disabled={busy}
       >
         <FilePlus2 size={17} />
         Select files
       </button>
+      {notice && (
+        <div className="drop-zone__notice" role="note">
+          <AlertTriangle size={15} />
+          <span>{notice}</span>
+        </div>
+      )}
       <input
         ref={inputRef}
         className="visually-hidden"

@@ -9,6 +9,7 @@ import {
   timelineDomainForDay,
   valueCounts,
 } from './filtering'
+import { getHttpErrReasonInsights } from './httpErrReasonGuidance'
 import type { LogRow } from './types'
 
 const row = (
@@ -192,5 +193,73 @@ describe('filtering and aggregation', () => {
       value: 'QueueFull',
       count: 2,
     })
+  })
+
+  it('returns the top three HTTPERR reasons with bundled guidance', () => {
+    const rows = [
+      ...Array.from({ length: 4 }, (_, index) =>
+        row(
+          `queue-${index}`,
+          `2026-09-03T01:00:0${index}Z`,
+          { 's-reason': 'QueueFull' },
+          'httperr',
+        ),
+      ),
+      ...Array.from({ length: 3 }, (_, index) =>
+        row(
+          `idle-${index}`,
+          `2026-09-03T02:00:0${index}Z`,
+          { 's-reason': 'Timer_ConnectionIdle' },
+          'httperr',
+        ),
+      ),
+      row(
+        'header',
+        '2026-09-03T03:00:00Z',
+        { 's-reason': 'Header' },
+        'httperr',
+      ),
+      row(
+        'url',
+        '2026-09-03T04:00:00Z',
+        { 's-reason': 'URL' },
+        'httperr',
+      ),
+    ]
+
+    const insights = getHttpErrReasonInsights(rows, [])
+
+    expect(insights.map(({ reason, count }) => ({ reason, count }))).toEqual([
+      { reason: 'QueueFull', count: 4 },
+      { reason: 'Timer_ConnectionIdle', count: 3 },
+      { reason: 'Header', count: 1 },
+    ])
+    expect(insights[0].description).toContain('request queue was full')
+    expect(insights[0].recommendation).toContain('worker-process health')
+  })
+
+  it('shows only selected HTTPERR reasons and includes zero counts', () => {
+    const rows = [
+      row(
+        'queue',
+        '2026-09-03T01:00:00Z',
+        { 's-reason': 'QueueFull' },
+        'httperr',
+      ),
+    ]
+
+    expect(
+      getHttpErrReasonInsights(
+        rows,
+        ['Timer_HeaderWait', 'QueueFull', 'Header', 'URL'],
+      ).map(
+        ({ reason, count }) => ({ reason, count }),
+      ),
+    ).toEqual([
+      { reason: 'QueueFull', count: 1 },
+      { reason: 'Header', count: 0 },
+      { reason: 'Timer_HeaderWait', count: 0 },
+      { reason: 'URL', count: 0 },
+    ])
   })
 })

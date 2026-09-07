@@ -12,7 +12,8 @@ import {
 import type { TimelineDomain, TimelinePoint } from '../logs/types'
 
 interface ChartClickState {
-  activePayload?: Array<{ payload?: TimelinePoint }>
+  activeTooltipIndex?: number | string
+  activeIndex?: number | string
 }
 
 interface TimelineChartProps {
@@ -57,8 +58,11 @@ export function TimelineChart({
               data={points}
               margin={{ top: 10, right: 18, left: -12, bottom: 2 }}
               onClick={(state) => {
-                const point = (state as unknown as ChartClickState)?.activePayload?.[0]
-                  ?.payload
+                const chartState = state as ChartClickState
+                const index = Number(
+                  chartState.activeTooltipIndex ?? chartState.activeIndex,
+                )
+                const point = Number.isInteger(index) ? points[index] : undefined
                 if (point?.firstRowId) onPointSelect(point.firstRowId)
               }}
             >

@@ -17,6 +17,15 @@ interface FileCandidate {
   rememberedId?: string
 }
 
+const PROTECTED_SYSTEM_FOLDER_MESSAGE =
+  'Files cannot be opened directly from protected system folders such as C:\\Windows\\System32. Copy the files to another location, such as Documents, and try opening them again.'
+
+const isProtectedSystemFolderError = (error: unknown) =>
+  error instanceof DOMException &&
+  /system files?|system folders?|sensitive (?:file|folder|director)|시스템 파일|시스템 폴더|이 폴더에서 파일을 열 수 없습니다/i.test(
+    error.message,
+  )
+
 export function useLogWorkspace() {
   const canRememberFiles = supportsFileHandlePersistence()
   const [files, setFiles] = useState<ParsedLogFile[]>([])
@@ -128,7 +137,9 @@ export function useLogWorkspace() {
         )
         await addCandidates(candidates, expected)
       } catch (error) {
-        if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        if (isProtectedSystemFolderError(error)) {
+          setPersistenceMessage(PROTECTED_SYSTEM_FOLDER_MESSAGE)
+        } else if (!(error instanceof DOMException && error.name === 'AbortError')) {
           setPersistenceMessage('The selected files could not be opened.')
         }
       }

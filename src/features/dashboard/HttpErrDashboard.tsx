@@ -1,4 +1,10 @@
-import { AlertTriangle, CalendarDays, Files, ListFilter } from 'lucide-react'
+import {
+  AlertTriangle,
+  BookOpenCheck,
+  CalendarDays,
+  Files,
+  ListFilter,
+} from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { StatCard } from '../../components/StatCard'
 import {
@@ -9,6 +15,10 @@ import {
   timelineDomainForDay,
   valueCounts,
 } from '../logs/filtering'
+import {
+  getHttpErrReasonInsights,
+  HTTPERR_REASON_SOURCE,
+} from '../logs/httpErrReasonGuidance'
 import type { ParsedLogFile } from '../logs/types'
 import { HttpErrFilterPanel } from './FilterPanel'
 import { RawLogTable } from './RawLogTable'
@@ -61,6 +71,10 @@ export function HttpErrDashboard({ files }: HttpErrDashboardProps) {
     [filteredRows, timelineDomain],
   )
   const topReason = valueCounts(filteredRows, 's-reason')[0]
+  const reasonInsights = useMemo(
+    () => getHttpErrReasonInsights(filteredRows, filters.reasons),
+    [filteredRows, filters.reasons],
+  )
   const mergedFileCount = new Set(scopedRows.map((row) => row.sourceName)).size
 
   if (!files.length) {
@@ -131,6 +145,40 @@ export function HttpErrDashboard({ files }: HttpErrDashboardProps) {
         includeAverage={false}
         onPointSelect={setSelectedRowId}
       />
+      <section className="reason-guide">
+        <div className="reason-guide__header">
+          <div>
+            <span className="eyebrow">
+              {filters.reasons.length ? 'Selected s-reason guidance' : 'Top 3 s-reason guidance'}
+            </span>
+            <h3>
+              <BookOpenCheck size={18} /> What these HTTP.sys reasons mean
+            </h3>
+          </div>
+          <span>{HTTPERR_REASON_SOURCE} · bundled locally</span>
+        </div>
+        {reasonInsights.length ? (
+          <div className="reason-guide__grid">
+            {reasonInsights.map((insight) => (
+              <article className="reason-guide__item" key={insight.reason}>
+                <div className="reason-guide__title">
+                  <code>{insight.reason}</code>
+                  <strong>{insight.count.toLocaleString()} rows</strong>
+                </div>
+                <p>{insight.description}</p>
+                <div>
+                  <b>Recommended check</b>
+                  <span>{insight.recommendation}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="reason-guide__empty">
+            No s-reason values match the current filters.
+          </p>
+        )}
+      </section>
       <RawLogTable
         rows={filteredRows}
         fields={fields}

@@ -30,12 +30,16 @@ export function RawLogTable({
     if (!selectedRowId) return
     const index = rows.findIndex((row) => row.id === selectedRowId)
     if (index < 0) return
-    const targetPage = Math.floor(index / PAGE_SIZE)
-    setPage(targetPage)
-    requestAnimationFrame(() =>
+    setPage(Math.floor(index / PAGE_SIZE))
+  }, [rows, selectedRowId])
+
+  useEffect(() => {
+    if (!selectedRowId || !visibleRows.some((row) => row.id === selectedRowId)) return
+    const frame = requestAnimationFrame(() =>
       selectedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
     )
-  }, [rows, selectedRowId])
+    return () => cancelAnimationFrame(frame)
+  }, [selectedRowId, visibleRows])
 
   return (
     <section className="table-card">

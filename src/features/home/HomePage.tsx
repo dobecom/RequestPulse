@@ -75,7 +75,8 @@ export function HomePage({
         <DropZone
           kind="httperr"
           title="Drop HTTPERR logs"
-          description="Validated by dynamic #Fields containing s-reason and s-queuename."
+          description="Analyze HTTP.sys rejection logs by reason, status, queue, site, and UTC time."
+          notice="HTTPERR logs in protected system folders such as C:\Windows\System32 cannot be opened directly. Copy them to Documents or another non-system folder first."
           accent="teal"
           busy={busy}
           onFiles={onFiles}
