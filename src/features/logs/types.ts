@@ -1,4 +1,6 @@
-export type LogKind = 'w3svc' | 'httperr'
+export type EventLogKind = 'event-application' | 'event-system'
+export type LogKind = 'w3svc' | 'httperr' | EventLogKind
+export type LogInputKind = LogKind | 'eventlog'
 
 export interface LogRow {
   id: string
@@ -51,12 +53,35 @@ export interface HttpErrFilters {
   queueNames: string[]
 }
 
+export interface EventLogFilters {
+  sources: string[]
+  eventIds: string[]
+}
+
+export type EventSeverity = 'Info' | 'Warn' | 'Err'
+
+export interface EventWeekRange {
+  id: string
+  label: string
+  start: number
+  end: number
+}
+
 export interface TimelinePoint {
   timestamp: number
   label: string
   count: number
   averageTimeTaken?: number
   firstRowId?: string
+}
+
+export interface EventTimelinePoint {
+  timestamp: number
+  label: string
+  applicationCount: number
+  systemCount: number
+  applicationFirstRowId?: string
+  systemFirstRowId?: string
 }
 
 export type TimelineDomain = [start: number, end: number]

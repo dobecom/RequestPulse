@@ -6,13 +6,13 @@ import {
   Trash2,
 } from 'lucide-react'
 import { DropZone } from '../../components/DropZone'
-import type { LogKind, ParsedLogFile } from '../logs/types'
+import type { LogInputKind, ParsedLogFile } from '../logs/types'
 
 interface HomePageProps {
   files: ParsedLogFile[]
   busy: boolean
-  onFiles: (files: FileList, expected: LogKind) => void
-  onPickFiles: (expected: LogKind) => Promise<boolean>
+  onFiles: (files: FileList, expected: LogInputKind) => void
+  onPickFiles: (expected: LogInputKind) => Promise<boolean>
   onRemove: (id: string) => void
   onRemoveAll: () => void
   rememberFiles: boolean
@@ -78,6 +78,18 @@ export function HomePage({
           description="Analyze HTTP.sys rejection logs by reason, status, queue, site, and UTC time."
           notice="HTTPERR logs in protected system folders such as C:\Windows\System32 cannot be opened directly. Copy them to Documents or another non-system folder first."
           accent="teal"
+          busy={busy}
+          onFiles={onFiles}
+          onPickFiles={onPickFiles}
+        />
+        <DropZone
+          kind="eventlog"
+          title="Drop Application and System event logs"
+          description="Open native .evtx files or Event Viewer XML exports. Only the latest month of events is retained, and Application and System channels are separated automatically."
+          notice="Live event logs under C:\Windows\System32\winevt\Logs may be protected by the browser. Copy or export Application.evtx and System.evtx to a non-system folder first."
+          eyebrow="Windows Event Viewer"
+          accept=".evtx,.xml"
+          accent="orange"
           busy={busy}
           onFiles={onFiles}
           onPickFiles={onPickFiles}
@@ -155,7 +167,14 @@ export function HomePage({
                 <div>
                   <strong>{file.name}</strong>
                   <span>
-                    {file.kind === 'w3svc' ? 'W3SVC' : 'HTTPERR'} ·{' '}
+                    {file.kind === 'w3svc'
+                      ? 'W3SVC'
+                      : file.kind === 'httperr'
+                        ? 'HTTPERR'
+                        : file.kind === 'event-application'
+                          ? 'Application events'
+                          : 'System events'}{' '}
+                    ·{' '}
                     {file.rows.length.toLocaleString()} rows · {file.fields.length} fields
                   </span>
                 </div>

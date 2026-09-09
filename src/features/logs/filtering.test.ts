@@ -1,22 +1,28 @@
 import { describe, expect, it } from 'vitest'
 import {
   aggregateTimeline,
+  aggregateEventTimeline,
   dateRangeForDay,
   emptyHttpErrFilters,
   emptyW3Filters,
+  defaultEventLogFilters,
+  filterEventLogRows,
+  filterEventRowsByWeek,
+  filterEventRowsBySeverity,
   filterHttpErrRows,
   filterW3Rows,
+  eventWeekRanges,
   timelineDomainForDay,
   valueCounts,
 } from './filtering'
 import { getHttpErrReasonInsights } from './httpErrReasonGuidance'
-import type { LogRow } from './types'
+import type { LogKind, LogRow } from './types'
 
 const row = (
   id: string,
   timestamp: string,
   values: Record<string, string>,
-  kind: 'w3svc' | 'httperr' = 'w3svc',
+  kind: LogKind = 'w3svc',
 ): LogRow => ({
   id,
   kind,
@@ -261,5 +267,152 @@ describe('filtering and aggregation', () => {
       { reason: 'Timer_HeaderWait', count: 0 },
       { reason: 'URL', count: 0 },
     ])
+  })
+
+  it('selects loaded IIS-related event defaults and filters both channels', () => {
+    const eventRows = [
+      row(
+        'application',
+        '2026-09-09T01:00:00Z',
+        { source: 'Application Error', 'event-id': '1000' },
+        'event-application',
+      ),
+      row(
+        'system',
+        '2026-09-09T01:01:00Z',
+        { source: 'Microsoft-Windows-WAS', 'event-id': '5002' },
+        'event-system',
+      ),
+      row(
+        'noise',
+        '2026-09-09T01:02:00Z',
+        { source: 'Service Control Manager', 'event-id': '7040' },
+        'event-system',
+      ),
+    ]
+    const filters = defaultEventLogFilters(eventRows)
+
+    expect(filters).toEqual({
+      sources: ['Application Error', 'Microsoft-Windows-WAS'],
+      eventIds: ['1000', '5002'],
+    })
+    expect(filterEventLogRows(eventRows, filters).map(({ id }) => id)).toEqual([
+      'application',
+      'system',
+    ])
+  })
+
+  it('aggregates Application and System events into separate chart series', () => {
+    const eventRows = [
+      row(
+        'application-newest',
+        '2026-09-09T01:00:40Z',
+        { source: 'Application Error', 'event-id': '1000' },
+        'event-application',
+      ),
+      row(
+        'application-older',
+        '2026-09-09T01:00:10Z',
+        { source: 'ASP.NET 4.0.30319.0', 'event-id': '1309' },
+        'event-application',
+      ),
+      row(
+        'system',
+        '2026-09-09T01:00:20Z',
+        { source: 'Microsoft-Windows-WAS', 'event-id': '5002' },
+        'event-system',
+      ),
+    ]
+
+    const { points } = aggregateEventTimeline(eventRows)
+    const populated = points.find(
+      (point) => point.applicationCount || point.systemCount,
+    )
+    expect(populated).toMatchObject({
+      applicationCount: 2,
+      systemCount: 1,
+      applicationFirstRowId: 'application-newest',
+      systemFirstRowId: 'system',
+    })
+  })
+
+  it('aggregates large EVTX datasets without spreading rows onto the call stack', () => {
+    const start = Date.parse('2026-09-01T00:00:00Z')
+    const eventRows: LogRow[] = Array.from({ length: 75_000 }, (_, index) => ({
+      id: `event-${index}`,
+      kind: index % 2 ? 'event-application' : 'event-system',
+      sourceName: index % 2 ? 'Application.evtx' : 'System.evtx',
+      sourceLine: index + 1,
+      timestamp: start + index * 1000,
+      utcDay: '2026-09-01',
+      values: {
+        source: index % 2 ? 'Application Error' : 'Microsoft-Windows-WAS',
+        'event-id': index % 2 ? '1000' : '5002',
+      },
+      raw: '',
+    }))
+
+    const { points, domain } = aggregateEventTimeline(eventRows)
+
+    expect(domain[0]).toBeLessThanOrEqual(start)
+    expect(domain[1]).toBeGreaterThan(eventRows.at(-1)?.timestamp ?? 0)
+    expect(
+      points.reduce(
+        (total, point) =>
+          total + point.applicationCount + point.systemCount,
+        0,
+      ),
+    ).toBe(75_000)
+  })
+
+  it('creates contiguous UTC week ranges and filters events to the selected week', () => {
+    const eventRows = [
+      row('oldest', '2026-08-09T01:00:00Z', {}, 'event-application'),
+      row('middle', '2026-08-28T12:00:00Z', {}, 'event-system'),
+      row('newest', '2026-09-09T01:00:00Z', {}, 'event-application'),
+    ]
+
+    const ranges = eventWeekRanges(eventRows)
+
+    expect(ranges).toHaveLength(5)
+    expect(ranges.at(-1)?.label).toBe('2026/09/03-2026/09/09')
+    expect(
+      filterEventRowsByWeek(eventRows, ranges.at(-1)).map(({ id }) => id),
+    ).toEqual(['newest'])
+  })
+
+  it('applies independent Application and System severity filters', () => {
+    const eventRows = [
+      row(
+        'application-info',
+        '2026-09-09T01:00:00Z',
+        { level: 'Information' },
+        'event-application',
+      ),
+      row(
+        'application-error',
+        '2026-09-09T01:01:00Z',
+        { level: 'Error' },
+        'event-application',
+      ),
+      row(
+        'system-warning',
+        '2026-09-09T01:02:00Z',
+        { level: 'Warning' },
+        'event-system',
+      ),
+      row(
+        'system-critical',
+        '2026-09-09T01:03:00Z',
+        { level: 'Critical' },
+        'event-system',
+      ),
+    ]
+
+    expect(
+      filterEventRowsBySeverity(eventRows, ['Err'], ['Warn']).map(
+        ({ id }) => id,
+      ),
+    ).toEqual(['application-error', 'system-warning'])
   })
 })

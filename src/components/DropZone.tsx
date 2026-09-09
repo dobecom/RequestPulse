@@ -1,16 +1,18 @@
 import { AlertTriangle, FilePlus2, LoaderCircle, UploadCloud } from 'lucide-react'
 import { useRef, useState } from 'react'
-import type { LogKind } from '../features/logs/types'
+import type { LogInputKind } from '../features/logs/types'
 
 interface DropZoneProps {
-  kind: LogKind
+  kind: LogInputKind
   title: string
   description: string
   notice?: string
-  accent: 'blue' | 'teal'
+  eyebrow?: string
+  accept?: string
+  accent: 'blue' | 'teal' | 'orange'
   busy: boolean
-  onFiles: (files: FileList, expected: LogKind) => void
-  onPickFiles: (expected: LogKind) => Promise<boolean>
+  onFiles: (files: FileList, expected: LogInputKind) => void
+  onPickFiles: (expected: LogInputKind) => Promise<boolean>
 }
 
 export function DropZone({
@@ -18,6 +20,8 @@ export function DropZone({
   title,
   description,
   notice,
+  eyebrow,
+  accept = '.log,.txt',
   accent,
   busy,
   onFiles,
@@ -54,7 +58,10 @@ export function DropZone({
         {busy ? <LoaderCircle className="spin" /> : <UploadCloud />}
       </div>
       <div>
-        <span className="eyebrow">{kind === 'w3svc' ? 'IIS access logs' : 'HTTP.sys errors'}</span>
+        <span className="eyebrow">
+          {eyebrow ??
+            (kind === 'w3svc' ? 'IIS access logs' : 'HTTP.sys errors')}
+        </span>
         <h2>{title}</h2>
         <p>{description}</p>
       </div>
@@ -78,7 +85,7 @@ export function DropZone({
         className="visually-hidden"
         type="file"
         multiple
-        accept=".log,.txt"
+        accept={accept}
         onChange={(event) => {
           if (event.target.files) onFiles(event.target.files, kind)
           event.target.value = ''

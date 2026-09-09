@@ -1,6 +1,13 @@
-import type { LogKind, LogRow, ParsedLogFile } from './types'
+import { parseEventLogFile } from './eventLogParser'
+import type {
+  LogInputKind,
+  LogRow,
+  ParsedLogFile,
+} from './types'
 
-const REQUIRED_FIELDS: Record<LogKind, string[]> = {
+type TextLogKind = 'w3svc' | 'httperr'
+
+const REQUIRED_FIELDS: Record<TextLogKind, string[]> = {
   w3svc: ['cs-uri-stem', 'time-taken'],
   httperr: ['s-reason', 's-queuename'],
 }
@@ -18,7 +25,7 @@ const parseUtcTimestamp = (date?: string, time?: string) => {
   return Number.isFinite(value) ? value : Number.NaN
 }
 
-export function detectLogKind(fields: string[]): LogKind | null {
+export function detectLogKind(fields: string[]): TextLogKind | null {
   const fieldSet = new Set(fields.map((field) => field.toLowerCase()))
   if (REQUIRED_FIELDS.w3svc.every((field) => fieldSet.has(field))) return 'w3svc'
   if (REQUIRED_FIELDS.httperr.every((field) => fieldSet.has(field))) return 'httperr'
@@ -29,11 +36,11 @@ export function parseLogText(
   text: string,
   fileName: string,
   size = text.length,
-  expectedKind?: LogKind,
+  expectedKind?: TextLogKind,
 ): ParsedLogFile {
   const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/)
   let fields: string[] = []
-  let kind: LogKind | null = null
+  let kind: TextLogKind | null = null
   const rows: LogRow[] = []
   const warnings: string[] = []
 
@@ -125,7 +132,18 @@ export function parseLogText(
   }
 }
 
-export async function parseBrowserFile(file: File, expectedKind?: LogKind) {
+export async function parseBrowserFile(file: File, expectedKind?: LogInputKind) {
+  const extension = file.name.toLowerCase().split('.').pop()
+  if (
+    expectedKind === 'eventlog' ||
+    expectedKind === 'event-application' ||
+    expectedKind === 'event-system' ||
+    extension === 'evtx' ||
+    extension === 'xml'
+  ) {
+    return parseEventLogFile(file, expectedKind)
+  }
+
   const text = await file.text()
   return parseLogText(text, file.name, file.size, expectedKind)
 }

@@ -4,16 +4,17 @@ import {
   BarChart3,
   Home,
   LockKeyhole,
+  MonitorCog,
   ServerCrash,
   X,
 } from 'lucide-react'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { HomePage } from '../features/home/HomePage'
-import type { LogKind } from '../features/logs/types'
+import type { LogInputKind } from '../features/logs/types'
 import { useLogWorkspace } from '../features/workspace/useLogWorkspace'
 import { recordVisit } from '../services/auditService'
 
-type Tab = 'home' | 'w3svc' | 'httperr'
+type Tab = 'home' | 'w3svc' | 'httperr' | 'events'
 
 const W3Dashboard = lazy(() =>
   import('../features/dashboard/W3Dashboard').then((module) => ({
@@ -25,6 +26,11 @@ const HttpErrDashboard = lazy(() =>
     default: module.HttpErrDashboard,
   })),
 )
+const EventLogDashboard = lazy(() =>
+  import('../features/dashboard/EventLogDashboard').then((module) => ({
+    default: module.EventLogDashboard,
+  })),
+)
 
 const tabs: Array<{
   id: Tab
@@ -34,6 +40,7 @@ const tabs: Array<{
   { id: 'home', label: 'Home', icon: Home },
   { id: 'w3svc', label: 'W3SVC', icon: BarChart3 },
   { id: 'httperr', label: 'HTTPERR', icon: ServerCrash },
+  { id: 'events', label: 'Events', icon: MonitorCog },
 ]
 
 export function App() {
@@ -43,7 +50,7 @@ export function App() {
 
   useEffect(() => recordVisit(window.location.pathname || '/'), [])
 
-  const acceptExpected = (files: FileList, expected: LogKind) => {
+  const acceptExpected = (files: FileList, expected: LogInputKind) => {
     void workspace.addFiles(files, expected)
   }
 
@@ -80,6 +87,8 @@ export function App() {
                 ? workspace.w3Files.length
                 : id === 'httperr'
                   ? workspace.httpErrFiles.length
+                  : id === 'events'
+                    ? workspace.eventFiles.length
                   : 0
             return (
               <button
@@ -127,6 +136,7 @@ export function App() {
         <Suspense fallback={<div className="dashboard-loading">Loading dashboard…</div>}>
           {tab === 'w3svc' && <W3Dashboard files={workspace.w3Files} />}
           {tab === 'httperr' && <HttpErrDashboard files={workspace.httpErrFiles} />}
+          {tab === 'events' && <EventLogDashboard files={workspace.eventFiles} />}
         </Suspense>
       </main>
 
@@ -135,7 +145,7 @@ export function App() {
           <div>
             <Activity size={32} />
             <strong>Drop logs into this workspace</strong>
-            <span>W3SVC and HTTPERR formats are detected from #Fields</span>
+            <span>W3SVC, HTTPERR, Application, and System logs are detected locally</span>
           </div>
         </div>
       )}

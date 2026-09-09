@@ -9,7 +9,11 @@ import {
   writeRememberFilesPreference,
 } from '../../services/fileHandleStore'
 import { parseBrowserFile } from '../logs/parsers'
-import type { LogKind, ParsedLogFile, ParseFailure } from '../logs/types'
+import type {
+  LogInputKind,
+  ParsedLogFile,
+  ParseFailure,
+} from '../logs/types'
 
 interface FileCandidate {
   file: File
@@ -42,7 +46,7 @@ export function useLogWorkspace() {
 
   const addCandidates = useCallback(async (
     candidates: FileCandidate[],
-    expected?: LogKind,
+    expected?: LogInputKind,
   ) => {
     if (!candidates.length) return
     setIsParsing(true)
@@ -107,7 +111,7 @@ export function useLogWorkspace() {
   }, [])
 
   const addFiles = useCallback(
-    async (incoming: FileList | File[], expected?: LogKind) => {
+    async (incoming: FileList | File[], expected?: LogInputKind) => {
       await addCandidates(
         Array.from(incoming).map((file) => ({ file })),
         expected,
@@ -117,15 +121,21 @@ export function useLogWorkspace() {
   )
 
   const pickFiles = useCallback(
-    async (expected: LogKind) => {
+    async (expected: LogInputKind) => {
       if (!window.showOpenFilePicker) return false
       try {
+        const eventLog = expected === 'eventlog'
         const handles = await window.showOpenFilePicker({
           multiple: true,
           types: [
             {
-              description: 'IIS text logs',
-              accept: { 'text/plain': ['.log', '.txt'] },
+              description: eventLog ? 'Windows Event logs' : 'IIS text logs',
+              accept: eventLog
+                ? {
+                    'application/octet-stream': ['.evtx'],
+                    'application/xml': ['.xml'],
+                  }
+                : { 'text/plain': ['.log', '.txt'] },
             },
           ],
         })
@@ -149,7 +159,7 @@ export function useLogWorkspace() {
   )
 
   const addDroppedFiles = useCallback(
-    async (dataTransfer: DataTransfer, expected?: LogKind) => {
+    async (dataTransfer: DataTransfer, expected?: LogInputKind) => {
       const items = Array.from(dataTransfer.items).filter(
         (item) => item.kind === 'file',
       )
@@ -283,11 +293,20 @@ export function useLogWorkspace() {
     () => files.filter((file) => file.kind === 'httperr'),
     [files],
   )
+  const eventFiles = useMemo(
+    () =>
+      files.filter(
+        (file) =>
+          file.kind === 'event-application' || file.kind === 'event-system',
+      ),
+    [files],
+  )
 
   return {
     files,
     w3Files,
     httpErrFiles,
+    eventFiles,
     failures,
     isParsing,
     rememberFiles,

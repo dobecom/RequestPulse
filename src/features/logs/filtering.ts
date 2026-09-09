@@ -1,5 +1,9 @@
 import type {
   DateRange,
+  EventLogFilters,
+  EventSeverity,
+  EventWeekRange,
+  EventTimelinePoint,
   HttpErrFilters,
   LogRow,
   TimelineDomain,
@@ -48,6 +52,124 @@ export const emptyHttpErrFilters = (): HttpErrFilters => ({
   reasons: [],
   queueNames: [],
 })
+
+const IIS_EVENT_SOURCE_PATTERN =
+  /(?:^|[\s.-])(iis|w3svc|was|asp\.?net|aspnetcore|httpservice|http service)(?:$|[\s.-])|application error|\.net runtime|windows error reporting/i
+
+const IIS_EVENT_IDS = new Set([
+  '1000',
+  '1001',
+  '1007',
+  '1010',
+  '1026',
+  '1309',
+  '1310',
+  '1325',
+  '1334',
+  '2268',
+  '2269',
+  '5002',
+  '5009',
+  '5011',
+  '5021',
+  '5057',
+  '5059',
+  '5074',
+  '5076',
+  '5079',
+  '5080',
+  '5186',
+])
+
+export const defaultEventLogFilters = (rows: LogRow[]): EventLogFilters => {
+  const sources = valueCounts(rows, 'source')
+    .map(({ value }) => value)
+    .filter((source) => IIS_EVENT_SOURCE_PATTERN.test(source))
+  const sourceSet = new Set(sources)
+  const relevantRows = sources.length
+    ? rows.filter((row) => sourceSet.has(row.values.source ?? ''))
+    : rows
+  const eventIds = valueCounts(relevantRows, 'event-id')
+    .map(({ value }) => value)
+    .filter((eventId) => IIS_EVENT_IDS.has(eventId))
+
+  return { sources, eventIds }
+}
+
+export function filterEventLogRows(rows: LogRow[], filters: EventLogFilters) {
+  return rows.filter(
+    (row) =>
+      includesSelected(row.values.source ?? '', filters.sources) &&
+      includesSelected(row.values['event-id'] ?? '', filters.eventIds),
+  )
+}
+
+export const eventSeverity = (level = ''): EventSeverity => {
+  if (/^(critical|error)$/i.test(level)) return 'Err'
+  if (/^warning$/i.test(level)) return 'Warn'
+  return 'Info'
+}
+
+export function filterEventRowsBySeverity(
+  rows: LogRow[],
+  applicationSeverities: EventSeverity[],
+  systemSeverities: EventSeverity[],
+) {
+  return rows.filter((row) => {
+    const selected =
+      row.kind === 'event-application'
+        ? applicationSeverities
+        : systemSeverities
+    return selected.includes(eventSeverity(row.values.level))
+  })
+}
+
+const UTC_DAY = 24 * 60 * 60_000
+
+const utcDayStart = (timestamp: number) => {
+  const date = new Date(timestamp)
+  return Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+  )
+}
+
+const weekLabel = (start: number, end: number) => {
+  const format = (timestamp: number) =>
+    new Date(timestamp).toISOString().slice(0, 10).replaceAll('-', '/')
+  return `${format(start)}-${format(end)}`
+}
+
+export function eventWeekRanges(rows: LogRow[]): EventWeekRange[] {
+  if (!rows.length) return []
+  let minimum = rows[0].timestamp
+  let maximum = rows[0].timestamp
+  rows.forEach((row) => {
+    if (row.timestamp < minimum) minimum = row.timestamp
+    if (row.timestamp > maximum) maximum = row.timestamp
+  })
+
+  const ranges: EventWeekRange[] = []
+  let end = utcDayStart(maximum) + UTC_DAY - 1
+  while (end >= minimum) {
+    const start = end - 7 * UTC_DAY + 1
+    const id = `${start}:${end}`
+    ranges.push({ id, label: weekLabel(start, end), start, end })
+    end = start - 1
+  }
+  return ranges.reverse()
+}
+
+export const filterEventRowsByWeek = (
+  rows: LogRow[],
+  range?: EventWeekRange,
+) =>
+  range
+    ? rows.filter(
+        (row) => row.timestamp >= range.start && row.timestamp <= range.end,
+      )
+    : rows
 
 export const dateRangeForDay = (utcDay: string): DateRange =>
   utcDay
@@ -121,6 +243,51 @@ const chooseBucketSize = (span: number) => {
   if (span <= 2 * 24 * 60 * 60_000) return 15 * 60_000
   if (span <= 14 * 24 * 60 * 60_000) return 60 * 60_000
   return 24 * 60 * 60_000
+}
+
+export function aggregateEventTimeline(rows: LogRow[]) {
+  if (!rows.length) {
+    return {
+      points: [] as EventTimelinePoint[],
+      domain: [0, 1] as TimelineDomain,
+    }
+  }
+
+  const ordered = [...rows].sort((a, b) => b.timestamp - a.timestamp)
+  let minimum = ordered[0].timestamp
+  let maximum = ordered[0].timestamp
+  ordered.forEach((row) => {
+    if (row.timestamp < minimum) minimum = row.timestamp
+    if (row.timestamp > maximum) maximum = row.timestamp
+  })
+  const bucketSize = chooseBucketSize(maximum - minimum)
+  const start = Math.floor(minimum / bucketSize) * bucketSize
+  const end = Math.max(start + bucketSize, Math.ceil(maximum / bucketSize) * bucketSize)
+  const buckets = new Map<number, EventTimelinePoint>()
+
+  for (let timestamp = start; timestamp <= end; timestamp += bucketSize) {
+    buckets.set(timestamp, {
+      timestamp,
+      label: new Date(timestamp).toISOString(),
+      applicationCount: 0,
+      systemCount: 0,
+    })
+  }
+
+  ordered.forEach((row) => {
+    const timestamp = Math.floor(row.timestamp / bucketSize) * bucketSize
+    const point = buckets.get(timestamp)
+    if (!point) return
+    if (row.kind === 'event-application') {
+      point.applicationCount += 1
+      point.applicationFirstRowId ??= row.id
+    } else if (row.kind === 'event-system') {
+      point.systemCount += 1
+      point.systemFirstRowId ??= row.id
+    }
+  })
+
+  return { points: [...buckets.values()], domain: [start, end] as TimelineDomain }
 }
 
 export function aggregateTimeline(

@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from 'node:url'
 import { loadEnv } from 'vite'
 import { defineConfig } from 'vitest/config'
 
@@ -15,6 +16,11 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    resolve: {
+      alias: {
+        fs: fileURLToPath(new URL('./src/shims/nodeFs.ts', import.meta.url)),
+      },
+    },
     server: {
       port: readPort(environment.VITE_DEV_SERVER_PORT),
       strictPort: true,
