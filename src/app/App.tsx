@@ -3,6 +3,7 @@ import {
   AlertCircle,
   BarChart3,
   Home,
+  LoaderCircle,
   LockKeyhole,
   MonitorCog,
   ServerCrash,
@@ -51,12 +52,24 @@ export function App() {
   const [workspaceDrag, setWorkspaceDrag] = useState(false)
   const [visitorCounts, setVisitorCounts] = useState<VisitorCounts | null>(null)
   const workspace = useLogWorkspace()
+  const w3Count = workspace.w3Files.length
+  const httpErrCount = workspace.httpErrFiles.length
+  const eventCount = workspace.eventFiles.length
+  const hasActiveTabData =
+    tab === 'home' ||
+    (tab === 'w3svc' && w3Count > 0) ||
+    (tab === 'httperr' && httpErrCount > 0) ||
+    (tab === 'events' && eventCount > 0)
 
   useEffect(() => {
     void loadVisitorCounts(window.location.pathname || '/')
       .then(setVisitorCounts)
       .catch(() => setVisitorCounts(null))
   }, [])
+
+  useEffect(() => {
+    if (!hasActiveTabData) setTab('home')
+  }, [hasActiveTabData])
 
   const acceptExpected = (files: FileList, expected: LogInputKind) => {
     void workspace.addFiles(files, expected)
@@ -80,7 +93,12 @@ export function App() {
       }}
     >
       <header className="app-header">
-        <button type="button" className="brand" onClick={() => setTab('home')}>
+        <button
+          type="button"
+          className="brand"
+          disabled={workspace.isParsing}
+          onClick={() => setTab('home')}
+        >
           <span className="brand__mark">
             <Activity size={20} />
           </span>
@@ -92,17 +110,27 @@ export function App() {
           {tabs.map(({ id, label, icon: Icon }) => {
             const count =
               id === 'w3svc'
-                ? workspace.w3Files.length
+                ? w3Count
                 : id === 'httperr'
-                  ? workspace.httpErrFiles.length
+                  ? httpErrCount
                   : id === 'events'
-                    ? workspace.eventFiles.length
+                    ? eventCount
                   : 0
+            const requiresFiles = id !== 'home' && count === 0
+            const disabled = workspace.isParsing || requiresFiles
             return (
               <button
                 type="button"
                 key={id}
                 className={tab === id ? 'is-active' : undefined}
+                disabled={disabled}
+                title={
+                  requiresFiles
+                    ? `Upload ${label} logs to enable this tab.`
+                    : workspace.isParsing
+                      ? 'Wait for log processing to finish.'
+                      : undefined
+                }
                 onClick={() => setTab(id)}
               >
                 <Icon size={17} />
@@ -155,6 +183,21 @@ export function App() {
             <Activity size={32} />
             <strong>Drop logs into this workspace</strong>
             <span>W3SVC, HTTPERR, Application, and System logs are detected locally</span>
+          </div>
+        </div>
+      )}
+
+      {workspace.isParsing && (
+        <div
+          className="workspace-overlay workspace-overlay--processing"
+          role="status"
+          aria-live="assertive"
+          aria-busy="true"
+        >
+          <div>
+            <LoaderCircle className="spin" size={38} />
+            <strong>Loading and parsing logs</strong>
+            <span>Large files can take a moment. Processing stays in this browser.</span>
           </div>
         </div>
       )}

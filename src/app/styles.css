@@ -126,6 +126,17 @@ summary:focus-visible {
   background: rgba(0, 0, 0, 0.025);
 }
 
+.main-tabs button:disabled,
+.brand:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.main-tabs button:disabled:hover {
+  color: var(--muted);
+  background: transparent;
+}
+
 .main-tabs button.is-active {
   color: var(--blue);
   font-weight: 600;
@@ -1458,6 +1469,13 @@ tbody tr.is-selected td {
 
 .workspace-overlay span {
   color: var(--muted);
+}
+
+.workspace-overlay--processing {
+  z-index: 110;
+  inset: 0;
+  border-radius: 0;
+  background: rgba(239, 246, 252, 0.96);
 }
 
 .error-toast {

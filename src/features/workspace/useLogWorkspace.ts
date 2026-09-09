@@ -50,64 +50,68 @@ export function useLogWorkspace() {
   ) => {
     if (!candidates.length) return
     setIsParsing(true)
-    const results = await Promise.allSettled(
-      candidates.map(async ({ file, handle, rememberedId }) => ({
-        parsed: await parseBrowserFile(file, expected),
-        handle,
-        rememberedId,
-      })),
-    )
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 0))
+    try {
+      const results = await Promise.allSettled(
+        candidates.map(async ({ file, handle, rememberedId }) => ({
+          parsed: await parseBrowserFile(file, expected),
+          handle,
+          rememberedId,
+        })),
+      )
 
-    const accepted: ParsedLogFile[] = []
-    const remembered: Promise<void>[] = []
-    const rejected: ParseFailure[] = []
-    results.forEach((result, index) => {
-      if (result.status === 'fulfilled') {
-        const { parsed, handle, rememberedId } = result.value
-        accepted.push(parsed)
-        if (handle) {
-          handlesByFileId.current.set(parsed.id, handle)
-          if (rememberedId && rememberedId !== parsed.id) {
-            remembered.push(deleteRememberedFileHandle(rememberedId))
+      const accepted: ParsedLogFile[] = []
+      const remembered: Promise<void>[] = []
+      const rejected: ParseFailure[] = []
+      results.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+          const { parsed, handle, rememberedId } = result.value
+          accepted.push(parsed)
+          if (handle) {
+            handlesByFileId.current.set(parsed.id, handle)
+            if (rememberedId && rememberedId !== parsed.id) {
+              remembered.push(deleteRememberedFileHandle(rememberedId))
+            }
+            if (rememberFilesRef.current) {
+              remembered.push(
+                saveRememberedFileHandle({
+                  id: parsed.id,
+                  kind: parsed.kind,
+                  handle,
+                }),
+              )
+            }
           }
-          if (rememberFilesRef.current) {
-            remembered.push(
-              saveRememberedFileHandle({
-                id: parsed.id,
-                kind: parsed.kind,
-                handle,
-              }),
-            )
-          }
+        } else {
+          rejected.push({
+            fileName: candidates[index].file.name,
+            message:
+              result.reason instanceof Error
+                ? result.reason.message
+                : 'The file could not be parsed.',
+          })
         }
-      } else {
-        rejected.push({
-          fileName: candidates[index].file.name,
-          message:
-            result.reason instanceof Error
-              ? result.reason.message
-              : 'The file could not be parsed.',
+      })
+
+      if (accepted.length) {
+        setFiles((current) => {
+          const next = new Map(current.map((file) => [file.id, file]))
+          accepted.forEach((file) => next.set(file.id, file))
+          return [...next.values()]
         })
       }
-    })
-
-    if (accepted.length) {
-      setFiles((current) => {
-        const next = new Map(current.map((file) => [file.id, file]))
-        accepted.forEach((file) => next.set(file.id, file))
-        return [...next.values()]
-      })
-    }
-    if (remembered.length) {
-      const persisted = await Promise.allSettled(remembered)
-      if (persisted.some((result) => result.status === 'rejected')) {
-        setPersistenceMessage(
-          'Some file handles could not be saved by the browser.',
-        )
+      if (remembered.length) {
+        const persisted = await Promise.allSettled(remembered)
+        if (persisted.some((result) => result.status === 'rejected')) {
+          setPersistenceMessage(
+            'Some file handles could not be saved by the browser.',
+          )
+        }
       }
+      setFailures(rejected)
+    } finally {
+      setIsParsing(false)
     }
-    setFailures(rejected)
-    setIsParsing(false)
   }, [])
 
   const addFiles = useCallback(
