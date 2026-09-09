@@ -25,7 +25,7 @@ describe('HomePage visitor metrics', () => {
     expect(screen.getByText('Visitors')).toBeInTheDocument()
     expect(screen.getByText('3')).toBeInTheDocument()
     expect(screen.getByText('42')).toBeInTheDocument()
-    expect(screen.getByText('UTC · 2026-09-09')).toBeInTheDocument()
+    expect(screen.queryByText(/UTC · 2026-09-09/)).not.toBeInTheDocument()
     expect(
       screen.queryByText(/winevt\\logs|copy or export application/i),
     ).not.toBeInTheDocument()

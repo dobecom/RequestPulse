@@ -48,7 +48,7 @@ export function HomePage({
           <span className="hero__pill">
             <LockKeyhole size={14} /> Browser-only log analysis
           </span>
-          <h1>Find the request pattern.<br />Keep the evidence local.</h1>
+          <h1>Find the request pattern</h1>
           <p>
             Explore IIS W3SVC performance and HTTP.sys rejection logs with immediate
             filters, UTC timelines, and source-row navigation. Raw logs never leave
@@ -71,11 +71,6 @@ export function HomePage({
                 <strong>{visitorCounts?.total.toLocaleString() ?? '—'}</strong>
               </div>
             </div>
-            <small>
-              {visitorCounts?.date
-                ? `UTC · ${visitorCounts.date}`
-                : 'Loading UTC visitor totals'}
-            </small>
           </div>
           <div className="hero__signal" aria-hidden="true">
             <span />
