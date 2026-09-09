@@ -232,6 +232,68 @@ main {
   transform: skewX(-7deg);
 }
 
+.hero__aside {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+
+.visitor-counts {
+  width: min(100%, 300px);
+  padding: 15px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 14px;
+  background: rgba(5, 41, 70, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.visitor-counts__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.visitor-counts__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.visitor-counts__metrics > div {
+  padding-right: 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.visitor-counts__metrics > div:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.visitor-counts__metrics span,
+.visitor-counts__metrics strong,
+.visitor-counts small {
+  display: block;
+}
+
+.visitor-counts__metrics span,
+.visitor-counts small {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+.visitor-counts__metrics strong {
+  margin-top: 2px;
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+.visitor-counts small {
+  margin-top: 10px;
+}
+
 .hero__signal span {
   width: clamp(12px, 2vw, 24px);
   border-radius: 8px;

@@ -12,7 +12,10 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { HomePage } from '../features/home/HomePage'
 import type { LogInputKind } from '../features/logs/types'
 import { useLogWorkspace } from '../features/workspace/useLogWorkspace'
-import { recordVisit } from '../services/auditService'
+import {
+  loadVisitorCounts,
+  type VisitorCounts,
+} from '../services/auditService'
 
 type Tab = 'home' | 'w3svc' | 'httperr' | 'events'
 
@@ -46,9 +49,14 @@ const tabs: Array<{
 export function App() {
   const [tab, setTab] = useState<Tab>('home')
   const [workspaceDrag, setWorkspaceDrag] = useState(false)
+  const [visitorCounts, setVisitorCounts] = useState<VisitorCounts | null>(null)
   const workspace = useLogWorkspace()
 
-  useEffect(() => recordVisit(window.location.pathname || '/'), [])
+  useEffect(() => {
+    void loadVisitorCounts(window.location.pathname || '/')
+      .then(setVisitorCounts)
+      .catch(() => setVisitorCounts(null))
+  }, [])
 
   const acceptExpected = (files: FileList, expected: LogInputKind) => {
     void workspace.addFiles(files, expected)
@@ -114,6 +122,7 @@ export function App() {
         {tab === 'home' && (
           <HomePage
             files={workspace.files}
+            visitorCounts={visitorCounts}
             busy={workspace.isParsing}
             onFiles={acceptExpected}
             onPickFiles={workspace.pickFiles}
