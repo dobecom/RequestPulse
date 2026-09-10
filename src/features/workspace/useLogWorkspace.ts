@@ -4,6 +4,7 @@ import {
   deleteRememberedFileHandle,
   listRememberedFileHandles,
   readRememberFilesPreference,
+  type RememberedFileHandle,
   saveRememberedFileHandle,
   supportsFileHandlePersistence,
   writeRememberFilesPreference,
@@ -42,7 +43,8 @@ export function useLogWorkspace() {
   const [persistenceMessage, setPersistenceMessage] = useState('')
   const rememberFilesRef = useRef(rememberFiles)
   const handlesByFileId = useRef(new Map<string, FileSystemFileHandle>())
-  const restoredOnLoad = useRef(false)
+  const rememberedHandlesRef = useRef<RememberedFileHandle[]>([])
+  const scannedRememberedFiles = useRef(false)
 
   const addCandidates = useCallback(async (
     candidates: FileCandidate[],
@@ -191,52 +193,83 @@ export function useLogWorkspace() {
     [addCandidates, addFiles],
   )
 
-  const restoreRememberedFiles = useCallback(
-    async (requestAccess = false) => {
-      if (!canRememberFiles) return
-      setIsParsing(true)
-      setPersistenceMessage('')
-      try {
-        const remembered = await listRememberedFileHandles()
-        const candidates: FileCandidate[] = []
-        let permissionNeeded = 0
+  const restoreRememberedFiles = useCallback(async () => {
+    if (!canRememberFiles) return
+    const remembered = rememberedHandlesRef.current
+    if (!remembered.length) return
 
-        for (const record of remembered) {
-          let permission = await record.handle.queryPermission({ mode: 'read' })
-          if (permission !== 'granted' && requestAccess) {
-            permission = await record.handle.requestPermission({ mode: 'read' })
-          }
-          if (permission === 'granted') {
-            candidates.push({
-              file: await record.handle.getFile(),
-              handle: record.handle,
-              rememberedId: record.id,
-            })
-          } else {
-            permissionNeeded += 1
-          }
-        }
+    setIsParsing(true)
+    setPersistenceMessage('')
+    try {
+      // Start every permission request directly from the button click. Awaiting
+      // IndexedDB or queryPermission first can lose the browser user activation.
+      const permissions = await Promise.allSettled(
+        remembered.map((record) =>
+          record.handle.requestPermission({ mode: 'read' }),
+        ),
+      )
+      const accessible = remembered.filter(
+        (_, index) =>
+          permissions[index].status === 'fulfilled' &&
+          permissions[index].value === 'granted',
+      )
+      const fileResults = await Promise.allSettled(
+        accessible.map(async (record) => ({
+          file: await record.handle.getFile(),
+          handle: record.handle,
+          rememberedId: record.id,
+        })),
+      )
+      const candidates = fileResults.flatMap((result) =>
+        result.status === 'fulfilled' ? [result.value] : [],
+      )
+      const unavailableCount =
+        remembered.length - accessible.length +
+        fileResults.filter((result) => result.status === 'rejected').length
 
-        setPendingRestoreCount(permissionNeeded)
-        if (candidates.length) await addCandidates(candidates)
-      } catch {
-        setPersistenceMessage('Remembered files could not be restored.')
-      } finally {
-        setIsParsing(false)
+      setPendingRestoreCount(unavailableCount)
+      if (unavailableCount > 0) {
+        setPersistenceMessage(
+          'Some remembered files still need browser permission or are no longer available.',
+        )
       }
-    },
-    [addCandidates, canRememberFiles],
-  )
+      if (candidates.length) await addCandidates(candidates)
+    } catch {
+      setPersistenceMessage('Remembered files could not be restored.')
+    } finally {
+      setIsParsing(false)
+    }
+  }, [addCandidates, canRememberFiles])
+
+  const resetRememberedFiles = useCallback(async () => {
+    try {
+      await clearRememberedFileHandles()
+      rememberedHandlesRef.current = []
+      setPendingRestoreCount(0)
+      setPersistenceMessage('Remembered file list was reset.')
+    } catch {
+      setPersistenceMessage('Remembered files could not be reset.')
+    }
+  }, [])
 
   useEffect(() => {
     rememberFilesRef.current = rememberFiles
   }, [rememberFiles])
 
   useEffect(() => {
-    if (!rememberFiles || !canRememberFiles || restoredOnLoad.current) return
-    restoredOnLoad.current = true
-    void restoreRememberedFiles()
-  }, [canRememberFiles, rememberFiles, restoreRememberedFiles])
+    if (!rememberFiles || !canRememberFiles || scannedRememberedFiles.current) {
+      return
+    }
+    scannedRememberedFiles.current = true
+    void listRememberedFileHandles()
+      .then((remembered) => {
+        rememberedHandlesRef.current = remembered
+        setPendingRestoreCount(remembered.length)
+      })
+      .catch(() => {
+        setPersistenceMessage('Remembered files could not be checked.')
+      })
+  }, [canRememberFiles, rememberFiles])
 
   const changeRememberFiles = useCallback(
     async (enabled: boolean) => {
@@ -248,6 +281,7 @@ export function useLogWorkspace() {
       try {
         if (!enabled) {
           setPendingRestoreCount(0)
+          rememberedHandlesRef.current = []
           await clearRememberedFileHandles()
           return
         }
@@ -257,6 +291,7 @@ export function useLogWorkspace() {
           return handle ? [{ id: file.id, kind: file.kind, handle }] : []
         })
         await Promise.all(records.map(saveRememberedFileHandle))
+        rememberedHandlesRef.current = records
         if (files.length > records.length) {
           setPersistenceMessage(
             'Use Select files to reopen files that were added without a reusable file handle.',
@@ -279,7 +314,12 @@ export function useLogWorkspace() {
   const removeFile = useCallback((id: string) => {
     setFiles((current) => current.filter((file) => file.id !== id))
     handlesByFileId.current.delete(id)
-    if (rememberFilesRef.current) void deleteRememberedFileHandle(id)
+    if (rememberFilesRef.current) {
+      rememberedHandlesRef.current = rememberedHandlesRef.current.filter(
+        (record) => record.id !== id,
+      )
+      void deleteRememberedFileHandle(id)
+    }
   }, [])
 
   const removeAllFiles = useCallback(async () => {
@@ -288,6 +328,7 @@ export function useLogWorkspace() {
     setPendingRestoreCount(0)
     setPersistenceMessage('')
     handlesByFileId.current.clear()
+    rememberedHandlesRef.current = []
     await clearRememberedFileHandles()
   }, [])
 
@@ -325,5 +366,6 @@ export function useLogWorkspace() {
     clearFailures,
     changeRememberFiles,
     restoreRememberedFiles,
+    resetRememberedFiles,
   }
 }

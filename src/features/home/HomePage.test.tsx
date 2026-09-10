@@ -19,6 +19,7 @@ describe('HomePage visitor metrics', () => {
         persistenceMessage=""
         onRememberFilesChange={vi.fn()}
         onRestoreFiles={vi.fn()}
+        onResetFiles={vi.fn()}
       />,
     )
 
@@ -29,5 +30,31 @@ describe('HomePage visitor metrics', () => {
     expect(
       screen.queryByText(/winevt\\logs|copy or export application/i),
     ).not.toBeInTheDocument()
+  })
+
+  it('offers restore and reset actions for remembered files', () => {
+    render(
+      <HomePage
+        files={[]}
+        visitorCounts={null}
+        busy={false}
+        onFiles={vi.fn()}
+        onPickFiles={vi.fn().mockResolvedValue(true)}
+        onRemove={vi.fn()}
+        onRemoveAll={vi.fn()}
+        rememberFiles
+        canRememberFiles
+        pendingRestoreCount={2}
+        persistenceMessage=""
+        onRememberFilesChange={vi.fn()}
+        onRestoreFiles={vi.fn()}
+        onResetFiles={vi.fn()}
+      />,
+    )
+
+    expect(
+      screen.getByRole('button', { name: 'Restore 2 files' }),
+    ).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Reset files' })).toBeEnabled()
   })
 })

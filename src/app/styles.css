@@ -59,6 +59,8 @@ summary:focus-visible {
 
 .app-shell {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
@@ -180,7 +182,7 @@ summary:focus-visible {
 
 main {
   width: min(1480px, 100%);
-  min-height: calc(100vh - 64px);
+  flex: 1;
   margin: 0 auto;
   padding: clamp(24px, 4vw, 52px);
 }
@@ -514,6 +516,12 @@ main {
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow-2);
+}
+
+.persistence-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .persistence-card__icon {
@@ -1443,6 +1451,28 @@ tbody tr.is-selected td {
   color: var(--muted);
 }
 
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px clamp(18px, 4vw, 56px);
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+}
+
+.app-footer a {
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
 .workspace-overlay {
   position: fixed;
   z-index: 100;
@@ -1638,9 +1668,10 @@ tbody tr.is-selected td {
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
-  .persistence-card > .button {
+  .persistence-card__actions {
     grid-column: 2 / -1;
     justify-self: start;
+    flex-wrap: wrap;
   }
 
   .warning-badge {
@@ -1710,5 +1741,10 @@ tbody tr.is-selected td {
 
   .reason-guide__grid {
     grid-template-columns: 1fr;
+  }
+
+  .app-footer {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

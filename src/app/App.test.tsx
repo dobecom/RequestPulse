@@ -22,6 +22,7 @@ const { workspace } = vi.hoisted(() => ({
     clearFailures: vi.fn(),
     changeRememberFiles: vi.fn(),
     restoreRememberedFiles: vi.fn(),
+    resetRememberedFiles: vi.fn(),
   },
 }))
 
@@ -56,5 +57,13 @@ describe('App navigation and file processing state', () => {
 
     expect(screen.getByRole('status')).toHaveTextContent('Loading and parsing logs')
     expect(screen.getByRole('button', { name: 'Home' })).toBeDisabled()
+  })
+
+  it('shows the support contact in the footer', () => {
+    render(<App />)
+
+    expect(
+      screen.getByRole('link', { name: 'steve@dobecom.me' }),
+    ).toHaveAttribute('href', 'mailto:steve@dobecom.me')
   })
 })

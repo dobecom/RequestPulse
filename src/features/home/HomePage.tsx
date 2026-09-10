@@ -24,6 +24,7 @@ interface HomePageProps {
   persistenceMessage: string
   onRememberFilesChange: (enabled: boolean) => void
   onRestoreFiles: () => void
+  onResetFiles: () => void
 }
 
 export function HomePage({
@@ -40,6 +41,7 @@ export function HomePage({
   persistenceMessage,
   onRememberFilesChange,
   onRestoreFiles,
+  onResetFiles,
 }: HomePageProps) {
   return (
     <div className="home-page">
@@ -137,15 +139,27 @@ export function HomePage({
           )}
         </div>
         {pendingRestoreCount > 0 && (
-          <button
-            type="button"
-            className="button button--secondary"
-            disabled={busy}
-            onClick={onRestoreFiles}
-          >
-            <RefreshCw size={16} />
-            Restore {pendingRestoreCount} file{pendingRestoreCount === 1 ? '' : 's'}
-          </button>
+          <div className="persistence-card__actions">
+            <button
+              type="button"
+              className="button button--secondary"
+              disabled={busy}
+              onClick={onRestoreFiles}
+            >
+              <RefreshCw size={16} />
+              Restore {pendingRestoreCount} file
+              {pendingRestoreCount === 1 ? '' : 's'}
+            </button>
+            <button
+              type="button"
+              className="button button--danger-subtle"
+              disabled={busy}
+              onClick={onResetFiles}
+            >
+              <Trash2 size={16} />
+              Reset files
+            </button>
+          </div>
         )}
         <label className="toggle-control">
           <input

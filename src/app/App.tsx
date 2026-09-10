@@ -166,7 +166,10 @@ export function App() {
               void workspace.changeRememberFiles(enabled)
             }}
             onRestoreFiles={() => {
-              void workspace.restoreRememberedFiles(true)
+              void workspace.restoreRememberedFiles()
+            }}
+            onResetFiles={() => {
+              void workspace.resetRememberedFiles()
             }}
           />
         )}
@@ -176,6 +179,14 @@ export function App() {
           {tab === 'events' && <EventLogDashboard files={workspace.eventFiles} />}
         </Suspense>
       </main>
+
+      <footer className="app-footer">
+        <span>© {new Date().getFullYear()} RequestPulse</span>
+        <span>
+          Improvements or bug reports:{' '}
+          <a href="mailto:steve@dobecom.me">steve@dobecom.me</a>
+        </span>
+      </footer>
 
       {workspaceDrag && (
         <div className="workspace-overlay" aria-hidden="true">
