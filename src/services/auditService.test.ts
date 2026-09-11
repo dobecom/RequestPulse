@@ -34,7 +34,11 @@ describe('loadVisitorCounts', () => {
     )
     expect(fetchMock).toHaveBeenCalledWith(
       '/api/v1/audit/visits',
-      expect.objectContaining({ method: 'POST', keepalive: true }),
+      expect.objectContaining({
+        method: 'POST',
+        keepalive: true,
+        body: expect.stringContaining('"site":"requestpulse"'),
+      }),
     )
   })
 
@@ -52,7 +56,7 @@ describe('loadVisitorCounts', () => {
       date: '2026-09-09',
     })
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/v1/audit/visits/counts',
+      '/api/v1/audit/visits/counts?site=requestpulse',
       expect.objectContaining({
         headers: { Accept: 'application/json' },
       }),

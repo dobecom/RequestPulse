@@ -25,7 +25,9 @@ function sessionId() {
 
 export async function loadVisitorCounts(page: string): Promise<VisitorCounts> {
   if (sessionStorage.getItem(AUDIT_SENT_KEY)) {
-    const counts = await getJson<VisitResponse>('/audit/visits/counts')
+    const counts = await getJson<VisitResponse>(
+      '/audit/visits/counts?site=requestpulse',
+    )
     if (!counts) throw new Error('Visitor counts response was empty.')
     return counts
   }
@@ -34,7 +36,7 @@ export async function loadVisitorCounts(page: string): Promise<VisitorCounts> {
   try {
     const counts = await postJson<VisitResponse>(
       '/audit/visits',
-      { sessionId: sessionId(), page },
+      { sessionId: sessionId(), page, site: 'requestpulse' },
       { keepalive: true },
     )
     if (!counts) throw new Error('Visitor counts response was empty.')
