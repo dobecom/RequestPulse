@@ -39,6 +39,76 @@ body {
     #f5f7fa;
 }
 
+.version-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 64px);
+}
+
+.version-page__panel {
+  width: min(760px, 100%);
+  padding: clamp(28px, 5vw, 52px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-8);
+}
+
+.version-page__eyebrow {
+  margin: 0;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.version-page h1 {
+  margin: 8px 0 28px;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: -0.045em;
+}
+
+.version-list {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.version-list li {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-alt);
+}
+
+.version-list li > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.version-list strong {
+  color: var(--blue);
+  font-size: 1.1rem;
+}
+
+.version-list time,
+.version-list code {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.version-list p {
+  margin: 12px 0;
+  line-height: 1.65;
+}
+
 button,
 input,
 select {

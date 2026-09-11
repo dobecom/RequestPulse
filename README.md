@@ -35,6 +35,11 @@ to `.env.prod` for a production-mode preview. Both local files are ignored.
 `VITE_APP_ENV` selects the application profile, `VITE_API_BASE_URL` defaults to
 `/api/v1`, and the development/preview ports default to `3001`.
 
+The unlinked `/version` route reads release history from
+`requestpulse.app.application_versions`. Update `release.json` before a new
+release; Core-DevOps records its version, description, and Git revision during
+deployment.
+
 ## Quality checks
 
 ```powershell

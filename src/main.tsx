@@ -2,9 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './app/App'
 import './app/styles.css'
+import { VersionPage } from './features/version/VersionPage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    {window.location.pathname.replace(/\/+$/, '') === '/version' ? (
+      <VersionPage />
+    ) : (
+      <App />
+    )}
   </StrictMode>,
 )
