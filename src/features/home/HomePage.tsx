@@ -52,9 +52,9 @@ export function HomePage({
           </span>
           <h1>Find the request pattern</h1>
           <p>
-            Explore IIS W3SVC performance and HTTP.sys rejection logs with immediate
-            filters, UTC timelines, and source-row navigation. Raw logs never leave
-            this browser.
+            Explore IIS logs, Windows events, and server configuration with
+            immediate filters, UTC timelines, schema comparisons, and source
+            evidence. Raw files never leave this browser.
           </p>
         </div>
         <div className="hero__aside">
@@ -113,6 +113,17 @@ export function HomePage({
           eyebrow="Windows Event Viewer"
           accept=".evtx,.xml"
           accent="orange"
+          busy={busy}
+          onFiles={onFiles}
+          onPickFiles={onPickFiles}
+        />
+        <DropZone
+          kind="config"
+          title="Drop IIS configuration files"
+          description="Open applicationHost.config and one or more web.config files for local schema-default comparison and risk review."
+          eyebrow="IIS configuration"
+          accept=".config,.xml"
+          accent="purple"
           busy={busy}
           onFiles={onFiles}
           onPickFiles={onPickFiles}
@@ -208,9 +219,15 @@ export function HomePage({
                         ? 'HTTPERR'
                         : file.kind === 'event-application'
                           ? 'Application events'
-                          : 'System events'}{' '}
+                          : file.kind === 'event-system'
+                            ? 'System events'
+                            : file.kind === 'config-applicationhost'
+                              ? 'applicationHost.config'
+                              : 'web.config'}{' '}
                     ·{' '}
-                    {file.rows.length.toLocaleString()} rows · {file.fields.length} fields
+                    {file.config
+                      ? `${file.config.settings.length.toLocaleString()} explicit settings`
+                      : `${file.rows.length.toLocaleString()} rows · ${file.fields.length} fields`}
                   </span>
                 </div>
                 {file.warnings.length > 0 && (

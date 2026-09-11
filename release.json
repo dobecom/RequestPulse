@@ -1,4 +1,4 @@
 {
-  "version": "v1.0.0",
-  "description": "Initial tracked release with project database isolation, protected operations management, and database-backed version history."
+  "version": "v1.1.0",
+  "description": "Adds local IIS configuration upload, synthetic configuration previews, server topology visualization, schema-default comparison, and risk-focused applicationHost.config and web.config findings."
 }

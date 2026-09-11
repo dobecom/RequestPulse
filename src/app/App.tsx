@@ -2,6 +2,7 @@ import {
   Activity,
   AlertCircle,
   BarChart3,
+  FileCog,
   Home,
   LoaderCircle,
   LockKeyhole,
@@ -11,6 +12,7 @@ import {
 } from 'lucide-react'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { SampleDataNotice } from '../features/dashboard/SampleDataNotice'
+import { sampleConfigFiles } from '../features/config/sampleConfigs'
 import { HomePage } from '../features/home/HomePage'
 import { sampleLogFiles } from '../features/logs/sampleLogs'
 import type { LogInputKind } from '../features/logs/types'
@@ -20,7 +22,7 @@ import {
   type VisitorCounts,
 } from '../services/auditService'
 
-type Tab = 'home' | 'w3svc' | 'httperr' | 'events'
+type Tab = 'home' | 'w3svc' | 'httperr' | 'events' | 'config'
 
 const W3Dashboard = lazy(() =>
   import('../features/dashboard/W3Dashboard').then((module) => ({
@@ -37,6 +39,11 @@ const EventLogDashboard = lazy(() =>
     default: module.EventLogDashboard,
   })),
 )
+const ConfigDashboard = lazy(() =>
+  import('../features/config/ConfigDashboard').then((module) => ({
+    default: module.ConfigDashboard,
+  })),
+)
 
 const tabs: Array<{
   id: Tab
@@ -47,6 +54,7 @@ const tabs: Array<{
   { id: 'w3svc', label: 'W3SVC', icon: BarChart3 },
   { id: 'httperr', label: 'HTTPERR', icon: ServerCrash },
   { id: 'events', label: 'Events', icon: MonitorCog },
+  { id: 'config', label: 'Configs', icon: FileCog },
 ]
 
 export function App() {
@@ -57,6 +65,7 @@ export function App() {
   const w3Count = workspace.w3Files.length
   const httpErrCount = workspace.httpErrFiles.length
   const eventCount = workspace.eventFiles.length
+  const configCount = workspace.configFiles.length
   const displayedW3Files = w3Count ? workspace.w3Files : sampleLogFiles.w3svc
   const displayedHttpErrFiles = httpErrCount
     ? workspace.httpErrFiles
@@ -64,6 +73,9 @@ export function App() {
   const displayedEventFiles = eventCount
     ? workspace.eventFiles
     : sampleLogFiles.events
+  const displayedConfigFiles = configCount
+    ? workspace.configFiles
+    : sampleConfigFiles
 
   useEffect(() => {
     void loadVisitorCounts(window.location.pathname || '/')
@@ -115,6 +127,8 @@ export function App() {
                   ? httpErrCount
                   : id === 'events'
                     ? eventCount
+                    : id === 'config'
+                      ? configCount
                   : 0
             const disabled = workspace.isParsing
             return (
@@ -177,6 +191,13 @@ export function App() {
         {tab === 'events' && !eventCount && (
           <SampleDataNotice kind="Event Viewer" />
         )}
+        {tab === 'config' && !configCount && (
+          <SampleDataNotice
+            kind="IIS configuration"
+            title="No uploaded IIS configuration files are currently loaded."
+            description="You are exploring synthetic applicationHost.config and web.config evidence with intentionally high-impact settings. Upload a matching file from Home to replace this preview."
+          />
+        )}
         <Suspense fallback={<div className="dashboard-loading">Loading dashboard…</div>}>
           {tab === 'w3svc' && (
             <W3Dashboard files={displayedW3Files} />
@@ -186,6 +207,9 @@ export function App() {
           )}
           {tab === 'events' && (
             <EventLogDashboard files={displayedEventFiles} />
+          )}
+          {tab === 'config' && (
+            <ConfigDashboard files={displayedConfigFiles} />
           )}
         </Suspense>
       </main>
@@ -203,7 +227,7 @@ export function App() {
           <div>
             <Activity size={32} />
             <strong>Drop logs into this workspace</strong>
-            <span>W3SVC, HTTPERR, Application, and System logs are detected locally</span>
+            <span>W3SVC, HTTPERR, Event Viewer, and IIS configuration files are detected locally</span>
           </div>
         </div>
       )}

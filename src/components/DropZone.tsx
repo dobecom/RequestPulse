@@ -9,7 +9,7 @@ interface DropZoneProps {
   notice?: string
   eyebrow?: string
   accept?: string
-  accent: 'blue' | 'teal' | 'orange'
+  accent: 'blue' | 'teal' | 'orange' | 'purple'
   busy: boolean
   onFiles: (files: FileList, expected: LogInputKind) => void
   onPickFiles: (expected: LogInputKind) => Promise<boolean>
@@ -60,7 +60,11 @@ export function DropZone({
       <div>
         <span className="eyebrow">
           {eyebrow ??
-            (kind === 'w3svc' ? 'IIS access logs' : 'HTTP.sys errors')}
+            (kind === 'w3svc'
+              ? 'IIS access logs'
+              : kind === 'httperr'
+                ? 'HTTP.sys errors'
+                : 'Local evidence')}
         </span>
         <h2>{title}</h2>
         <p>{description}</p>

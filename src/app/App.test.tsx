@@ -10,6 +10,7 @@ const { workspace } = vi.hoisted(() => ({
     w3Files: [] as ParsedLogFile[],
     httpErrFiles: [] as ParsedLogFile[],
     eventFiles: [] as ParsedLogFile[],
+    configFiles: [] as ParsedLogFile[],
     failures: [],
     isParsing: false,
     rememberFiles: false,
@@ -43,6 +44,7 @@ describe('App navigation and file processing state', () => {
     workspace.w3Files = []
     workspace.httpErrFiles = []
     workspace.eventFiles = []
+    workspace.configFiles = []
   })
 
   it('keeps dashboards available without uploaded files', async () => {
@@ -52,11 +54,24 @@ describe('App navigation and file processing state', () => {
     expect(screen.getByRole('button', { name: 'W3SVC' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'HTTPERR' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'Events' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Configs' })).toBeEnabled()
 
     fireEvent.click(screen.getByRole('button', { name: 'W3SVC' }))
 
     expect(
       await screen.findByText('No uploaded W3SVC logs are currently loaded.'),
+    ).toBeInTheDocument()
+  })
+
+  it('shows synthetic configuration evidence until config files are uploaded', async () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Configs' }))
+
+    expect(
+      await screen.findByText(
+        'No uploaded IIS configuration files are currently loaded.',
+      ),
     ).toBeInTheDocument()
   })
 

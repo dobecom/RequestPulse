@@ -1,4 +1,5 @@
 import { parseEventLogFile } from './eventLogParser'
+import { parseConfigText } from '../config/configParser'
 import type {
   LogInputKind,
   LogRow,
@@ -134,16 +135,40 @@ export function parseLogText(
 
 export async function parseBrowserFile(file: File, expectedKind?: LogInputKind) {
   const extension = file.name.toLowerCase().split('.').pop()
+  const isConfigRequest =
+    expectedKind === 'config' ||
+    expectedKind === 'config-applicationhost' ||
+    expectedKind === 'config-web'
+  if (isConfigRequest) {
+    return parseConfigText(
+      await file.text(),
+      file.name,
+      file.size,
+      expectedKind,
+    )
+  }
+
+  if (extension === 'xml') {
+    const text = await file.text()
+    if (/<configuration(?:\s|>)/i.test(text)) {
+      return parseConfigText(text, file.name, file.size, expectedKind)
+    }
+    return parseEventLogFile(file, expectedKind)
+  }
+
   if (
     expectedKind === 'eventlog' ||
     expectedKind === 'event-application' ||
     expectedKind === 'event-system' ||
-    extension === 'evtx' ||
-    extension === 'xml'
+    extension === 'evtx'
   ) {
     return parseEventLogFile(file, expectedKind)
   }
 
   const text = await file.text()
-  return parseLogText(text, file.name, file.size, expectedKind)
+  const expectedTextKind =
+    expectedKind === 'w3svc' || expectedKind === 'httperr'
+      ? expectedKind
+      : undefined
+  return parseLogText(text, file.name, file.size, expectedTextKind)
 }

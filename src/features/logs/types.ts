@@ -1,6 +1,49 @@
 export type EventLogKind = 'event-application' | 'event-system'
-export type LogKind = 'w3svc' | 'httperr' | EventLogKind
-export type LogInputKind = LogKind | 'eventlog'
+export type ConfigKind = 'config-applicationhost' | 'config-web'
+export type LogKind = 'w3svc' | 'httperr' | EventLogKind | ConfigKind
+export type LogInputKind = LogKind | 'eventlog' | 'config'
+
+export interface ConfigSetting {
+  id: string
+  path: string
+  displayPath: string
+  scope: string
+  attribute: string
+  value: string
+}
+
+export interface ConfigApplicationPool {
+  name: string
+  runtime: string
+  pipeline: string
+  startMode: string
+}
+
+export interface ConfigSite {
+  name: string
+  id: string
+  applicationPool: string
+  bindings: string[]
+  applications: number
+  virtualDirectories: number
+  ftp: boolean
+}
+
+export interface ConfigInventory {
+  applicationPools: ConfigApplicationPool[]
+  sites: ConfigSite[]
+  applications: number
+  virtualDirectories: number
+  bindings: number
+  ftpSites: number
+  arrEnabled: boolean
+  globalModules: number
+}
+
+export interface ParsedConfigData {
+  settings: ConfigSetting[]
+  inventory: ConfigInventory
+}
 
 export interface LogRow {
   id: string
@@ -21,6 +64,7 @@ export interface ParsedLogFile {
   rows: LogRow[]
   warnings: string[]
   size: number
+  config?: ParsedConfigData
 }
 
 export interface ParseFailure {

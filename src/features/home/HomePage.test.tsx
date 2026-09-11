@@ -30,6 +30,12 @@ describe('HomePage visitor metrics', () => {
     expect(
       screen.queryByText(/winevt\\logs|copy or export application/i),
     ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Drop IIS configuration files' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(/Configuration files can contain account names/i),
+    ).not.toBeInTheDocument()
   })
 
   it('offers restore and reset actions for remembered files', () => {

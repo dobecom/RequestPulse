@@ -1,13 +1,23 @@
 # RequestPulse
 
 RequestPulse is a browser-only React application for exploring IIS W3SVC access
-logs and HTTP.sys HTTPERR logs. Parsing, filtering, aggregation, and raw-row
-navigation happen locally in the browser. Raw log content is never sent to an
-API.
+logs, HTTP.sys HTTPERR logs, Windows Event Viewer evidence, and IIS
+configuration. Parsing, filtering, aggregation, configuration comparison, and
+raw-row navigation happen locally in the browser. Raw evidence is never sent to
+an API.
 
 ## Features
 
 - Separate W3SVC and HTTPERR drag/drop zones plus file pickers and workspace drop
+- Side-by-side Event Viewer and IIS configuration upload areas
+- applicationHost.config topology dashboard for pools, sites, applications,
+  virtual directories, bindings, FTP, modules, and ARR detection
+- applicationHost.config and web.config comparison against a bundled XML
+  catalog generated from every IIS configuration schema installed on Windows
+- Focused risk guidance for high-signal application pool, request, proxy,
+  authentication, ASP.NET, session, error-detail, cookie, and tracing settings
+- Synthetic applicationHost.config and web.config previews when no uploaded
+  configuration files are available
 - Dynamic `#Fields` parsing with strict format validation and UTC timestamps
 - W3SVC per-file, per-UTC-day dashboards with request count and average
   `time-taken` timelines
@@ -64,9 +74,24 @@ Open `http://localhost:3001`. The container health endpoint is `/healthz`.
 
 - W3SVC: an active `#Fields:` header must include `cs-uri-stem` and `time-taken`.
 - HTTPERR: an active `#Fields:` header must include `s-reason` and `s-queuename`.
+- IIS configuration: `applicationHost.config` and `web.config` must contain a
+  valid XML `<configuration>` root.
 
 Headers may change within a file. RequestPulse applies the active header to each
 subsequent data row and preserves the original source file and line number.
+
+The configuration reference is stored at
+`src/features/config/reference/iis-configuration-reference.xml`. Regenerate it
+on a Windows IIS machine with:
+
+```powershell
+.\scripts\generate-iis-configuration-reference.ps1
+```
+
+The generated catalog contains schema defaults, types, validation metadata, and
+allowed enum values. Findings cover explicit non-default values only. Missing
+settings may be inherited from parent configuration and are not treated as
+disabled.
 
 ## Privacy
 

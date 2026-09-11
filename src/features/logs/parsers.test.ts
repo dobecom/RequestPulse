@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { detectLogKind, parseLogText } from './parsers'
+import { detectLogKind, parseBrowserFile, parseLogText } from './parsers'
 
 const w3Text = `#Software: Microsoft Internet Information Services 10.0
 #Version: 1.0
@@ -61,5 +61,19 @@ describe('log parser', () => {
         'unknown.log',
       ),
     ).toThrow(/not recognized/i)
+  })
+
+  it('routes IIS configuration XML to the local configuration parser', async () => {
+    const xml =
+      '<configuration><system.web><compilation debug="true" /></system.web></configuration>'
+    const file = new File([xml], 'web.config', { type: 'application/xml' })
+    Object.defineProperty(file, 'text', {
+      value: async () => xml,
+    })
+
+    const parsed = await parseBrowserFile(file, 'config')
+
+    expect(parsed.kind).toBe('config-web')
+    expect(parsed.config?.settings).toHaveLength(1)
   })
 })

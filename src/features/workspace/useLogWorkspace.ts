@@ -131,17 +131,27 @@ export function useLogWorkspace() {
       if (!window.showOpenFilePicker) return false
       try {
         const eventLog = expected === 'eventlog'
+        const configuration = expected === 'config'
         const handles = await window.showOpenFilePicker({
           multiple: true,
           types: [
             {
-              description: eventLog ? 'Windows Event logs' : 'IIS text logs',
+              description: eventLog
+                ? 'Windows Event logs'
+                : configuration
+                  ? 'IIS configuration files'
+                  : 'IIS text logs',
               accept: eventLog
                 ? {
                     'application/octet-stream': ['.evtx'],
                     'application/xml': ['.xml'],
                   }
-                : { 'text/plain': ['.log', '.txt'] },
+                : configuration
+                  ? {
+                      'application/xml': ['.config', '.xml'],
+                      'text/xml': ['.config', '.xml'],
+                    }
+                  : { 'text/plain': ['.log', '.txt'] },
             },
           ],
         })
@@ -346,12 +356,21 @@ export function useLogWorkspace() {
       ),
     [files],
   )
+  const configFiles = useMemo(
+    () =>
+      files.filter(
+        (file) =>
+          file.kind === 'config-applicationhost' || file.kind === 'config-web',
+      ),
+    [files],
+  )
 
   return {
     files,
     w3Files,
     httpErrFiles,
     eventFiles,
+    configFiles,
     failures,
     isParsing,
     rememberFiles,

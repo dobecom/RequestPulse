@@ -1,0 +1,1780 @@
+<?xml version="1.0" encoding="utf-8"?>
+<iisConfigurationReference schemaVersion="1" source="Microsoft configuration schema XML files installed with IIS" documentation="https://learn.microsoft.com/iis/get-started/planning-your-iis-architecture/introduction-to-applicationhostconfig">
+  <section path="system.web/anonymousIdentification" source="ASPNET_schema.xml">
+    <option elementPath="" name="cookieless" type="enum" defaultValue="UseCookies" />
+    <option elementPath="" name="cookieName" type="string" defaultValue=".ASPXANONYMOUS" validationType="nonEmptyString" />
+    <option elementPath="" name="cookiePath" type="string" defaultValue="/" validationType="nonEmptyString" />
+    <option elementPath="" name="cookieProtection" type="enum" defaultValue="Validation" />
+    <option elementPath="" name="cookieRequireSSL" type="bool" defaultValue="False" />
+    <option elementPath="" name="cookieSlidingExpiration" type="bool" defaultValue="True" />
+    <option elementPath="" name="cookieTimeout" type="timeSpan" defaultValue="100000" allowInfinite="true" timeSpanFormat="minutes" validationType="timeSpanRange" validationParameter="0,2147483640,60" />
+    <option elementPath="" name="domain" type="string" />
+    <option elementPath="" name="enabled" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.web/authentication" source="ASPNET_schema.xml">
+    <option elementPath="forms" name="cookieless" type="enum" defaultValue="UseDeviceProfile" />
+    <option elementPath="forms/credentials" name="passwordFormat" type="enum" defaultValue="SHA1" />
+    <option elementPath="forms/credentials/user" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="forms/credentials/user" name="password" type="string" required="true" />
+    <option elementPath="forms" name="defaultUrl" type="string" defaultValue="default.aspx" validationType="nonEmptyString" />
+    <option elementPath="forms" name="domain" type="string" />
+    <option elementPath="forms" name="enableCrossAppRedirects" type="bool" defaultValue="False" />
+    <option elementPath="forms" name="loginUrl" type="string" defaultValue="login.aspx" validationType="nonEmptyString" />
+    <option elementPath="forms" name="name" type="string" defaultValue=".ASPXAUTH" validationType="nonEmptyString" />
+    <option elementPath="forms" name="path" type="string" defaultValue="/" validationType="nonEmptyString" />
+    <option elementPath="forms" name="protection" type="enum" defaultValue="All" />
+    <option elementPath="forms" name="requireSSL" type="bool" defaultValue="False" />
+    <option elementPath="forms" name="cookieSameSite" type="enum" defaultValue="Lax" />
+    <option elementPath="forms" name="slidingExpiration" type="bool" defaultValue="True" />
+    <option elementPath="forms" name="timeout" type="timeSpan" defaultValue="30" timeSpanFormat="minutes" validationType="timeSpanRange" validationParameter="60,2147483640,60" />
+    <option elementPath="forms" name="ticketCompatibilityMode" type="string" validationType="nonEmptyString" />
+    <option elementPath="" name="mode" type="enum" defaultValue="Windows" />
+    <option elementPath="passport" name="redirectUrl" type="string" defaultValue="internal" />
+  </section>
+  <section path="system.web/authorization" source="ASPNET_schema.xml">
+    <option elementPath="allow,deny" name="roles" type="string" />
+    <option elementPath="allow,deny" name="users" type="string" />
+    <option elementPath="allow,deny" name="verbs" type="string" />
+  </section>
+  <section path="system.web/browserCaps" source="ASPNET_schema.xml">
+    <option elementPath="" name="userAgentCacheKeyLength" type="int" defaultValue="64" />
+    <option elementPath="result" name="type" type="string" defaultValue="System.Web.Mobile.MobileCapabilities, System.Web.Mobile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3" />
+  </section>
+  <section path="system.web/clientTarget" source="ASPNET_schema.xml">
+    <option elementPath="add" name="alias" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="userAgent" type="string" required="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.web/compilation" source="ASPNET_schema.xml">
+    <option elementPath="assemblies/add" name="assembly" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="" name="assemblyPostProcessorType" type="string" />
+    <option elementPath="" name="batch" type="bool" defaultValue="True" />
+    <option elementPath="" name="batchTimeout" type="timeSpan" defaultValue="900" allowInfinite="true" timeSpanFormat="seconds" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+    <option elementPath="buildProviders/add" name="extension" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="buildProviders/add" name="type" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="codeSubDirectories/add" name="directoryName" type="string" required="true" isUniqueKey="true" validationType="requireTrimmedString" />
+    <option elementPath="" name="controlBuilderInterceptorType" type="string" />
+    <option elementPath="" name="debug" type="bool" defaultValue="False" />
+    <option elementPath="" name="defaultLanguage" type="string" defaultValue="vb" />
+    <option elementPath="" name="enablePrefetchOptimization" type="bool" defaultValue="False" />
+    <option elementPath="" name="explicit" type="bool" defaultValue="True" />
+    <option elementPath="expressionBuilders/add" name="expressionPrefix" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="expressionBuilders/add" name="type" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="" name="maxBatchGeneratedFileSize" type="int" defaultValue="1000" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="maxBatchSize" type="int" defaultValue="1000" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="numRecompilesBeforeAppRestart" type="int" defaultValue="15" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="strict" type="bool" defaultValue="False" />
+    <option elementPath="" name="tempDirectory" type="string" />
+    <option elementPath="" name="urlLinePragmas" type="bool" defaultValue="False" />
+    <option elementPath="" name="profileGuidedOptimizations" type="string" defaultValue="All" />
+    <option elementPath="" name="optimizeCompilations" type="bool" defaultValue="False" />
+    <option elementPath="" name="targetFramework" type="string" />
+    <option elementPath="folderLevelBuildProviders/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="folderLevelBuildProviders/add" name="type" type="string" required="true" isUniqueKey="false" validationType="nonEmptyString" />
+  </section>
+  <section path="system.web/customErrors" source="ASPNET_schema.xml">
+    <option elementPath="" name="allowNestedErrors" type="bool" defaultValue="False" />
+    <option elementPath="" name="defaultRedirect" type="string" />
+    <option elementPath="error" name="redirect" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="error" name="statusCode" type="int" required="true" isUniqueKey="true" validationType="integerRange" validationParameter="100,999" />
+    <option elementPath="" name="mode" type="enum" defaultValue="RemoteOnly" />
+    <option elementPath="" name="redirectMode" type="string" defaultValue="ResponseRedirect" validationType="nonEmptyString" />
+  </section>
+  <section path="system.web/deviceFilters" source="ASPNET_schema.xml">
+    <option elementPath="filter" name="argument" type="string" validationType="nonEmptyString" />
+    <option elementPath="filter" name="compare" type="string" validationType="nonEmptyString" />
+    <option elementPath="filter" name="type" type="string" />
+    <option elementPath="filter" name="method" type="string" validationType="nonEmptyString" />
+    <option elementPath="filter" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.web/globalization" source="ASPNET_schema.xml">
+    <option elementPath="" name="culture" type="string" />
+    <option elementPath="" name="enableBestFitResponseEncoding" type="bool" defaultValue="False" />
+    <option elementPath="" name="enableClientBasedCulture" type="bool" defaultValue="False" />
+    <option elementPath="" name="fileEncoding" type="string" />
+    <option elementPath="" name="requestEncoding" type="string" defaultValue="utf-8" />
+    <option elementPath="" name="resourceProviderFactoryType" type="string" />
+    <option elementPath="" name="responseEncoding" type="string" defaultValue="utf-8" />
+    <option elementPath="" name="responseHeaderEncoding" type="string" defaultValue="utf-8" />
+    <option elementPath="" name="uiCulture" type="string" />
+  </section>
+  <section path="system.web/healthMonitoring" source="ASPNET_schema.xml">
+    <option elementPath="bufferModes/add" name="maxBufferSize" type="int" defaultValue="2147483647" required="true" allowInfinite="true" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="bufferModes/add" name="maxBufferThreads" type="int" defaultValue="1" allowInfinite="true" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="bufferModes/add" name="maxFlushSize" type="int" defaultValue="2147483647" required="true" allowInfinite="true" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="bufferModes/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="bufferModes/add" name="regularFlushInterval" type="timeSpan" defaultValue="00:00:01" required="true" allowInfinite="true" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+    <option elementPath="bufferModes/add" name="urgentFlushInterval" type="timeSpan" defaultValue="00:00:00" required="true" allowInfinite="true" />
+    <option elementPath="bufferModes/add" name="urgentFlushThreshold" type="int" defaultValue="2147483647" required="true" allowInfinite="true" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="" name="enabled" type="bool" defaultValue="True" />
+    <option elementPath="eventMappings/add" name="endEventCode" type="int" defaultValue="2147483647" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="eventMappings/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="eventMappings/add" name="startEventCode" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="eventMappings/add" name="type" type="string" required="true" />
+    <option elementPath="" name="heartbeatInterval" type="timeSpan" defaultValue="0" timeSpanFormat="seconds" validationType="timeSpanRange" validationParameter="0,2147483,1" />
+    <option elementPath="profiles/add" name="custom" type="string" />
+    <option elementPath="profiles/add" name="maxLimit" type="int" defaultValue="2147483647" allowInfinite="true" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="profiles/add" name="minInstances" type="int" defaultValue="1" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="profiles/add" name="minInterval" type="timeSpan" defaultValue="00:00:00" allowInfinite="true" />
+    <option elementPath="profiles/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+    <option elementPath="rules/add" name="custom" type="string" />
+    <option elementPath="rules/add" name="eventName" type="string" required="true" />
+    <option elementPath="rules/add" name="maxLimit" type="int" defaultValue="2147483647" allowInfinite="true" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="rules/add" name="minInstances" type="int" defaultValue="1" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="rules/add" name="minInterval" type="timeSpan" defaultValue="00:00:00" allowInfinite="true" />
+    <option elementPath="rules/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="rules/add" name="profile" type="string" />
+    <option elementPath="rules/add" name="provider" type="string" />
+  </section>
+  <section path="system.web/hostingEnvironment" source="ASPNET_schema.xml">
+    <option elementPath="" name="idleTimeout" type="timeSpan" defaultValue="Infinite" allowInfinite="true" timeSpanFormat="minutes" validationType="timeSpanRange" validationParameter="0,2147483640,60" />
+    <option elementPath="" name="shadowCopyBinAssemblies" type="bool" defaultValue="True" />
+    <option elementPath="" name="shutdownTimeout" type="timeSpan" defaultValue="30" timeSpanFormat="seconds" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+  </section>
+  <section path="system.web/httpCookies" source="ASPNET_schema.xml">
+    <option elementPath="" name="domain" type="string" />
+    <option elementPath="" name="httpOnlyCookies" type="bool" defaultValue="False" />
+    <option elementPath="" name="requireSSL" type="bool" defaultValue="False" />
+    <option elementPath="" name="sameSite" type="enum" defaultValue="Unspecified" />
+  </section>
+  <section path="system.web/httpHandlers" source="ASPNET_schema.xml">
+    <option elementPath="add" name="path" type="string" required="true" isCombinedKey="true" />
+    <option elementPath="add" name="type" type="string" required="true" />
+    <option elementPath="add" name="validate" type="bool" defaultValue="True" />
+    <option elementPath="add" name="verb" type="string" required="true" isCombinedKey="true" />
+  </section>
+  <section path="system.web/httpModules" source="ASPNET_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.web/httpRuntime" source="ASPNET_schema.xml">
+    <option elementPath="" name="apartmentThreading" type="bool" defaultValue="False" />
+    <option elementPath="" name="appRequestQueueLimit" type="int" defaultValue="5000" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="" name="delayNotificationTimeout" type="timeSpan" defaultValue="5" timeSpanFormat="seconds" />
+    <option elementPath="" name="enable" type="bool" defaultValue="True" />
+    <option elementPath="" name="enableHeaderChecking" type="bool" defaultValue="True" />
+    <option elementPath="" name="enableKernelOutputCache" type="bool" defaultValue="True" />
+    <option elementPath="" name="enableVersionHeader" type="bool" defaultValue="True" />
+    <option elementPath="" name="executionTimeout" type="timeSpan" defaultValue="110" timeSpanFormat="seconds" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+    <option elementPath="" name="maxRequestLength" type="int" defaultValue="4096" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="maxWaitChangeNotification" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="minFreeThreads" type="int" defaultValue="8" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="minLocalRequestFreeThreads" type="int" defaultValue="4" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="requestLengthDiskThreshold" type="int" defaultValue="80" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="" name="requireRootedSaveAsPath" type="bool" defaultValue="True" />
+    <option elementPath="" name="sendCacheControlHeader" type="bool" defaultValue="True" />
+    <option elementPath="" name="shutdownTimeout" type="timeSpan" defaultValue="90" timeSpanFormat="seconds" />
+    <option elementPath="" name="useFullyQualifiedRedirectUrl" type="bool" defaultValue="False" />
+    <option elementPath="" name="waitChangeNotification" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="maxUrlLength" type="int" defaultValue="260" />
+    <option elementPath="" name="maxQueryStringLength" type="int" defaultValue="2048" />
+    <option elementPath="" name="relaxedUrlToFileSystemMapping" type="bool" defaultValue="False" />
+    <option elementPath="" name="requestPathInvalidCharacters" type="string" />
+    <option elementPath="" name="requestValidationMode" type="string" />
+    <option elementPath="" name="requestValidationType" type="string" />
+    <option elementPath="" name="encoderType" type="string" />
+    <option elementPath="" name="asyncPreloadMode" type="enum" defaultValue="None" />
+  </section>
+  <section path="system.web/identity" source="ASPNET_schema.xml">
+    <option elementPath="" name="impersonate" type="bool" defaultValue="False" />
+    <option elementPath="" name="password" type="string" />
+    <option elementPath="" name="userName" type="string" />
+  </section>
+  <section path="system.web/machineKey" source="ASPNET_schema.xml">
+    <option elementPath="" name="decryption" type="string" defaultValue="Auto" validationType="requireTrimmedString" />
+    <option elementPath="" name="decryptionKey" type="string" defaultValue="AutoGenerate,IsolateApps" validationType="requireTrimmedString" />
+    <option elementPath="" name="validation" type="enum" defaultValue="SHA1" />
+    <option elementPath="" name="validationKey" type="string" defaultValue="AutoGenerate,IsolateApps" validationType="requireTrimmedString" />
+    <option elementPath="" name="applicationName" type="string" />
+    <option elementPath="" name="dataProtectorType" type="string" />
+    <option elementPath="" name="compatibilityMode" type="enum" defaultValue="Framework20SP1" />
+  </section>
+  <section path="system.web/mobileControls" source="ASPNET_schema.xml">
+    <option elementPath="" name="allowCustomAttributes" type="bool" defaultValue="False" />
+    <option elementPath="" name="cookielessDataDictionaryType" type="string" defaultValue="System.Web.Mobile.CookielessData" />
+    <option elementPath="device/control" name="adapter" type="string" required="true" />
+    <option elementPath="device/control" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="device" name="inheritsFrom" type="string" validationType="nonEmptyString" />
+    <option elementPath="device" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="device" name="pageAdapter" type="string" />
+    <option elementPath="device" name="predicateClass" type="string" />
+    <option elementPath="device" name="predicateMethod" type="string" validationType="nonEmptyString" />
+    <option elementPath="" name="sessionStateHistorySize" type="int" defaultValue="6" validationType="integerRange" validationParameter="0,2147483647" />
+  </section>
+  <section path="system.web/pages" source="ASPNET_schema.xml">
+    <option elementPath="" name="asyncTimeout" type="timeSpan" defaultValue="45" timeSpanFormat="seconds" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+    <option elementPath="" name="autoEventWireup" type="bool" defaultValue="True" />
+    <option elementPath="" name="buffer" type="bool" defaultValue="True" />
+    <option elementPath="" name="compilationMode" type="enum" defaultValue="Always" />
+    <option elementPath="controls/add" name="assembly" type="string" />
+    <option elementPath="controls/add" name="namespace" type="string" />
+    <option elementPath="controls/add" name="src" type="string" />
+    <option elementPath="controls/add" name="tagName" type="string" />
+    <option elementPath="controls/add" name="tagPrefix" type="string" defaultValue="/" required="true" validationType="nonEmptyString" />
+    <option elementPath="" name="enableEventValidation" type="bool" defaultValue="True" />
+    <option elementPath="" name="enableSessionState" type="enum" defaultValue="true" />
+    <option elementPath="" name="enableViewState" type="bool" defaultValue="True" />
+    <option elementPath="" name="enableViewStateMac" type="bool" defaultValue="True" />
+    <option elementPath="" name="maintainScrollPositionOnPostBack" type="bool" defaultValue="False" />
+    <option elementPath="" name="masterPageFile" type="string" />
+    <option elementPath="" name="maxPageStateFieldLength" type="int" defaultValue="-1" />
+    <option elementPath="namespaces/add" name="namespace" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="namespaces" name="autoImportVBNamespace" type="bool" defaultValue="True" />
+    <option elementPath="" name="pageBaseType" type="string" defaultValue="System.Web.UI.Page" />
+    <option elementPath="" name="pageParserFilterType" type="string" />
+    <option elementPath="" name="smartNavigation" type="bool" defaultValue="False" />
+    <option elementPath="" name="styleSheetTheme" type="string" />
+    <option elementPath="tagMapping/add" name="mappedTagType" type="string" validationType="nonEmptyString" />
+    <option elementPath="tagMapping/add" name="tagType" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="" name="theme" type="string" />
+    <option elementPath="" name="userControlBaseType" type="string" defaultValue="System.Web.UI.UserControl" />
+    <option elementPath="" name="validateRequest" type="bool" defaultValue="True" />
+    <option elementPath="" name="viewStateEncryptionMode" type="enum" defaultValue="Auto" />
+    <option elementPath="" name="renderAllHiddenFieldsAtTopOfForm" type="bool" defaultValue="True" />
+    <option elementPath="" name="controlRenderingCompatibilityVersion" type="string" defaultValue="4.5" />
+    <option elementPath="" name="clientIDMode" type="string" defaultValue="Predictable" />
+  </section>
+  <section path="system.web/protocols" source="ASPNET_schema.xml">
+    <option elementPath="add" name="appDomainHandlerType" type="string" />
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="processHandlerType" type="string" />
+    <option elementPath="add" name="validate" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.web/securityPolicy" source="ASPNET_schema.xml">
+    <option elementPath="trustLevel" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="trustLevel" name="policyFile" type="string" defaultValue="internal" required="true" />
+  </section>
+  <section path="system.web/sessionPageState" source="ASPNET_schema.xml">
+    <option elementPath="" name="historySize" type="int" defaultValue="9" validationType="integerRange" validationParameter="1,2147483647" />
+  </section>
+  <section path="system.web/sessionState" source="ASPNET_schema.xml">
+    <option elementPath="" name="allowCustomSqlDatabase" type="bool" defaultValue="False" />
+    <option elementPath="" name="cookieless" type="enum" defaultValue="UseCookies" />
+    <option elementPath="" name="cookieName" type="string" defaultValue="ASP.NET_SessionId" />
+    <option elementPath="" name="cookieSameSite" type="enum" defaultValue="Lax" />
+    <option elementPath="" name="customProvider" type="string" />
+    <option elementPath="" name="mode" type="enum" defaultValue="InProc" />
+    <option elementPath="" name="partitionResolverType" type="string" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+    <option elementPath="" name="regenerateExpiredSessionId" type="bool" defaultValue="True" />
+    <option elementPath="" name="sessionIDManagerType" type="string" />
+    <option elementPath="" name="sqlCommandTimeout" type="timeSpan" defaultValue="30" allowInfinite="true" timeSpanFormat="seconds" />
+    <option elementPath="" name="sqlConnectionString" type="string" defaultValue="data source=localhost;Integrated Security=SSPI" />
+    <option elementPath="" name="stateConnectionString" type="string" defaultValue="tcpip=loopback:42424" />
+    <option elementPath="" name="stateNetworkTimeout" type="timeSpan" defaultValue="10" allowInfinite="true" timeSpanFormat="seconds" />
+    <option elementPath="" name="timeout" type="timeSpan" defaultValue="20" allowInfinite="true" timeSpanFormat="minutes" validationType="timeSpanRange" validationParameter="1,2147483640,60" />
+    <option elementPath="" name="useHostingIdentity" type="bool" defaultValue="True" />
+    <option elementPath="" name="sqlConnectionRetryInterval" type="timeSpan" defaultValue="0" allowInfinite="true" timeSpanFormat="seconds" />
+    <option elementPath="" name="compressionEnabled" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.web/siteMap" source="ASPNET_schema.xml">
+    <option elementPath="" name="defaultProvider" type="string" defaultValue="AspNetXmlSiteMapProvider" validationType="nonEmptyString" />
+    <option elementPath="" name="enabled" type="bool" defaultValue="True" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.web/trace" source="ASPNET_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="False" />
+    <option elementPath="" name="localOnly" type="bool" defaultValue="True" />
+    <option elementPath="" name="mostRecent" type="bool" defaultValue="False" />
+    <option elementPath="" name="pageOutput" type="bool" defaultValue="False" />
+    <option elementPath="" name="requestLimit" type="int" defaultValue="10" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="traceMode" type="enum" defaultValue="SortByTime" />
+    <option elementPath="" name="writeToDiagnosticsTrace" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.web/trust" source="ASPNET_schema.xml">
+    <option elementPath="" name="level" type="string" defaultValue="Full" validationType="nonEmptyString" />
+    <option elementPath="" name="originUrl" type="string" />
+    <option elementPath="" name="processRequestInApplicationTrust" type="bool" defaultValue="True" />
+    <option elementPath="" name="legacyCasModel" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.web/urlMappings" source="ASPNET_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="True" />
+    <option elementPath="add" name="mappedUrl" type="string" required="true" />
+    <option elementPath="add" name="url" type="string" required="true" isUniqueKey="true" />
+  </section>
+  <section path="system.web/webControls" source="ASPNET_schema.xml">
+    <option elementPath="" name="clientScriptsLocation" type="string" defaultValue="/aspnet_client/{0}/{1}/" validationType="nonEmptyString" />
+  </section>
+  <section path="system.web/webParts" source="ASPNET_schema.xml">
+    <option elementPath="" name="enableExport" type="bool" defaultValue="False" />
+    <option elementPath="personalization/authorization/allow,deny" name="roles" type="string" />
+    <option elementPath="personalization/authorization/allow,deny" name="users" type="string" />
+    <option elementPath="personalization/authorization/allow,deny" name="verbs" type="string" />
+    <option elementPath="personalization" name="defaultProvider" type="string" defaultValue="AspNetSqlPersonalizationProvider" validationType="nonEmptyString" />
+    <option elementPath="personalization/providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="personalization/providers/add" name="type" type="string" required="true" />
+    <option elementPath="transformers/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="transformers/add" name="type" type="string" required="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.web/webServices" source="ASPNET_schema.xml">
+    <option elementPath="conformanceWarnings/add" name="name" type="flags" isUniqueKey="true" />
+    <option elementPath="diagnostics" name="suppressReturningExceptions" type="bool" defaultValue="False" />
+    <option elementPath="protocols/add" name="name" type="flags" isUniqueKey="true" />
+    <option elementPath="serviceDescriptionFormatExtensionTypes/add" name="type" type="string" isUniqueKey="true" />
+    <option elementPath="soapEnvelopeProcessing" name="strict" type="bool" defaultValue="False" />
+    <option elementPath="soapEnvelopeProcessing" name="readTimeout" type="int" defaultValue="2147483647" />
+    <option elementPath="soapExtensionImporterTypes/add" name="type" type="string" isUniqueKey="true" />
+    <option elementPath="soapExtensionReflectorTypes/add" name="type" type="string" isUniqueKey="true" />
+    <option elementPath="soapExtensionTypes/add" name="group" type="enum" defaultValue="Low" isCombinedKey="true" />
+    <option elementPath="soapExtensionTypes/add" name="priority" type="int" defaultValue="0" isCombinedKey="true" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="soapExtensionTypes/add" name="type" type="string" isCombinedKey="true" />
+    <option elementPath="soapServerProtocolFactory" name="type" type="string" />
+    <option elementPath="soapTransportImporterTypes/add" name="type" type="string" isUniqueKey="true" />
+    <option elementPath="wsdlHelpGenerator" name="href" type="string" />
+  </section>
+  <section path="system.web/xhtmlConformance" source="ASPNET_schema.xml">
+    <option elementPath="" name="mode" type="enum" defaultValue="Transitional" />
+  </section>
+  <section path="system.web/caching/cache" source="ASPNET_schema.xml">
+    <option elementPath="" name="defaultProvider" type="string" />
+    <option elementPath="" name="disableExpiration" type="bool" defaultValue="False" />
+    <option elementPath="" name="disableMemoryCollection" type="bool" defaultValue="False" />
+    <option elementPath="" name="percentagePhysicalMemoryUsedLimit" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,100" />
+    <option elementPath="" name="privateBytesLimit" type="int64" defaultValue="0" />
+    <option elementPath="" name="privateBytesPollTime" type="timeSpan" defaultValue="00:02:00" allowInfinite="true" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.web/caching/outputCache" source="ASPNET_schema.xml">
+    <option elementPath="" name="enableFragmentCache" type="bool" defaultValue="True" />
+    <option elementPath="" name="enableKernelCacheForVaryByStar" type="bool" defaultValue="False" />
+    <option elementPath="" name="enableOutputCache" type="bool" defaultValue="True" />
+    <option elementPath="" name="omitVaryStar" type="bool" defaultValue="False" />
+    <option elementPath="" name="sendCacheControlHeader" type="bool" defaultValue="True" />
+  </section>
+  <section path="system.web/caching/outputCacheSettings" source="ASPNET_schema.xml">
+    <option elementPath="outputCacheProfiles/add" name="duration" type="int" defaultValue="-1" />
+    <option elementPath="outputCacheProfiles/add" name="enabled" type="bool" defaultValue="True" />
+    <option elementPath="outputCacheProfiles/add" name="location" type="enum" />
+    <option elementPath="outputCacheProfiles/add" name="name" type="string" required="true" isUniqueKey="true" validationType="requireTrimmedString" />
+    <option elementPath="outputCacheProfiles/add" name="noStore" type="bool" defaultValue="False" />
+    <option elementPath="outputCacheProfiles/add" name="sqlDependency" type="string" />
+    <option elementPath="outputCacheProfiles/add" name="varyByContentEncoding" type="string" />
+    <option elementPath="outputCacheProfiles/add" name="varyByControl" type="string" />
+    <option elementPath="outputCacheProfiles/add" name="varyByCustom" type="string" />
+    <option elementPath="outputCacheProfiles/add" name="varyByHeader" type="string" />
+    <option elementPath="outputCacheProfiles/add" name="varyByParam" type="string" />
+  </section>
+  <section path="system.web/caching/sqlCacheDependency" source="ASPNET_schema.xml">
+    <option elementPath="databases/add" name="connectionStringName" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="databases/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="databases/add" name="pollTime" type="int" defaultValue="60000" />
+    <option elementPath="" name="enabled" type="bool" defaultValue="True" />
+    <option elementPath="" name="pollTime" type="int" defaultValue="60000" />
+  </section>
+  <section path="system.web/fullTrustAssemblies" source="ASPNET_schema.xml">
+    <option elementPath="add" name="assemblyName" type="string" required="true" isUniqueKey="false" validationType="nonEmptyString" />
+    <option elementPath="add" name="version" type="string" required="true" isUniqueKey="false" validationType="nonEmptyString" />
+    <option elementPath="add" name="publicKey" type="string" required="true" isUniqueKey="false" validationType="nonEmptyString" />
+  </section>
+  <section path="system.web/partialTrustVisibleAssemblies" source="ASPNET_schema.xml">
+    <option elementPath="add" name="assemblyName" type="string" required="true" isUniqueKey="false" validationType="nonEmptyString" />
+    <option elementPath="add" name="version" type="string" required="true" isUniqueKey="false" validationType="nonEmptyString" />
+    <option elementPath="add" name="publicKey" type="string" required="true" isUniqueKey="false" validationType="nonEmptyString" />
+  </section>
+  <section path="system.webServer/aspNetCore" source="aspnetcore_schema_v2.xml">
+    <option elementPath="" name="processPath" type="string" />
+    <option elementPath="" name="arguments" type="string" />
+    <option elementPath="" name="startupTimeLimit" type="uint" defaultValue="120" validationType="integerRange" validationParameter="0,3600" />
+    <option elementPath="" name="shutdownTimeLimit" type="uint" defaultValue="10" validationType="integerRange" validationParameter="0,600" />
+    <option elementPath="" name="rapidFailsPerMinute" type="uint" defaultValue="10" validationType="integerRange" validationParameter="0,100" />
+    <option elementPath="" name="requestTimeout" type="timeSpan" defaultValue="00:02:00" validationType="timeSpanRange" validationParameter="0,1296000,1" />
+    <option elementPath="" name="stdoutLogEnabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="stdoutLogFile" type="string" defaultValue=".\aspnetcore-stdout" />
+    <option elementPath="" name="processesPerApplication" type="uint" defaultValue="1" validationType="integerRange" validationParameter="1,100" />
+    <option elementPath="" name="forwardWindowsAuthToken" type="bool" defaultValue="true" />
+    <option elementPath="" name="disableStartUpErrorPage" type="bool" defaultValue="false" />
+    <option elementPath="" name="hostingModel" type="string" />
+    <option elementPath="recycleOnFileChange/file" name="path" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="environmentVariables/environmentVariable" name="name" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="environmentVariables/environmentVariable" name="value" type="string" required="true" />
+    <option elementPath="handlerSettings/handlerSetting" name="name" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="handlerSettings/handlerSetting" name="value" type="string" required="true" />
+  </section>
+  <section path="system.applicationHost/sites" source="ftp_rscaext.xml">
+    <option elementPath="site/ftpServer" name="state" type="enum" />
+    <option elementPath="site/ftpServer" name="lastStartupStatus" type="uint" />
+    <option elementPath="site/ftpServer/sessions/session" name="clientIp" type="string" />
+    <option elementPath="site/ftpServer/sessions/session" name="sessionId" type="string" />
+    <option elementPath="site/ftpServer/sessions/session" name="sessionStartTime" type="string" />
+    <option elementPath="site/ftpServer/sessions/session" name="userName" type="string" />
+    <option elementPath="site/ftpServer/sessions/session" name="currentCommand" type="string" />
+    <option elementPath="site/ftpServer/sessions/session" name="previousCommand" type="string" />
+    <option elementPath="site/ftpServer/sessions/session" name="commandStartTime" type="string" />
+    <option elementPath="site/ftpServer/sessions/session" name="bytesSent" type="int64" />
+    <option elementPath="site/ftpServer/sessions/session" name="bytesReceived" type="int64" />
+    <option elementPath="site/ftpServer/sessions/session" name="lastErrorStatus" type="uint" />
+  </section>
+  <section path="system.ftpServer/caching" source="ftp_rscaext.xml" />
+  <section path="system.applicationHost/sites" source="Ftp_schema.xml">
+    <option elementPath="site/ftpServer" name="allowUTF8" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer" name="serverAutoStart" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/connections" name="unauthenticatedTimeout" type="int" defaultValue="30" />
+    <option elementPath="site/ftpServer/connections" name="controlChannelTimeout" type="int" defaultValue="120" />
+    <option elementPath="site/ftpServer/connections" name="dataChannelTimeout" type="int" defaultValue="30" />
+    <option elementPath="site/ftpServer/connections" name="disableSocketPooling" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/connections" name="serverListenBacklog" type="int" defaultValue="60" />
+    <option elementPath="site/ftpServer/connections" name="minBytesPerSecond" type="int" defaultValue="240" />
+    <option elementPath="site/ftpServer/connections" name="maxConnections" type="uint" defaultValue="4294967295" />
+    <option elementPath="site/ftpServer/connections" name="resetOnMaxConnections" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/connections" name="maxBandwidth" type="uint" defaultValue="4294967295" validationType="integerRange" validationParameter="0,4294967294,exclude" />
+    <option elementPath="site/ftpServer/security/dataChannelSecurity" name="matchClientAddressForPort" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/security/dataChannelSecurity" name="matchClientAddressForPasv" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/security/commandFiltering" name="maxCommandLine" type="uint" defaultValue="4096" />
+    <option elementPath="site/ftpServer/security/commandFiltering" name="allowUnlisted" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/security/commandFiltering/add" name="command" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="site/ftpServer/security/commandFiltering/add" name="allowed" type="bool" required="true" />
+    <option elementPath="site/ftpServer/security/ssl" name="serverCertHash" type="string" />
+    <option elementPath="site/ftpServer/security/ssl" name="serverCertStoreName" type="string" defaultValue="MY" />
+    <option elementPath="site/ftpServer/security/ssl" name="ssl128" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/security/ssl" name="controlChannelPolicy" type="enum" defaultValue="SslRequire" />
+    <option elementPath="site/ftpServer/security/ssl" name="dataChannelPolicy" type="enum" defaultValue="SslRequire" />
+    <option elementPath="site/ftpServer/security/sslClientCertificates" name="clientCertificatePolicy" type="enum" defaultValue="CertIgnore" />
+    <option elementPath="site/ftpServer/security/sslClientCertificates" name="useActiveDirectoryMapping" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/security/sslClientCertificates" name="validationFlags" type="flags" />
+    <option elementPath="site/ftpServer/security/sslClientCertificates" name="revocationFreshnessTime" type="timeSpan" defaultValue="00:00:00" />
+    <option elementPath="site/ftpServer/security/sslClientCertificates" name="revocationUrlRetrievalTimeout" type="timeSpan" defaultValue="00:01:00" />
+    <option elementPath="site/ftpServer/security/authentication/anonymousAuthentication" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/security/authentication/anonymousAuthentication" name="userName" type="string" defaultValue="IUSR" />
+    <option elementPath="site/ftpServer/security/authentication/anonymousAuthentication" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="site/ftpServer/security/authentication/anonymousAuthentication" name="defaultLogonDomain" type="string" defaultValue="NT AUTHORITY" />
+    <option elementPath="site/ftpServer/security/authentication/anonymousAuthentication" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="site/ftpServer/security/authentication/basicAuthentication" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/security/authentication/basicAuthentication" name="defaultLogonDomain" type="string" />
+    <option elementPath="site/ftpServer/security/authentication/basicAuthentication" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="site/ftpServer/security/authentication/clientCertAuthentication" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/security/authentication/customAuthentication/providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="site/ftpServer/security/authentication/customAuthentication/providers/add" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/security/customAuthorization/provider" name="name" type="string" />
+    <option elementPath="site/ftpServer/security/customAuthorization/provider" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/customFeatures/providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="site/ftpServer/customFeatures/providers/add" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/messages" name="exitMessage" type="string" />
+    <option elementPath="site/ftpServer/messages" name="greetingMessage" type="string" />
+    <option elementPath="site/ftpServer/messages" name="bannerMessage" type="string" />
+    <option elementPath="site/ftpServer/messages" name="maxClientsMessage" type="string" />
+    <option elementPath="site/ftpServer/messages" name="suppressDefaultBanner" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/messages" name="allowLocalDetailedErrors" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/messages" name="expandVariables" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/fileHandling" name="keepPartialUploads" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/fileHandling" name="allowReplaceOnRename" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/fileHandling" name="allowReadUploadsInProgress" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/firewallSupport" name="externalIp4Address" type="string" />
+    <option elementPath="site/ftpServer/userIsolation" name="mode" type="enum" defaultValue="None" />
+    <option elementPath="site/ftpServer/userIsolation/activeDirectory" name="adUserName" type="string" />
+    <option elementPath="site/ftpServer/userIsolation/activeDirectory" name="adPassword" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="site/ftpServer/userIsolation/activeDirectory" name="adCacheRefresh" type="timeSpan" defaultValue="00:01:00" />
+    <option elementPath="site/ftpServer/directoryBrowse" name="showFlags" type="flags" />
+    <option elementPath="site/ftpServer/directoryBrowse" name="virtualDirectoryTimeout" type="int" defaultValue="5" />
+    <option elementPath="site/ftpServer/logFile" name="logExtFileFlags" type="flags" defaultValue="Date, Time, ClientIP, UserName, ServerIP, Method, UriStem, FtpStatus, Win32Status, FtpSubStatus, ServerPort, Session, FullPath" />
+    <option elementPath="site/ftpServer/logFile" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\LogFiles" validationType="nonEmptyString" />
+    <option elementPath="site/ftpServer/logFile" name="period" type="enum" defaultValue="Daily" />
+    <option elementPath="site/ftpServer/logFile" name="truncateSize" type="int64" defaultValue="20971520" validationType="integerRange" validationParameter="1048576,4294967295" />
+    <option elementPath="site/ftpServer/logFile" name="localTimeRollover" type="bool" defaultValue="false" />
+    <option elementPath="site/ftpServer/logFile" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="site/ftpServer/logFile" name="selectiveLogging" type="flags" defaultValue="LogSuccessful,LogError,LogInfrastructure" />
+    <option elementPath="siteDefaults/ftpServer" name="allowUTF8" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer" name="serverAutoStart" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="unauthenticatedTimeout" type="int" defaultValue="30" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="controlChannelTimeout" type="int" defaultValue="120" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="dataChannelTimeout" type="int" defaultValue="30" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="disableSocketPooling" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="serverListenBacklog" type="int" defaultValue="60" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="minBytesPerSecond" type="int" defaultValue="240" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="maxConnections" type="uint" defaultValue="4294967295" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="resetOnMaxConnections" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/connections" name="maxBandwidth" type="uint" defaultValue="4294967295" validationType="integerRange" validationParameter="0,4294967294,exclude" />
+    <option elementPath="siteDefaults/ftpServer/security/dataChannelSecurity" name="matchClientAddressForPort" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/security/dataChannelSecurity" name="matchClientAddressForPasv" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/security/commandFiltering" name="maxCommandLine" type="uint" defaultValue="4096" />
+    <option elementPath="siteDefaults/ftpServer/security/commandFiltering" name="allowUnlisted" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/security/commandFiltering/add" name="command" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="siteDefaults/ftpServer/security/commandFiltering/add" name="allowed" type="bool" required="true" />
+    <option elementPath="siteDefaults/ftpServer/security/ssl" name="serverCertHash" type="string" />
+    <option elementPath="siteDefaults/ftpServer/security/ssl" name="serverCertStoreName" type="string" defaultValue="MY" />
+    <option elementPath="siteDefaults/ftpServer/security/ssl" name="ssl128" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/security/ssl" name="controlChannelPolicy" type="enum" defaultValue="SslRequire" />
+    <option elementPath="siteDefaults/ftpServer/security/ssl" name="dataChannelPolicy" type="enum" defaultValue="SslRequire" />
+    <option elementPath="siteDefaults/ftpServer/security/sslClientCertificates" name="clientCertificatePolicy" type="enum" defaultValue="CertIgnore" />
+    <option elementPath="siteDefaults/ftpServer/security/sslClientCertificates" name="useActiveDirectoryMapping" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/security/sslClientCertificates" name="validationFlags" type="flags" />
+    <option elementPath="siteDefaults/ftpServer/security/sslClientCertificates" name="revocationFreshnessTime" type="timeSpan" defaultValue="00:00:00" />
+    <option elementPath="siteDefaults/ftpServer/security/sslClientCertificates" name="revocationUrlRetrievalTimeout" type="timeSpan" defaultValue="00:01:00" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/anonymousAuthentication" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/anonymousAuthentication" name="userName" type="string" defaultValue="IUSR" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/anonymousAuthentication" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/anonymousAuthentication" name="defaultLogonDomain" type="string" defaultValue="NT AUTHORITY" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/anonymousAuthentication" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/basicAuthentication" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/basicAuthentication" name="defaultLogonDomain" type="string" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/basicAuthentication" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/clientCertAuthentication" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/customAuthentication/providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="siteDefaults/ftpServer/security/authentication/customAuthentication/providers/add" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/security/customAuthorization/provider" name="name" type="string" />
+    <option elementPath="siteDefaults/ftpServer/security/customAuthorization/provider" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/customFeatures" name="impersonationLevel" type="enum" defaultValue="Identify" />
+    <option elementPath="siteDefaults/ftpServer/customFeatures/providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="siteDefaults/ftpServer/customFeatures/providers/add" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/messages" name="exitMessage" type="string" />
+    <option elementPath="siteDefaults/ftpServer/messages" name="greetingMessage" type="string" />
+    <option elementPath="siteDefaults/ftpServer/messages" name="bannerMessage" type="string" />
+    <option elementPath="siteDefaults/ftpServer/messages" name="maxClientsMessage" type="string" />
+    <option elementPath="siteDefaults/ftpServer/messages" name="suppressDefaultBanner" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/messages" name="allowLocalDetailedErrors" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/messages" name="expandVariables" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/fileHandling" name="keepPartialUploads" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/fileHandling" name="allowReplaceOnRename" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/fileHandling" name="allowReadUploadsInProgress" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/firewallSupport" name="externalIp4Address" type="string" />
+    <option elementPath="siteDefaults/ftpServer/userIsolation" name="mode" type="enum" defaultValue="None" />
+    <option elementPath="siteDefaults/ftpServer/userIsolation/activeDirectory" name="adUserName" type="string" />
+    <option elementPath="siteDefaults/ftpServer/userIsolation/activeDirectory" name="adPassword" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="siteDefaults/ftpServer/userIsolation/activeDirectory" name="adCacheRefresh" type="timeSpan" defaultValue="00:01:00" />
+    <option elementPath="siteDefaults/ftpServer/directoryBrowse" name="showFlags" type="flags" />
+    <option elementPath="siteDefaults/ftpServer/directoryBrowse" name="virtualDirectoryTimeout" type="int" defaultValue="5" />
+    <option elementPath="siteDefaults/ftpServer/logFile" name="logExtFileFlags" type="flags" defaultValue="Date, Time, ClientIP, UserName, ServerIP, Method, UriStem, FtpStatus, Win32Status, FtpSubStatus, ServerPort, Session, FullPath" />
+    <option elementPath="siteDefaults/ftpServer/logFile" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\LogFiles" validationType="nonEmptyString" />
+    <option elementPath="siteDefaults/ftpServer/logFile" name="period" type="enum" defaultValue="Daily" />
+    <option elementPath="siteDefaults/ftpServer/logFile" name="truncateSize" type="int64" defaultValue="20971520" validationType="integerRange" validationParameter="1048576,4294967295" />
+    <option elementPath="siteDefaults/ftpServer/logFile" name="localTimeRollover" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/ftpServer/logFile" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/ftpServer/logFile" name="selectiveLogging" type="flags" defaultValue="LogSuccessful,LogError,LogInfrastructure" />
+  </section>
+  <section path="system.ftpServer/log" source="Ftp_schema.xml">
+    <option elementPath="" name="centralLogFileMode" type="enum" defaultValue="Site" />
+    <option elementPath="" name="logInUTF8" type="bool" defaultValue="true" />
+    <option elementPath="centralLogFile" name="logExtFileFlags" type="flags" defaultValue="Date, Time, ClientIP, UserName, ServerIP, Method, UriStem, FtpStatus, Win32Status, FtpSubStatus, ServerPort, Session, FullPath" />
+    <option elementPath="centralLogFile" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\LogFiles" validationType="nonEmptyString" />
+    <option elementPath="centralLogFile" name="period" type="enum" defaultValue="Daily" />
+    <option elementPath="centralLogFile" name="truncateSize" type="int64" defaultValue="20971520" validationType="integerRange" validationParameter="1048576,4294967295" />
+    <option elementPath="centralLogFile" name="localTimeRollover" type="bool" defaultValue="false" />
+    <option elementPath="centralLogFile" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="centralLogFile" name="selectiveLogging" type="flags" defaultValue="LogSuccessful,LogError,LogInfrastructure" />
+  </section>
+  <section path="system.ftpServer/firewallSupport" source="Ftp_schema.xml">
+    <option elementPath="" name="lowDataChannelPort" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,65535" />
+    <option elementPath="" name="highDataChannelPort" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,65535" />
+  </section>
+  <section path="system.ftpServer/providerDefinitions" source="Ftp_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="type" type="string" />
+    <option elementPath="add" name="clsid" type="string" />
+    <option elementPath="activation/providerData" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="activation/providerData/add" name="key" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="activation/providerData/add" name="value" type="string" />
+    <option elementPath="activation/providerData/add" name="encryptedValue" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+  </section>
+  <section path="system.ftpServer/security/authorization" source="Ftp_schema.xml">
+    <option elementPath="add" name="accessType" type="enum" required="true" />
+    <option elementPath="add" name="users" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="roles" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="permissions" type="flags" isCombinedKey="true" />
+  </section>
+  <section path="system.ftpServer/security/ipSecurity" source="Ftp_schema.xml">
+    <option elementPath="" name="enableReverseDns" type="bool" defaultValue="false" />
+    <option elementPath="" name="allowUnlisted" type="bool" defaultValue="true" />
+    <option elementPath="add" name="ipAddress" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="subnetMask" type="string" defaultValue="255.255.255.255" isCombinedKey="true" />
+    <option elementPath="add" name="domainName" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="allowed" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.ftpServer/security/requestFiltering" source="Ftp_schema.xml">
+    <option elementPath="" name="allowHighBitCharacters" type="bool" defaultValue="true" />
+    <option elementPath="fileExtensions" name="allowUnlisted" type="bool" defaultValue="true" />
+    <option elementPath="fileExtensions/add" name="fileExtension" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="fileExtensions/add" name="allowed" type="bool" defaultValue="true" required="true" />
+    <option elementPath="requestLimits" name="maxAllowedContentLength" type="int64" defaultValue="0" />
+    <option elementPath="requestLimits" name="maxUrl" type="uint" defaultValue="4096" validationType="integerRange" validationParameter="32,32768" />
+    <option elementPath="hiddenSegments/add" name="segment" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="denyUrlSequences/add" name="sequence" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.ftpServer/security/authentication" source="Ftp_schema.xml">
+    <option elementPath="denyByFailure" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="denyByFailure" name="maxFailure" type="uint" defaultValue="4" validationType="integerRange" validationParameter="1,4294967295" />
+    <option elementPath="denyByFailure" name="entryExpiration" type="timeSpan" defaultValue="00:00:30" />
+    <option elementPath="denyByFailure" name="loggingOnlyMode" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.ftpServer/caching" source="Ftp_schema.xml">
+    <option elementPath="credentialsCache" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="credentialsCache" name="flushInterval" type="uint" defaultValue="900" validationType="integerRange" validationParameter="5,604800" />
+  </section>
+  <section path="system.ftpServer/serverRuntime" source="Ftp_schema.xml">
+    <option elementPath="hostNameSupport" name="useDomainNameAsHostName" type="bool" defaultValue="false" />
+  </section>
+  <section path="appSettings" source="FX_schema.xml">
+    <option elementPath="" name="file" type="string" />
+    <option elementPath="add" name="key" type="string" isUniqueKey="true" />
+    <option elementPath="add" name="value" type="string" />
+  </section>
+  <section path="configProtectedData" source="FX_schema.xml">
+    <option elementPath="" name="defaultProvider" type="string" defaultValue="RsaProtectedConfigurationProvider" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+  </section>
+  <section path="connectionStrings" source="FX_schema.xml">
+    <option elementPath="add" name="connectionString" type="string" required="true" />
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="providerName" type="string" defaultValue="System.Data.SqlClient" />
+  </section>
+  <section path="system.codedom" source="FX_schema.xml">
+    <option elementPath="compilers/compiler" name="language" type="string" isCombinedKey="true" />
+    <option elementPath="compilers/compiler" name="extension" type="string" isCombinedKey="true" />
+    <option elementPath="compilers/compiler" name="type" type="string" />
+    <option elementPath="compilers/compiler" name="warningLevel" type="int" />
+    <option elementPath="compilers/compiler" name="compilerOptions" type="string" />
+    <option elementPath="compilers/compiler/providerOption" name="name" type="string" isCombinedKey="true" />
+    <option elementPath="compilers/compiler/providerOption" name="value" type="string" isCombinedKey="true" />
+  </section>
+  <section path="system.data" source="FX_schema.xml">
+    <option elementPath="DbProviderFactories/add" name="invariant" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="DbProviderFactories/add" name="name" type="string" />
+    <option elementPath="DbProviderFactories/add" name="description" type="string" />
+    <option elementPath="DbProviderFactories/add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.diagnostics" source="FX_schema.xml">
+    <option elementPath="assert" name="assertuienabled" type="bool" defaultValue="True" />
+    <option elementPath="assert" name="logfilename" type="string" />
+    <option elementPath="performanceCounters" name="filemappingsize" type="int" defaultValue="524288" />
+    <option elementPath="sharedListeners/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="sharedListeners/add" name="traceOutputOptions" type="flags" defaultValue="None" />
+    <option elementPath="sharedListeners/add" name="initializeData" type="string" />
+    <option elementPath="sharedListeners/add" name="type" type="string" required="true" />
+    <option elementPath="sharedListeners/add/filter" name="initializeData" type="string" />
+    <option elementPath="sharedListeners/add/filter" name="type" type="string" />
+    <option elementPath="sources/source" name="name" type="string" required="true" />
+    <option elementPath="sources/source" name="switchName" type="string" />
+    <option elementPath="sources/source" name="switchValue" type="string" />
+    <option elementPath="sources/source" name="switchType" type="string" />
+    <option elementPath="sources/source/listeners/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="sources/source/listeners/add" name="traceOutputOptions" type="flags" defaultValue="None" />
+    <option elementPath="sources/source/listeners/add" name="initializeData" type="string" />
+    <option elementPath="sources/source/listeners/add" name="type" type="string" required="true" />
+    <option elementPath="sources/source/listeners/add/filter" name="initializeData" type="string" />
+    <option elementPath="sources/source/listeners/add/filter" name="type" type="string" />
+    <option elementPath="switches/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="switches/add" name="value" type="string" required="true" />
+    <option elementPath="trace" name="autoflush" type="bool" defaultValue="False" />
+    <option elementPath="trace" name="indentsize" type="int" defaultValue="4" />
+    <option elementPath="trace/listeners/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="trace/listeners/add" name="traceOutputOptions" type="flags" defaultValue="None" />
+    <option elementPath="trace/listeners/add" name="initializeData" type="string" />
+    <option elementPath="trace/listeners/add" name="type" type="string" required="true" />
+    <option elementPath="trace/listeners/add/filter" name="initializeData" type="string" />
+    <option elementPath="trace/listeners/add/filter" name="type" type="string" />
+    <option elementPath="trace" name="useGlobalLock" type="bool" defaultValue="True" />
+  </section>
+  <section path="system.windows.forms" source="FX_schema.xml">
+    <option elementPath="" name="jitDebugging" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.net/authenticationModules" source="FX_schema.xml">
+    <option elementPath="add" name="type" type="string" required="true" isUniqueKey="true" />
+  </section>
+  <section path="system.net/connectionManagement" source="FX_schema.xml">
+    <option elementPath="add" name="address" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="maxconnection" type="int" defaultValue="1" required="true" />
+  </section>
+  <section path="system.net/defaultProxy" source="FX_schema.xml">
+    <option elementPath="bypasslist/add" name="address" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="" name="enabled" type="bool" defaultValue="True" />
+    <option elementPath="module" name="type" type="string" />
+    <option elementPath="proxy" name="autoDetect" type="enum" defaultValue="Unspecified" />
+    <option elementPath="proxy" name="bypassonlocal" type="enum" defaultValue="Unspecified" />
+    <option elementPath="proxy" name="proxyaddress" type="string" />
+    <option elementPath="proxy" name="scriptLocation" type="string" />
+    <option elementPath="proxy" name="usesystemdefault" type="enum" defaultValue="Unspecified" />
+    <option elementPath="" name="useDefaultCredentials" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.net/requestCaching" source="FX_schema.xml">
+    <option elementPath="defaultFtpCachePolicy" name="policyLevel" type="enum" defaultValue="Default" />
+    <option elementPath="defaultHttpCachePolicy" name="maximumAge" type="timeSpan" defaultValue="10675199.02:48:05.4775807" />
+    <option elementPath="defaultHttpCachePolicy" name="maximumStale" type="timeSpan" defaultValue="-10675199.02:48:05.4775808" />
+    <option elementPath="defaultHttpCachePolicy" name="minimumFresh" type="timeSpan" defaultValue="-10675199.02:48:05.4775808" />
+    <option elementPath="defaultHttpCachePolicy" name="policyLevel" type="enum" defaultValue="Default" />
+    <option elementPath="" name="defaultPolicyLevel" type="enum" defaultValue="BypassCache" />
+    <option elementPath="" name="disableAllCaching" type="bool" defaultValue="False" />
+    <option elementPath="" name="isPrivateCache" type="bool" defaultValue="True" />
+    <option elementPath="" name="unspecifiedMaximumAge" type="timeSpan" defaultValue="1.00:00:00" />
+  </section>
+  <section path="system.net/settings" source="FX_schema.xml">
+    <option elementPath="httpWebRequest" name="maximumErrorResponseLength" type="int" defaultValue="64" />
+    <option elementPath="httpWebRequest" name="maximumResponseHeadersLength" type="int" defaultValue="64" />
+    <option elementPath="httpWebRequest" name="maximumUnauthorizedUploadLength" type="int" defaultValue="-1" />
+    <option elementPath="httpWebRequest" name="useUnsafeHeaderParsing" type="bool" defaultValue="False" />
+    <option elementPath="ipv6" name="enabled" type="bool" defaultValue="False" />
+    <option elementPath="performanceCounters" name="enabled" type="bool" defaultValue="False" />
+    <option elementPath="servicePointManager" name="checkCertificateName" type="bool" defaultValue="True" />
+    <option elementPath="servicePointManager" name="checkCertificateRevocationList" type="bool" defaultValue="False" />
+    <option elementPath="servicePointManager" name="dnsRefreshTimeout" type="int" defaultValue="120000" />
+    <option elementPath="servicePointManager" name="enableDnsRoundRobin" type="bool" defaultValue="False" />
+    <option elementPath="servicePointManager" name="expect100Continue" type="bool" defaultValue="True" />
+    <option elementPath="servicePointManager" name="useNagleAlgorithm" type="bool" defaultValue="True" />
+    <option elementPath="socket" name="alwaysUseCompletionPortsForAccept" type="bool" defaultValue="False" />
+    <option elementPath="socket" name="alwaysUseCompletionPortsForConnect" type="bool" defaultValue="False" />
+    <option elementPath="webProxyScript" name="downloadTimeout" type="timeSpan" defaultValue="00:02:00" />
+  </section>
+  <section path="system.net/webRequestModules" source="FX_schema.xml">
+    <option elementPath="add" name="prefix" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="type" type="string" />
+  </section>
+  <section path="system.net/mailSettings/smtp" source="FX_schema.xml">
+    <option elementPath="" name="deliveryMethod" type="enum" defaultValue="Network" />
+    <option elementPath="" name="from" type="string" />
+    <option elementPath="network" name="defaultCredentials" type="bool" defaultValue="False" />
+    <option elementPath="network" name="host" type="string" />
+    <option elementPath="network" name="password" type="string" />
+    <option elementPath="network" name="port" type="int" defaultValue="25" />
+    <option elementPath="network" name="userName" type="string" />
+    <option elementPath="specifiedPickupDirectory" name="pickupDirectoryLocation" type="string" />
+  </section>
+  <section path="system.transactions/defaultSettings" source="FX_schema.xml">
+    <option elementPath="" name="distributedTransactionManagerName" type="string" />
+    <option elementPath="" name="timeout" type="timeSpan" defaultValue="00:01:00" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+  </section>
+  <section path="system.transactions/machineSettings" source="FX_schema.xml">
+    <option elementPath="" name="maxTimeout" type="timeSpan" defaultValue="00:10:00" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+  </section>
+  <section path="system.web/deployment" source="FX_schema.xml">
+    <option elementPath="" name="retail" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.web/membership" source="FX_schema.xml">
+    <option elementPath="" name="defaultProvider" type="string" defaultValue="AspNetSqlMembershipProvider" validationType="nonEmptyString" />
+    <option elementPath="" name="hashAlgorithmType" type="string" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+    <option elementPath="" name="userIsOnlineTimeWindow" type="timeSpan" defaultValue="15" timeSpanFormat="minutes" validationType="timeSpanRange" validationParameter="1,2147483640,60" />
+  </section>
+  <section path="system.web/processModel" source="FX_schema.xml">
+    <option elementPath="" name="autoConfig" type="bool" defaultValue="False" />
+    <option elementPath="" name="clientConnectedCheck" type="timeSpan" defaultValue="00:00:05" allowInfinite="true" />
+    <option elementPath="" name="comAuthenticationLevel" type="enum" defaultValue="Connect" />
+    <option elementPath="" name="comImpersonationLevel" type="enum" defaultValue="Impersonate" />
+    <option elementPath="" name="cpuMask" type="int" />
+    <option elementPath="" name="enable" type="bool" defaultValue="True" />
+    <option elementPath="" name="idleTimeout" type="timeSpan" defaultValue="10675199.02:48:05.4775807" allowInfinite="true" />
+    <option elementPath="" name="logLevel" type="enum" defaultValue="Errors" />
+    <option elementPath="" name="maxAppDomains" type="int" defaultValue="2000" validationType="integerRange" validationParameter="1,2147483646" />
+    <option elementPath="" name="maxIoThreads" type="int" defaultValue="20" validationType="integerRange" validationParameter="1,2147483646" />
+    <option elementPath="" name="maxWorkerThreads" type="int" defaultValue="20" validationType="integerRange" validationParameter="1,2147483646" />
+    <option elementPath="" name="memoryLimit" type="int" defaultValue="60" />
+    <option elementPath="" name="minIoThreads" type="int" defaultValue="1" validationType="integerRange" validationParameter="1,2147483646" />
+    <option elementPath="" name="minWorkerThreads" type="int" defaultValue="1" validationType="integerRange" validationParameter="1,2147483646" />
+    <option elementPath="" name="password" type="string" defaultValue="AutoGenerate" />
+    <option elementPath="" name="pingFrequency" type="timeSpan" defaultValue="10675199.02:48:05.4775807" allowInfinite="true" />
+    <option elementPath="" name="pingTimeout" type="timeSpan" defaultValue="10675199.02:48:05.4775807" allowInfinite="true" />
+    <option elementPath="" name="requestLimit" type="int" defaultValue="2147483647" allowInfinite="true" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="requestQueueLimit" type="int" defaultValue="5000" allowInfinite="true" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="responseDeadlockInterval" type="timeSpan" defaultValue="00:03:00" allowInfinite="true" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+    <option elementPath="" name="responseRestartDeadlockInterval" type="timeSpan" defaultValue="00:03:00" allowInfinite="true" />
+    <option elementPath="" name="restartQueueLimit" type="int" defaultValue="10" allowInfinite="true" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="serverErrorMessageFile" type="string" />
+    <option elementPath="" name="shutdownTimeout" type="timeSpan" defaultValue="00:00:05" allowInfinite="true" validationType="timeSpanRange" validationParameter="0,2147483647,1" />
+    <option elementPath="" name="timeout" type="timeSpan" defaultValue="10675199.02:48:05.4775807" allowInfinite="true" />
+    <option elementPath="" name="userName" type="string" defaultValue="machine" />
+    <option elementPath="" name="webGarden" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.web/profile" source="FX_schema.xml">
+    <option elementPath="" name="automaticSaveEnabled" type="bool" defaultValue="True" />
+    <option elementPath="" name="defaultProvider" type="string" defaultValue="AspNetSqlProfileProvider" validationType="nonEmptyString" />
+    <option elementPath="" name="enabled" type="bool" defaultValue="True" />
+    <option elementPath="" name="inherits" type="string" />
+    <option elementPath="properties/add" name="allowAnonymous" type="bool" defaultValue="False" />
+    <option elementPath="properties/add" name="customProviderData" type="string" />
+    <option elementPath="properties/add" name="defaultValue" type="string" />
+    <option elementPath="properties/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="properties/add" name="provider" type="string" />
+    <option elementPath="properties/add" name="readOnly" type="bool" defaultValue="False" />
+    <option elementPath="properties/add" name="serializeAs" type="enum" defaultValue="ProviderSpecific" />
+    <option elementPath="properties/add" name="type" type="string" defaultValue="string" />
+    <option elementPath="properties/group" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="properties/group/add" name="allowAnonymous" type="bool" defaultValue="False" />
+    <option elementPath="properties/group/add" name="customProviderData" type="string" />
+    <option elementPath="properties/group/add" name="defaultValue" type="string" />
+    <option elementPath="properties/group/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="properties/group/add" name="provider" type="string" />
+    <option elementPath="properties/group/add" name="readOnly" type="bool" defaultValue="False" />
+    <option elementPath="properties/group/add" name="serializeAs" type="enum" defaultValue="ProviderSpecific" />
+    <option elementPath="properties/group/add" name="type" type="string" defaultValue="string" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.web/roleManager" source="FX_schema.xml">
+    <option elementPath="" name="cacheRolesInCookie" type="bool" defaultValue="False" />
+    <option elementPath="" name="cookieName" type="string" defaultValue=".ASPXROLES" validationType="requireTrimmedString" />
+    <option elementPath="" name="cookiePath" type="string" defaultValue="/" validationType="requireTrimmedString" />
+    <option elementPath="" name="cookieProtection" type="enum" defaultValue="All" />
+    <option elementPath="" name="cookieRequireSSL" type="bool" defaultValue="False" />
+    <option elementPath="" name="cookieSlidingExpiration" type="bool" defaultValue="True" />
+    <option elementPath="" name="cookieTimeout" type="timeSpan" defaultValue="30" allowInfinite="true" timeSpanFormat="minutes" validationType="timeSpanRange" validationParameter="0,2147483640,60" />
+    <option elementPath="" name="createPersistentCookie" type="bool" defaultValue="False" />
+    <option elementPath="" name="defaultProvider" type="string" defaultValue="AspNetSqlRoleProvider" validationType="requireTrimmedString" />
+    <option elementPath="" name="domain" type="string" />
+    <option elementPath="" name="enabled" type="bool" defaultValue="False" />
+    <option elementPath="" name="maxCachedResults" type="int" defaultValue="25" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.xml.serialization/dateTimeSerialization" source="FX_schema.xml">
+    <option elementPath="" name="mode" type="enum" defaultValue="Roundtrip" />
+  </section>
+  <section path="system.xml.serialization/schemaImporterExtensions" source="FX_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.xml.serialization/xmlSerializer" source="FX_schema.xml">
+    <option elementPath="" name="checkDeserializeAdvances" type="bool" defaultValue="False" />
+  </section>
+  <section path="system.applicationHost/applicationPools" source="IIS_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" validationType="applicationPoolName" />
+    <option elementPath="add" name="queueLength" type="uint" defaultValue="1000" validationType="integerRange" validationParameter="10,65535" />
+    <option elementPath="add" name="autoStart" type="bool" defaultValue="true" />
+    <option elementPath="add" name="enable32BitAppOnWin64" type="bool" defaultValue="false" />
+    <option elementPath="add" name="enableEmulationOnWinArm64" type="bool" defaultValue="true" />
+    <option elementPath="add" name="managedRuntimeVersion" type="string" />
+    <option elementPath="add" name="managedRuntimeLoader" type="string" defaultValue="webengine4.dll" />
+    <option elementPath="add" name="enableConfigurationOverride" type="bool" defaultValue="true" />
+    <option elementPath="add" name="managedPipelineMode" type="enum" defaultValue="Integrated" />
+    <option elementPath="add" name="CLRConfigFile" type="string" />
+    <option elementPath="add" name="passAnonymousToken" type="bool" defaultValue="true" />
+    <option elementPath="add" name="startMode" type="enum" defaultValue="OnDemand" />
+    <option elementPath="add/processModel" name="identityType" type="enum" defaultValue="ApplicationPoolIdentity" />
+    <option elementPath="add/processModel" name="userName" type="string" />
+    <option elementPath="add/processModel" name="password" type="string" defaultValue="[enc:IISWASOnlyCngProvider::enc]" encrypted="true" />
+    <option elementPath="add/processModel" name="requestQueueDelegatorIdentity" type="string" />
+    <option elementPath="add/processModel" name="loadUserProfile" type="bool" defaultValue="false" />
+    <option elementPath="add/processModel" name="setProfileEnvironment" type="bool" defaultValue="true" />
+    <option elementPath="add/processModel" name="logonType" type="enum" defaultValue="LogonBatch" />
+    <option elementPath="add/processModel" name="manualGroupMembership" type="bool" defaultValue="false" />
+    <option elementPath="add/processModel" name="idleTimeout" type="timeSpan" defaultValue="00:20:00" validationType="timeSpanRange" validationParameter="0,2592000,60" />
+    <option elementPath="add/processModel" name="idleTimeoutAction" type="enum" defaultValue="Terminate" />
+    <option elementPath="add/processModel" name="maxProcesses" type="uint" defaultValue="1" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="add/processModel" name="shutdownTimeLimit" type="timeSpan" defaultValue="00:01:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="add/processModel" name="startupTimeLimit" type="timeSpan" defaultValue="00:01:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="add/processModel" name="pingingEnabled" type="bool" defaultValue="true" />
+    <option elementPath="add/processModel" name="pingInterval" type="timeSpan" defaultValue="00:00:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="add/processModel" name="pingResponseTime" type="timeSpan" defaultValue="00:01:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="add/processModel" name="logEventOnProcessModel" type="flags" defaultValue="IdleTimeout" />
+    <option elementPath="add/recycling" name="disallowOverlappingRotation" type="bool" defaultValue="false" />
+    <option elementPath="add/recycling" name="disallowRotationOnConfigChange" type="bool" defaultValue="false" />
+    <option elementPath="add/recycling" name="logEventOnRecycle" type="flags" defaultValue="Time, Requests, Schedule, Memory, IsapiUnhealthy, OnDemand, ConfigChange, PrivateMemory" />
+    <option elementPath="add/recycling/periodicRestart" name="memory" type="uint" defaultValue="0" />
+    <option elementPath="add/recycling/periodicRestart" name="privateMemory" type="uint" defaultValue="0" />
+    <option elementPath="add/recycling/periodicRestart" name="requests" type="uint" defaultValue="0" />
+    <option elementPath="add/recycling/periodicRestart" name="time" type="timeSpan" defaultValue="1.05:00:00" validationType="timeSpanRange" validationParameter="0,25920000,60" />
+    <option elementPath="add/recycling/periodicRestart/schedule/add" name="value" type="timeSpan" required="true" isUniqueKey="true" validationType="timeSpanRange" validationParameter="0,86399,60" />
+    <option elementPath="add/failure" name="loadBalancerCapabilities" type="enum" defaultValue="HttpLevel" />
+    <option elementPath="add/failure" name="orphanWorkerProcess" type="bool" defaultValue="false" />
+    <option elementPath="add/failure" name="orphanActionExe" type="string" />
+    <option elementPath="add/failure" name="orphanActionParams" type="string" />
+    <option elementPath="add/failure" name="rapidFailProtection" type="bool" defaultValue="true" />
+    <option elementPath="add/failure" name="rapidFailProtectionInterval" type="timeSpan" defaultValue="00:05:00" validationType="timeSpanRange" validationParameter="60,8640000,60" />
+    <option elementPath="add/failure" name="rapidFailProtectionMaxCrashes" type="uint" defaultValue="5" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="add/failure" name="autoShutdownExe" type="string" />
+    <option elementPath="add/failure" name="autoShutdownParams" type="string" />
+    <option elementPath="add/cpu" name="limit" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,100000" />
+    <option elementPath="add/cpu" name="action" type="enum" defaultValue="NoAction" />
+    <option elementPath="add/cpu" name="resetInterval" type="timeSpan" defaultValue="00:05:00" validationType="timeSpanRange" validationParameter="0,86400,60" />
+    <option elementPath="add/cpu" name="smpAffinitized" type="bool" defaultValue="false" />
+    <option elementPath="add/cpu" name="smpProcessorAffinityMask" type="uint" defaultValue="4294967295" />
+    <option elementPath="add/cpu" name="smpProcessorAffinityMask2" type="uint" defaultValue="4294967295" />
+    <option elementPath="add/cpu" name="processorGroup" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="add/cpu" name="numaNodeAssignment" type="enum" defaultValue="MostAvailableMemory" />
+    <option elementPath="add/cpu" name="numaNodeAffinityMode" type="enum" defaultValue="Soft" />
+    <option elementPath="add/environmentVariables/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add/environmentVariables/add" name="value" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="applicationPoolDefaults" name="name" type="string" validationType="applicationPoolName" />
+    <option elementPath="applicationPoolDefaults" name="queueLength" type="uint" defaultValue="1000" validationType="integerRange" validationParameter="10,65535" />
+    <option elementPath="applicationPoolDefaults" name="autoStart" type="bool" defaultValue="true" />
+    <option elementPath="applicationPoolDefaults" name="enable32BitAppOnWin64" type="bool" defaultValue="false" />
+    <option elementPath="applicationPoolDefaults" name="enableEmulationOnWinArm64" type="bool" defaultValue="true" />
+    <option elementPath="applicationPoolDefaults" name="managedRuntimeVersion" type="string" />
+    <option elementPath="applicationPoolDefaults" name="managedRuntimeLoader" type="string" defaultValue="webengine4.dll" />
+    <option elementPath="applicationPoolDefaults" name="enableConfigurationOverride" type="bool" defaultValue="true" />
+    <option elementPath="applicationPoolDefaults" name="managedPipelineMode" type="enum" defaultValue="Integrated" />
+    <option elementPath="applicationPoolDefaults" name="CLRConfigFile" type="string" />
+    <option elementPath="applicationPoolDefaults" name="passAnonymousToken" type="bool" defaultValue="true" />
+    <option elementPath="applicationPoolDefaults" name="startMode" type="enum" defaultValue="OnDemand" />
+    <option elementPath="applicationPoolDefaults/processModel" name="identityType" type="enum" defaultValue="ApplicationPoolIdentity" />
+    <option elementPath="applicationPoolDefaults/processModel" name="userName" type="string" />
+    <option elementPath="applicationPoolDefaults/processModel" name="password" type="string" defaultValue="[enc:IISWASOnlyCngProvider::enc]" encrypted="true" />
+    <option elementPath="applicationPoolDefaults/processModel" name="requestQueueDelegatorIdentity" type="string" />
+    <option elementPath="applicationPoolDefaults/processModel" name="loadUserProfile" type="bool" defaultValue="false" />
+    <option elementPath="applicationPoolDefaults/processModel" name="setProfileEnvironment" type="bool" defaultValue="true" />
+    <option elementPath="applicationPoolDefaults/processModel" name="logonType" type="enum" defaultValue="LogonBatch" />
+    <option elementPath="applicationPoolDefaults/processModel" name="manualGroupMembership" type="bool" defaultValue="false" />
+    <option elementPath="applicationPoolDefaults/processModel" name="idleTimeout" type="timeSpan" defaultValue="00:20:00" validationType="timeSpanRange" validationParameter="0,2592000,60" />
+    <option elementPath="applicationPoolDefaults/processModel" name="idleTimeoutAction" type="enum" defaultValue="Terminate" />
+    <option elementPath="applicationPoolDefaults/processModel" name="maxProcesses" type="uint" defaultValue="1" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="applicationPoolDefaults/processModel" name="shutdownTimeLimit" type="timeSpan" defaultValue="00:01:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="applicationPoolDefaults/processModel" name="startupTimeLimit" type="timeSpan" defaultValue="00:01:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="applicationPoolDefaults/processModel" name="pingingEnabled" type="bool" defaultValue="true" />
+    <option elementPath="applicationPoolDefaults/processModel" name="pingInterval" type="timeSpan" defaultValue="00:00:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="applicationPoolDefaults/processModel" name="pingResponseTime" type="timeSpan" defaultValue="00:01:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="applicationPoolDefaults/processModel" name="logEventOnProcessModel" type="flags" defaultValue="IdleTimeout" />
+    <option elementPath="applicationPoolDefaults/recycling" name="disallowOverlappingRotation" type="bool" defaultValue="false" />
+    <option elementPath="applicationPoolDefaults/recycling" name="disallowRotationOnConfigChange" type="bool" defaultValue="false" />
+    <option elementPath="applicationPoolDefaults/recycling" name="logEventOnRecycle" type="flags" defaultValue="Time, Requests, Schedule, Memory, IsapiUnhealthy, OnDemand, ConfigChange, PrivateMemory" />
+    <option elementPath="applicationPoolDefaults/recycling/periodicRestart" name="memory" type="uint" defaultValue="0" />
+    <option elementPath="applicationPoolDefaults/recycling/periodicRestart" name="privateMemory" type="uint" defaultValue="0" />
+    <option elementPath="applicationPoolDefaults/recycling/periodicRestart" name="requests" type="uint" defaultValue="0" />
+    <option elementPath="applicationPoolDefaults/recycling/periodicRestart" name="time" type="timeSpan" defaultValue="1.05:00:00" validationType="timeSpanRange" validationParameter="0,25920000,60" />
+    <option elementPath="applicationPoolDefaults/recycling/periodicRestart/schedule/add" name="value" type="timeSpan" required="true" isUniqueKey="true" validationType="timeSpanRange" validationParameter="0,86399,60" />
+    <option elementPath="applicationPoolDefaults/failure" name="loadBalancerCapabilities" type="enum" defaultValue="HttpLevel" />
+    <option elementPath="applicationPoolDefaults/failure" name="orphanWorkerProcess" type="bool" defaultValue="false" />
+    <option elementPath="applicationPoolDefaults/failure" name="orphanActionExe" type="string" />
+    <option elementPath="applicationPoolDefaults/failure" name="orphanActionParams" type="string" />
+    <option elementPath="applicationPoolDefaults/failure" name="rapidFailProtection" type="bool" defaultValue="true" />
+    <option elementPath="applicationPoolDefaults/failure" name="rapidFailProtectionInterval" type="timeSpan" defaultValue="00:05:00" validationType="timeSpanRange" validationParameter="60,8640000,60" />
+    <option elementPath="applicationPoolDefaults/failure" name="rapidFailProtectionMaxCrashes" type="uint" defaultValue="5" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="applicationPoolDefaults/failure" name="autoShutdownExe" type="string" />
+    <option elementPath="applicationPoolDefaults/failure" name="autoShutdownParams" type="string" />
+    <option elementPath="applicationPoolDefaults/cpu" name="limit" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,100000" />
+    <option elementPath="applicationPoolDefaults/cpu" name="action" type="enum" defaultValue="NoAction" />
+    <option elementPath="applicationPoolDefaults/cpu" name="resetInterval" type="timeSpan" defaultValue="00:05:00" validationType="timeSpanRange" validationParameter="0,86400,60" />
+    <option elementPath="applicationPoolDefaults/cpu" name="smpAffinitized" type="bool" defaultValue="false" />
+    <option elementPath="applicationPoolDefaults/cpu" name="smpProcessorAffinityMask" type="uint" defaultValue="4294967295" />
+    <option elementPath="applicationPoolDefaults/cpu" name="smpProcessorAffinityMask2" type="uint" defaultValue="4294967295" />
+    <option elementPath="applicationPoolDefaults/cpu" name="processorGroup" type="int" defaultValue="0" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="applicationPoolDefaults/cpu" name="numaNodeAssignment" type="enum" defaultValue="MostAvailableMemory" />
+    <option elementPath="applicationPoolDefaults/cpu" name="numaNodeAffinityMode" type="enum" defaultValue="Soft" />
+    <option elementPath="applicationPoolDefaults/environmentVariables/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="applicationPoolDefaults/environmentVariables/add" name="value" type="string" required="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.applicationHost/configHistory" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="" name="path" type="string" defaultValue="%SYSTEMDRIVE%\inetpub\history" validationType="nonEmptyString" />
+    <option elementPath="" name="maxHistories" type="uint" defaultValue="10" validationType="integerRange" validationParameter="1,4294967295" />
+    <option elementPath="" name="period" type="timeSpan" defaultValue="00:02:00" validationType="timeSpanRange" validationParameter="10,2147483647,1" />
+  </section>
+  <section path="system.applicationHost/customMetadata" source="IIS_schema.xml">
+    <option elementPath="key" name="path" type="string" isUniqueKey="true" />
+    <option elementPath="key/property" name="id" type="uint" isUniqueKey="true" />
+    <option elementPath="key/property" name="dataType" type="enum" required="true" />
+    <option elementPath="key/property" name="userType" type="uint" defaultValue="1" />
+    <option elementPath="key/property" name="attributes" type="flags" defaultValue="Inherit" />
+    <option elementPath="key/property" name="value" type="string" />
+  </section>
+  <section path="system.applicationHost/listenerAdapters" source="IIS_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="identity" type="string" />
+    <option elementPath="add" name="protocolManagerDll" type="string" />
+    <option elementPath="add" name="protocolManagerDllInitFunction" type="string" />
+  </section>
+  <section path="system.applicationHost/log" source="IIS_schema.xml">
+    <option elementPath="" name="logInUTF8" type="bool" defaultValue="true" />
+    <option elementPath="" name="centralLogFileMode" type="enum" defaultValue="Site" />
+    <option elementPath="centralBinaryLogFile" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="centralBinaryLogFile" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\LogFiles" />
+    <option elementPath="centralBinaryLogFile" name="period" type="enum" defaultValue="Daily" />
+    <option elementPath="centralBinaryLogFile" name="truncateSize" type="int64" defaultValue="20971520" validationType="integerRange" validationParameter="1048576,4294967295" />
+    <option elementPath="centralBinaryLogFile" name="localTimeRollover" type="bool" defaultValue="false" />
+    <option elementPath="centralW3CLogFile" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="centralW3CLogFile" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\LogFiles" validationType="nonEmptyString" />
+    <option elementPath="centralW3CLogFile" name="period" type="enum" defaultValue="Daily" />
+    <option elementPath="centralW3CLogFile" name="truncateSize" type="int64" defaultValue="20971520" validationType="integerRange" validationParameter="1048576,4294967295" />
+    <option elementPath="centralW3CLogFile" name="localTimeRollover" type="bool" defaultValue="false" />
+    <option elementPath="centralW3CLogFile" name="logExtFileFlags" type="flags" defaultValue="Date, Time, ClientIP, UserName, SiteName, ServerIP, Method, UriStem, UriQuery, TimeTaken, HttpStatus, Win32Status, BytesSent, BytesRecv, ServerPort, UserAgent, HttpSubStatus, Referer" />
+  </section>
+  <section path="system.applicationHost/serviceAutoStartProviders" source="IIS_schema.xml">
+    <option elementPath="add" name="name" type="string" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="type" type="string" />
+  </section>
+  <section path="system.applicationHost/sites" source="IIS_schema.xml">
+    <option elementPath="site" name="name" type="string" required="true" isUniqueKey="true" validationType="siteName" />
+    <option elementPath="site" name="id" type="uint" required="true" isUniqueKey="true" />
+    <option elementPath="site" name="serverAutoStart" type="bool" defaultValue="true" />
+    <option elementPath="site/bindings/binding" name="protocol" type="string" required="true" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="site/bindings/binding" name="bindingInformation" type="string" required="true" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="site/bindings/binding" name="sslFlags" type="uint" defaultValue="0" />
+    <option elementPath="site/limits" name="maxBandwidth" type="uint" defaultValue="4294967295" validationType="integerRange" validationParameter="0,1023,exclude" />
+    <option elementPath="site/limits" name="maxConnections" type="uint" defaultValue="4294967295" />
+    <option elementPath="site/limits" name="connectionTimeout" type="timeSpan" defaultValue="00:02:00" validationType="timeSpanRange" validationParameter="0,65535,1" />
+    <option elementPath="site/limits" name="maxUrlSegments" type="uint" defaultValue="32" validationType="integerRange" validationParameter="0,16383" />
+    <option elementPath="site/logFile" name="logExtFileFlags" type="flags" defaultValue="Date, Time, ClientIP, UserName, ServerIP, Method, UriStem, UriQuery, TimeTaken, HttpStatus, Win32Status, BytesSent, BytesRecv, ServerPort, UserAgent, HttpSubStatus, Referer" />
+    <option elementPath="site/logFile" name="customLogPluginClsid" type="string" />
+    <option elementPath="site/logFile" name="logFormat" type="enum" defaultValue="W3C" />
+    <option elementPath="site/logFile" name="logTargetW3C" type="flags" defaultValue="File" />
+    <option elementPath="site/logFile" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\LogFiles" validationType="nonEmptyString" />
+    <option elementPath="site/logFile" name="period" type="enum" defaultValue="Daily" />
+    <option elementPath="site/logFile" name="truncateSize" type="int64" defaultValue="20971520" validationType="integerRange" validationParameter="1048576,4294967295" />
+    <option elementPath="site/logFile" name="localTimeRollover" type="bool" defaultValue="false" />
+    <option elementPath="site/logFile" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="site/logFile" name="logSiteId" type="bool" defaultValue="true" />
+    <option elementPath="site/logFile" name="flushByEntryCountW3CLog" type="uint" defaultValue="0" />
+    <option elementPath="site/logFile" name="maxLogLineLength" type="uint" defaultValue="65536" validationType="integerRange" validationParameter="2,65536" />
+    <option elementPath="site/logFile/customFields" name="maxCustomFieldLength" type="uint" defaultValue="4096" validationType="integerRange" validationParameter="2,65536" />
+    <option elementPath="site/logFile/customFields/add" name="logFieldName" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="site/logFile/customFields/add" name="sourceName" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="site/logFile/customFields/add" name="sourceType" type="enum" required="true" />
+    <option elementPath="site/traceFailedRequestsLogging" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="site/traceFailedRequestsLogging" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\FailedReqLogFiles" />
+    <option elementPath="site/traceFailedRequestsLogging" name="maxLogFiles" type="uint" defaultValue="50" validationType="integerRange" validationParameter="1,10000" />
+    <option elementPath="site/traceFailedRequestsLogging" name="maxLogFileSizeKB" type="uint" defaultValue="1024" validationType="integerRange" validationParameter="0,1048576" />
+    <option elementPath="site/traceFailedRequestsLogging" name="customActionsEnabled" type="bool" defaultValue="false" />
+    <option elementPath="site/hsts" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="site/hsts" name="max-age" type="uint" defaultValue="0" />
+    <option elementPath="site/hsts" name="includeSubDomains" type="bool" defaultValue="false" />
+    <option elementPath="site/hsts" name="preload" type="bool" defaultValue="false" />
+    <option elementPath="site/hsts" name="redirectHttpToHttps" type="bool" defaultValue="false" />
+    <option elementPath="site/application" name="path" type="string" required="true" isUniqueKey="true" validationType="applicationPath" />
+    <option elementPath="site/application" name="applicationPool" type="string" validationType="applicationPoolName" />
+    <option elementPath="site/application" name="enabledProtocols" type="string" defaultValue="http" />
+    <option elementPath="site/application" name="serviceAutoStartEnabled" type="bool" defaultValue="false" />
+    <option elementPath="site/application" name="serviceAutoStartProvider" type="string" />
+    <option elementPath="site/application" name="preloadEnabled" type="bool" defaultValue="false" />
+    <option elementPath="site/application/virtualDirectory" name="path" type="string" isUniqueKey="true" validationType="virtualDirectoryPath" />
+    <option elementPath="site/application/virtualDirectory" name="physicalPath" type="string" />
+    <option elementPath="site/application/virtualDirectory" name="userName" type="string" />
+    <option elementPath="site/application/virtualDirectory" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="site/application/virtualDirectory" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="site/application/virtualDirectory" name="allowSubDirConfig" type="bool" defaultValue="true" />
+    <option elementPath="site/application/virtualDirectoryDefaults" name="path" type="string" validationType="virtualDirectoryPath" />
+    <option elementPath="site/application/virtualDirectoryDefaults" name="physicalPath" type="string" />
+    <option elementPath="site/application/virtualDirectoryDefaults" name="userName" type="string" />
+    <option elementPath="site/application/virtualDirectoryDefaults" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="site/application/virtualDirectoryDefaults" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="site/application/virtualDirectoryDefaults" name="allowSubDirConfig" type="bool" defaultValue="true" />
+    <option elementPath="site/applicationDefaults" name="path" type="string" validationType="applicationPath" />
+    <option elementPath="site/applicationDefaults" name="applicationPool" type="string" validationType="applicationPoolName" />
+    <option elementPath="site/applicationDefaults" name="enabledProtocols" type="string" defaultValue="http" />
+    <option elementPath="site/applicationDefaults" name="serviceAutoStartEnabled" type="bool" defaultValue="false" />
+    <option elementPath="site/applicationDefaults" name="serviceAutoStartProvider" type="string" />
+    <option elementPath="site/applicationDefaults" name="preloadEnabled" type="bool" defaultValue="false" />
+    <option elementPath="site/virtualDirectoryDefaults" name="path" type="string" validationType="virtualDirectoryPath" />
+    <option elementPath="site/virtualDirectoryDefaults" name="physicalPath" type="string" />
+    <option elementPath="site/virtualDirectoryDefaults" name="userName" type="string" />
+    <option elementPath="site/virtualDirectoryDefaults" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="site/virtualDirectoryDefaults" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="site/virtualDirectoryDefaults" name="allowSubDirConfig" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults" name="name" type="string" validationType="siteName" />
+    <option elementPath="siteDefaults" name="id" type="uint" />
+    <option elementPath="siteDefaults" name="serverAutoStart" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/bindings/binding" name="protocol" type="string" required="true" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="siteDefaults/bindings/binding" name="bindingInformation" type="string" required="true" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="siteDefaults/bindings/binding" name="sslFlags" type="uint" defaultValue="0" />
+    <option elementPath="siteDefaults/limits" name="maxBandwidth" type="uint" defaultValue="4294967295" validationType="integerRange" validationParameter="0,1023,exclude" />
+    <option elementPath="siteDefaults/limits" name="maxConnections" type="uint" defaultValue="4294967295" />
+    <option elementPath="siteDefaults/limits" name="connectionTimeout" type="timeSpan" defaultValue="00:02:00" validationType="timeSpanRange" validationParameter="0,65535,1" />
+    <option elementPath="siteDefaults/limits" name="maxUrlSegments" type="uint" defaultValue="32" validationType="integerRange" validationParameter="0,16383" />
+    <option elementPath="siteDefaults/logFile" name="logExtFileFlags" type="flags" defaultValue="Date, Time, ClientIP, UserName, ServerIP, Method, UriStem, UriQuery, TimeTaken, HttpStatus, Win32Status, BytesSent, BytesRecv, ServerPort, UserAgent, HttpSubStatus, Referer" />
+    <option elementPath="siteDefaults/logFile" name="customLogPluginClsid" type="string" />
+    <option elementPath="siteDefaults/logFile" name="logFormat" type="enum" defaultValue="W3C" />
+    <option elementPath="siteDefaults/logFile" name="logTargetW3C" type="flags" defaultValue="File" />
+    <option elementPath="siteDefaults/logFile" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\logs\LogFiles" />
+    <option elementPath="siteDefaults/logFile" name="period" type="enum" defaultValue="Daily" />
+    <option elementPath="siteDefaults/logFile" name="truncateSize" type="int64" defaultValue="20971520" validationType="integerRange" validationParameter="1048576,4294967295" />
+    <option elementPath="siteDefaults/logFile" name="localTimeRollover" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/logFile" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/logFile" name="logSiteId" type="bool" defaultValue="true" />
+    <option elementPath="siteDefaults/logFile" name="flushByEntryCountW3CLog" type="uint" defaultValue="0" />
+    <option elementPath="siteDefaults/logFile" name="maxLogLineLength" type="uint" defaultValue="65536" validationType="integerRange" validationParameter="2,65536" />
+    <option elementPath="siteDefaults/logFile/customFields" name="maxCustomFieldLength" type="uint" defaultValue="4096" validationType="integerRange" validationParameter="2,65536" />
+    <option elementPath="siteDefaults/logFile/customFields/add" name="logFieldName" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="siteDefaults/logFile/customFields/add" name="sourceName" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="siteDefaults/logFile/customFields/add" name="sourceType" type="enum" required="true" />
+    <option elementPath="siteDefaults/traceFailedRequestsLogging" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/traceFailedRequestsLogging" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\FailedReqLogFiles" />
+    <option elementPath="siteDefaults/traceFailedRequestsLogging" name="maxLogFiles" type="uint" defaultValue="50" validationType="integerRange" validationParameter="1,10000" />
+    <option elementPath="siteDefaults/traceFailedRequestsLogging" name="maxLogFileSizeKB" type="uint" defaultValue="1024" validationType="integerRange" validationParameter="0,1048576" />
+    <option elementPath="siteDefaults/traceFailedRequestsLogging" name="customActionsEnabled" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/hsts" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/hsts" name="max-age" type="uint" defaultValue="0" />
+    <option elementPath="siteDefaults/hsts" name="includeSubDomains" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/hsts" name="preload" type="bool" defaultValue="false" />
+    <option elementPath="siteDefaults/hsts" name="redirectHttpToHttps" type="bool" defaultValue="false" />
+    <option elementPath="applicationDefaults" name="path" type="string" validationType="applicationPath" />
+    <option elementPath="applicationDefaults" name="applicationPool" type="string" validationType="applicationPoolName" />
+    <option elementPath="applicationDefaults" name="enabledProtocols" type="string" defaultValue="http" />
+    <option elementPath="virtualDirectoryDefaults" name="path" type="string" validationType="virtualDirectoryPath" />
+    <option elementPath="virtualDirectoryDefaults" name="physicalPath" type="string" />
+    <option elementPath="virtualDirectoryDefaults" name="userName" type="string" />
+    <option elementPath="virtualDirectoryDefaults" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="virtualDirectoryDefaults" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="virtualDirectoryDefaults" name="allowSubDirConfig" type="bool" defaultValue="true" />
+  </section>
+  <section path="system.applicationHost/webLimits" source="IIS_schema.xml">
+    <option elementPath="" name="maxGlobalBandwidth" type="uint" defaultValue="4294967295" validationType="integerRange" validationParameter="0,1023,exclude" />
+    <option elementPath="" name="connectionTimeout" type="timeSpan" defaultValue="00:02:00" />
+    <option elementPath="" name="demandStartThreshold" type="uint" defaultValue="2147483647" validationType="integerRange" validationParameter="10,2147483647" />
+    <option elementPath="" name="dynamicIdleThreshold" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,10000" />
+    <option elementPath="" name="headerWaitTimeout" type="timeSpan" defaultValue="00:00:00" validationType="timeSpanRange" validationParameter="0,65535,1" />
+    <option elementPath="" name="minBytesPerSecond" type="uint" defaultValue="240" />
+    <option elementPath="" name="dynamicRegistrationThreshold" type="uint" defaultValue="100" validationType="integerRange" validationParameter="0,4294967295" />
+  </section>
+  <section path="system.webServer/asp" source="IIS_schema.xml">
+    <option elementPath="" name="appAllowClientDebug" type="bool" defaultValue="false" />
+    <option elementPath="" name="appAllowDebugging" type="bool" defaultValue="false" />
+    <option elementPath="" name="errorsToNTLog" type="bool" defaultValue="false" />
+    <option elementPath="" name="logErrorRequests" type="bool" defaultValue="true" />
+    <option elementPath="" name="calcLineNumber" type="bool" defaultValue="true" />
+    <option elementPath="" name="codePage" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="enableApplicationRestart" type="bool" defaultValue="true" />
+    <option elementPath="" name="enableAspHtmlFallback" type="bool" defaultValue="true" />
+    <option elementPath="" name="enableChunkedEncoding" type="bool" defaultValue="true" />
+    <option elementPath="" name="enableParentPaths" type="bool" defaultValue="false" />
+    <option elementPath="" name="exceptionCatchEnable" type="bool" defaultValue="true" />
+    <option elementPath="" name="lcid" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="runOnEndAnonymously" type="bool" defaultValue="true" />
+    <option elementPath="" name="scriptErrorMessage" type="string" defaultValue="An error occurred on the server when processing the URL. Please contact the system administrator. &lt;p/&gt; If you are the system administrator please click &lt;a href=&quot;https://go.microsoft.com/fwlink/?LinkID=82731&quot;&gt;here&lt;/a&gt; to find out more about this error." validationType="nonEmptyString" />
+    <option elementPath="" name="scriptErrorSentToBrowser" type="bool" defaultValue="false" />
+    <option elementPath="" name="scriptLanguage" type="string" defaultValue="VBScript" validationType="nonEmptyString" />
+    <option elementPath="" name="bufferingOn" type="bool" defaultValue="true" />
+    <option elementPath="session" name="allowSessionState" type="bool" defaultValue="true" />
+    <option elementPath="session" name="keepSessionIdSecure" type="bool" defaultValue="true" />
+    <option elementPath="session" name="max" type="uint" defaultValue="4294967295" />
+    <option elementPath="session" name="timeout" type="timeSpan" defaultValue="00:20:00" validationType="timeSpanRange" validationParameter="0,31536000,60" />
+    <option elementPath="comPlus" name="appServiceFlags" type="flags" defaultValue="None" />
+    <option elementPath="comPlus" name="sxsName" type="string" validationType="nonEmptyString" />
+    <option elementPath="comPlus" name="partitionId" type="string" defaultValue="00000000-0000-0000-0000-000000000000" />
+    <option elementPath="comPlus" name="trackThreadingModel" type="bool" defaultValue="false" />
+    <option elementPath="comPlus" name="executeInMta" type="bool" defaultValue="false" />
+    <option elementPath="cache" name="diskTemplateCacheDirectory" type="string" defaultValue="%SystemDrive%\inetpub\temp\ASP Compiled Templates" validationType="nonEmptyString" />
+    <option elementPath="cache" name="maxDiskTemplateCacheFiles" type="uint" defaultValue="2000" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="cache" name="scriptFileCacheSize" type="uint" defaultValue="500" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="cache" name="scriptEngineCacheMax" type="uint" defaultValue="250" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="cache" name="enableTypelibCache" type="bool" defaultValue="true" />
+    <option elementPath="limits" name="scriptTimeout" type="timeSpan" defaultValue="00:01:30" />
+    <option elementPath="limits" name="bufferingLimit" type="uint" defaultValue="4194304" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="limits" name="maxRequestEntityAllowed" type="uint" defaultValue="200000" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="limits" name="processorThreadMax" type="uint" defaultValue="25" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="limits" name="queueConnectionTestTime" type="timeSpan" defaultValue="00:00:03" validationType="timeSpanRange" validationParameter="1,2147483647,1" />
+    <option elementPath="limits" name="queueTimeout" type="timeSpan" defaultValue="00:00:00" />
+    <option elementPath="limits" name="requestQueueMax" type="uint" defaultValue="3000" validationType="integerRange" validationParameter="0,2147483647" />
+  </section>
+  <section path="system.webServer/caching" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="" name="enableKernelCache" type="bool" defaultValue="true" />
+    <option elementPath="" name="maxCacheSize" type="uint" defaultValue="0" />
+    <option elementPath="" name="maxResponseSize" type="uint" defaultValue="262144" />
+    <option elementPath="profiles/add" name="extension" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="profiles/add" name="policy" type="enum" defaultValue="DontCache" />
+    <option elementPath="profiles/add" name="kernelCachePolicy" type="enum" defaultValue="DontCache" />
+    <option elementPath="profiles/add" name="duration" type="timeSpan" defaultValue="00:00:30" validationType="timeSpanRange" validationParameter="1,4294967,1" />
+    <option elementPath="profiles/add" name="location" type="enum" defaultValue="Server" />
+    <option elementPath="profiles/add" name="varyByHeaders" type="string" />
+    <option elementPath="profiles/add" name="varyByQueryString" type="string" />
+  </section>
+  <section path="system.webServer/cgi" source="IIS_schema.xml">
+    <option elementPath="" name="createCGIWithNewConsole" type="bool" defaultValue="false" />
+    <option elementPath="" name="createProcessAsUser" type="bool" defaultValue="true" />
+    <option elementPath="" name="timeout" type="timeSpan" defaultValue="00:15:00" validationType="timeSpanRange" validationParameter="1,2147483647,1" />
+  </section>
+  <section path="system.webServer/defaultDocument" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="files/add" name="value" type="string" isUniqueKey="true" />
+  </section>
+  <section path="system.webServer/directoryBrowse" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="showFlags" type="flags" defaultValue="Date, Time, Size, Extension" />
+  </section>
+  <section path="system.webServer/fastCgi" source="IIS_schema.xml">
+    <option elementPath="application" name="fullPath" type="string" required="true" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="application" name="arguments" type="string" isCombinedKey="true" />
+    <option elementPath="application" name="monitorChangesTo" type="string" />
+    <option elementPath="application" name="stderrMode" type="enum" defaultValue="ReturnStdErrIn500" />
+    <option elementPath="application" name="maxInstances" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,10000" />
+    <option elementPath="application" name="idleTimeout" type="uint" defaultValue="300" validationType="integerRange" validationParameter="10,2592000" />
+    <option elementPath="application" name="activityTimeout" type="uint" defaultValue="70" validationType="integerRange" validationParameter="10,2592000" />
+    <option elementPath="application" name="requestTimeout" type="uint" defaultValue="90" validationType="integerRange" validationParameter="10,2592000" />
+    <option elementPath="application" name="instanceMaxRequests" type="uint" defaultValue="200" validationType="integerRange" validationParameter="1,10000000" />
+    <option elementPath="application" name="signalBeforeTerminateSeconds" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,60" />
+    <option elementPath="application" name="protocol" type="enum" defaultValue="NamedPipe" />
+    <option elementPath="application" name="queueLength" type="uint" defaultValue="1000" validationType="integerRange" validationParameter="1,100000000" />
+    <option elementPath="application" name="flushNamedPipe" type="bool" defaultValue="false" />
+    <option elementPath="application" name="rapidFailsPerMinute" type="uint" defaultValue="10" validationType="integerRange" validationParameter="0,1000" />
+    <option elementPath="application/environmentVariables/environmentVariable" name="name" type="string" isUniqueKey="true" />
+    <option elementPath="application/environmentVariables/environmentVariable" name="value" type="string" />
+  </section>
+  <section path="system.webServer/globalModules" source="IIS_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="image" type="string" />
+    <option elementPath="add" name="preCondition" type="string" />
+  </section>
+  <section path="system.webServer/handlers" source="IIS_schema.xml">
+    <option elementPath="" name="accessPolicy" type="flags" defaultValue="Read" />
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="path" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="verb" type="string" required="true" />
+    <option elementPath="add" name="type" type="string" />
+    <option elementPath="add" name="modules" type="string" defaultValue="ManagedPipelineHandler" />
+    <option elementPath="add" name="scriptProcessor" type="string" />
+    <option elementPath="add" name="resourceType" type="enum" defaultValue="Unspecified" />
+    <option elementPath="add" name="requireAccess" type="enum" defaultValue="Script" />
+    <option elementPath="add" name="allowPathInfo" type="bool" defaultValue="false" />
+    <option elementPath="add" name="preCondition" type="string" />
+    <option elementPath="add" name="responseBufferLimit" type="uint" defaultValue="4194304" />
+  </section>
+  <section path="system.webServer/httpCompression" source="IIS_schema.xml">
+    <option elementPath="" name="sendCacheHeaders" type="bool" defaultValue="false" />
+    <option elementPath="" name="expiresHeader" type="string" defaultValue="Wed, 01 Jan 1997 12:00:00 GMT" />
+    <option elementPath="" name="cacheControlHeader" type="string" defaultValue="max-age=86400" />
+    <option elementPath="" name="directory" type="string" defaultValue="%SystemDrive%\inetpub\temp\IIS Temporary Compressed Files" />
+    <option elementPath="" name="doDiskSpaceLimiting" type="bool" defaultValue="true" />
+    <option elementPath="" name="maxDiskSpaceUsage" type="uint" defaultValue="100" />
+    <option elementPath="" name="minFileSizeForComp" type="uint" defaultValue="2700" />
+    <option elementPath="" name="noCompressionForHttp10" type="bool" defaultValue="true" />
+    <option elementPath="" name="noCompressionForProxies" type="bool" defaultValue="true" />
+    <option elementPath="" name="noCompressionForRange" type="bool" defaultValue="true" />
+    <option elementPath="" name="staticCompressionIgnoreHitFrequency" type="bool" defaultValue="false" />
+    <option elementPath="" name="staticCompressionDisableCpuUsage" type="uint" defaultValue="100" validationType="integerRange" validationParameter="0,100" />
+    <option elementPath="" name="staticCompressionEnableCpuUsage" type="uint" defaultValue="50" validationType="integerRange" validationParameter="0,100" />
+    <option elementPath="" name="dynamicCompressionDisableCpuUsage" type="uint" defaultValue="90" validationType="integerRange" validationParameter="0,100" />
+    <option elementPath="" name="dynamicCompressionEnableCpuUsage" type="uint" defaultValue="50" validationType="integerRange" validationParameter="0,100" />
+    <option elementPath="" name="dynamicCompressionBufferLimit" type="uint" defaultValue="65536" />
+    <option elementPath="scheme" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="scheme" name="doStaticCompression" type="bool" defaultValue="true" />
+    <option elementPath="scheme" name="doDynamicCompression" type="bool" defaultValue="true" />
+    <option elementPath="scheme" name="dll" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="scheme" name="staticCompressionLevel" type="uint" defaultValue="7" />
+    <option elementPath="scheme" name="dynamicCompressionLevel" type="uint" defaultValue="0" />
+    <option elementPath="staticTypes/add" name="mimeType" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="staticTypes/add" name="enabled" type="bool" required="true" />
+    <option elementPath="dynamicTypes/add" name="mimeType" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="dynamicTypes/add" name="enabled" type="bool" required="true" />
+  </section>
+  <section path="system.webServer/httpErrors" source="IIS_schema.xml">
+    <option elementPath="" name="errorMode" type="enum" defaultValue="DetailedLocalOnly" />
+    <option elementPath="" name="existingResponse" type="enum" defaultValue="Auto" />
+    <option elementPath="" name="defaultPath" type="string" />
+    <option elementPath="" name="defaultResponseMode" type="enum" defaultValue="File" />
+    <option elementPath="" name="detailedMoreInformationLink" type="string" defaultValue="https://go.microsoft.com/fwlink/?LinkID=62293" required="false" />
+    <option elementPath="" name="allowAbsolutePathsWhenDelegated" type="bool" defaultValue="false" />
+    <option elementPath="error" name="statusCode" type="uint" required="true" isCombinedKey="true" validationType="integerRange" validationParameter="400,999" />
+    <option elementPath="error" name="subStatusCode" type="int" defaultValue="-1" isCombinedKey="true" validationType="integerRange" validationParameter="-1,999" />
+    <option elementPath="error" name="prefixLanguageFilePath" type="string" required="false" />
+    <option elementPath="error" name="path" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="error" name="responseMode" type="enum" defaultValue="File" />
+  </section>
+  <section path="system.webServer/httpLogging" source="IIS_schema.xml">
+    <option elementPath="" name="selectiveLogging" type="enum" defaultValue="LogAll" />
+    <option elementPath="" name="dontLog" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/httpProtocol" source="IIS_schema.xml">
+    <option elementPath="customHeaders/add" name="name" type="string" isUniqueKey="true" />
+    <option elementPath="customHeaders/add" name="value" type="string" />
+    <option elementPath="redirectHeaders/add" name="name" type="string" isUniqueKey="true" />
+    <option elementPath="redirectHeaders/add" name="value" type="string" />
+    <option elementPath="" name="allowKeepAlive" type="bool" defaultValue="true" />
+  </section>
+  <section path="system.webServer/httpRedirect" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="destination" type="string" />
+    <option elementPath="add" name="wildcard" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="destination" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="" name="exactDestination" type="bool" defaultValue="false" />
+    <option elementPath="" name="childOnly" type="bool" defaultValue="false" />
+    <option elementPath="" name="httpResponseStatus" type="enum" defaultValue="Found" />
+  </section>
+  <section path="system.webServer/httpTracing" source="IIS_schema.xml">
+    <option elementPath="traceUrls/add" name="value" type="string" required="true" isUniqueKey="true" />
+  </section>
+  <section path="system.webServer/isapiFilters" source="IIS_schema.xml">
+    <option elementPath="filter" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="filter" name="path" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="filter" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="filter" name="enableCache" type="bool" defaultValue="false" />
+    <option elementPath="filter" name="preCondition" type="string" />
+  </section>
+  <section path="system.webServer/management/authentication" source="IIS_schema.xml">
+    <option elementPath="" name="defaultProvider" type="string" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+    <option elementPath="credentials/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="credentials/add" name="password" type="string" required="true" />
+    <option elementPath="credentials/add" name="enabled" type="bool" defaultValue="true" />
+  </section>
+  <section path="system.webServer/management/authorization" source="IIS_schema.xml">
+    <option elementPath="" name="defaultProvider" type="string" />
+    <option elementPath="providers/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="providers/add" name="type" type="string" required="true" />
+    <option elementPath="authorizationRules/scope" name="path" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="authorizationRules/scope/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="authorizationRules/scope/add" name="isRole" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/management/trustedProviders" source="IIS_schema.xml">
+    <option elementPath="" name="allowUntrustedProviders" type="bool" defaultValue="false" />
+    <option elementPath="add" name="type" type="string" required="true" />
+  </section>
+  <section path="system.webServer/modules" source="IIS_schema.xml">
+    <option elementPath="" name="runAllManagedModulesForAllRequests" type="bool" defaultValue="false" />
+    <option elementPath="" name="runManagedModulesForWebDavRequests" type="bool" defaultValue="false" />
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="type" type="string" />
+    <option elementPath="add" name="preCondition" type="string" />
+  </section>
+  <section path="system.webServer/applicationInitialization" source="IIS_schema.xml">
+    <option elementPath="" name="remapManagedRequestsTo" type="string" />
+    <option elementPath="" name="skipManagedModules" type="bool" defaultValue="false" />
+    <option elementPath="" name="doAppInitAfterRestart" type="bool" defaultValue="false" />
+    <option elementPath="add" name="initializationPage" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="hostName" type="string" />
+  </section>
+  <section path="system.webServer/odbcLogging" source="IIS_schema.xml">
+    <option elementPath="" name="dataSource" type="string" defaultValue="InternetDb" />
+    <option elementPath="" name="tableName" type="string" defaultValue="InternetLog" />
+    <option elementPath="" name="userName" type="string" defaultValue="InternetAdmin" />
+    <option elementPath="" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+  </section>
+  <section path="system.webServer/security/access" source="IIS_schema.xml">
+    <option elementPath="" name="sslFlags" type="flags" defaultValue="None" />
+  </section>
+  <section path="system.webServer/security/applicationDependencies" source="IIS_schema.xml">
+    <option elementPath="application" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="application" name="groupId" type="string" />
+    <option elementPath="application/add" name="groupId" type="string" required="true" isUniqueKey="true" />
+  </section>
+  <section path="system.webServer/security/authentication/anonymousAuthentication" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="" name="userName" type="string" defaultValue="IUSR" />
+    <option elementPath="" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="" name="logonMethod" type="enum" defaultValue="ClearText" />
+  </section>
+  <section path="system.webServer/security/authentication/basicAuthentication" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="realm" type="string" />
+    <option elementPath="" name="defaultLogonDomain" type="string" />
+    <option elementPath="" name="logonMethod" type="enum" defaultValue="ClearText" />
+  </section>
+  <section path="system.webServer/security/authentication/clientCertificateMappingAuthentication" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/security/authentication/digestAuthentication" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="realm" type="string" />
+  </section>
+  <section path="system.webServer/security/authentication/iisClientCertificateMappingAuthentication" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="oneToOneCertificateMappingsEnabled" type="bool" defaultValue="true" />
+    <option elementPath="" name="manyToOneCertificateMappingsEnabled" type="bool" defaultValue="true" />
+    <option elementPath="" name="defaultLogonDomain" type="string" />
+    <option elementPath="" name="logonMethod" type="enum" defaultValue="ClearText" />
+    <option elementPath="manyToOneMappings/add" name="name" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="manyToOneMappings/add" name="description" type="string" />
+    <option elementPath="manyToOneMappings/add" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="manyToOneMappings/add" name="permissionMode" type="enum" defaultValue="Allow" />
+    <option elementPath="manyToOneMappings/add/rules/add" name="certificateField" type="enum" required="true" isCombinedKey="true" />
+    <option elementPath="manyToOneMappings/add/rules/add" name="certificateSubField" type="string" required="true" isCombinedKey="true" />
+    <option elementPath="manyToOneMappings/add/rules/add" name="matchCriteria" type="string" required="true" isCombinedKey="true" />
+    <option elementPath="manyToOneMappings/add/rules/add" name="compareCaseSensitive" type="bool" defaultValue="true" isCombinedKey="true" />
+    <option elementPath="manyToOneMappings/add" name="userName" type="string" validationType="nonEmptyString" />
+    <option elementPath="manyToOneMappings/add" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="oneToOneMappings/add" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="oneToOneMappings/add" name="userName" type="string" />
+    <option elementPath="oneToOneMappings/add" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="oneToOneMappings/add" name="certificate" type="string" required="true" isUniqueKey="true" />
+  </section>
+  <section path="system.webServer/security/authentication/windowsAuthentication" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="providers/add" name="value" type="string" isUniqueKey="true" />
+    <option elementPath="" name="authPersistSingleRequest" type="bool" defaultValue="false" />
+    <option elementPath="" name="authPersistNonNTLM" type="bool" defaultValue="false" />
+    <option elementPath="" name="useKernelMode" type="bool" defaultValue="true" />
+    <option elementPath="" name="useAppPoolCredentials" type="bool" defaultValue="false" />
+    <option elementPath="extendedProtection" name="tokenChecking" type="enum" defaultValue="None" />
+    <option elementPath="extendedProtection" name="flags" type="flags" defaultValue="None" />
+    <option elementPath="extendedProtection/spn" name="name" type="string" isUniqueKey="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.webServer/security/authorization" source="IIS_schema.xml">
+    <option elementPath="" name="bypassLoginPages" type="bool" defaultValue="true" />
+    <option elementPath="add" name="accessType" type="enum" required="true" />
+    <option elementPath="add" name="users" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="roles" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="verbs" type="string" isCombinedKey="true" />
+  </section>
+  <section path="system.webServer/security/ipSecurity" source="IIS_schema.xml">
+    <option elementPath="" name="enableReverseDns" type="bool" defaultValue="false" />
+    <option elementPath="" name="allowUnlisted" type="bool" defaultValue="true" />
+    <option elementPath="" name="enableProxyMode" type="bool" defaultValue="false" />
+    <option elementPath="" name="denyAction" type="enum" defaultValue="Forbidden" />
+    <option elementPath="add" name="ipAddress" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="subnetMask" type="string" defaultValue="255.255.255.255" isCombinedKey="true" />
+    <option elementPath="add" name="domainName" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="allowed" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/security/dynamicIpSecurity" source="IIS_schema.xml">
+    <option elementPath="" name="denyAction" type="enum" defaultValue="Forbidden" />
+    <option elementPath="" name="enableProxyMode" type="bool" defaultValue="false" />
+    <option elementPath="" name="enableLoggingOnlyMode" type="bool" defaultValue="false" />
+    <option elementPath="denyByConcurrentRequests" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="denyByConcurrentRequests" name="maxConcurrentRequests" type="uint" defaultValue="5" validationType="integerRange" validationParameter="1,4294967295" />
+    <option elementPath="denyByRequestRate" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="denyByRequestRate" name="maxRequests" type="uint" defaultValue="20" validationType="integerRange" validationParameter="1,4294967295" />
+    <option elementPath="denyByRequestRate" name="requestIntervalInMilliseconds" type="uint" defaultValue="200" validationType="integerRange" validationParameter="1,4294967295" />
+  </section>
+  <section path="system.webServer/security/isapiCgiRestriction" source="IIS_schema.xml">
+    <option elementPath="add" name="path" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="allowed" type="bool" defaultValue="false" required="true" />
+    <option elementPath="add" name="groupId" type="string" required="false" />
+    <option elementPath="add" name="description" type="string" />
+    <option elementPath="" name="notListedIsapisAllowed" type="bool" defaultValue="false" />
+    <option elementPath="" name="notListedCgisAllowed" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/security/requestFiltering" source="IIS_schema.xml">
+    <option elementPath="" name="allowDoubleEscaping" type="bool" defaultValue="false" />
+    <option elementPath="" name="allowHighBitCharacters" type="bool" defaultValue="true" />
+    <option elementPath="" name="unescapeQueryString" type="bool" defaultValue="true" />
+    <option elementPath="" name="removeServerHeader" type="bool" defaultValue="false" />
+    <option elementPath="fileExtensions" name="allowUnlisted" type="bool" defaultValue="true" />
+    <option elementPath="fileExtensions" name="applyToWebDAV" type="bool" defaultValue="true" />
+    <option elementPath="fileExtensions/add" name="fileExtension" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="fileExtensions/add" name="allowed" type="bool" defaultValue="true" required="true" />
+    <option elementPath="requestLimits" name="maxAllowedContentLength" type="uint" defaultValue="30000000" />
+    <option elementPath="requestLimits" name="maxUrl" type="uint" defaultValue="4096" />
+    <option elementPath="requestLimits" name="maxQueryString" type="uint" defaultValue="2048" />
+    <option elementPath="requestLimits/headerLimits/add" name="header" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="requestLimits/headerLimits/add" name="sizeLimit" type="uint" required="true" />
+    <option elementPath="verbs" name="allowUnlisted" type="bool" defaultValue="true" />
+    <option elementPath="verbs" name="applyToWebDAV" type="bool" defaultValue="true" />
+    <option elementPath="verbs/add" name="verb" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="verbs/add" name="allowed" type="bool" required="true" />
+    <option elementPath="hiddenSegments" name="applyToWebDAV" type="bool" defaultValue="true" />
+    <option elementPath="hiddenSegments/add" name="segment" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="alwaysAllowedUrls/add" name="url" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="alwaysAllowedQueryStrings/add" name="queryString" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="denyUrlSequences/add" name="sequence" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="denyQueryStringSequences/add" name="sequence" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="filteringRules/filteringRule" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="filteringRules/filteringRule" name="scanUrl" type="bool" defaultValue="false" />
+    <option elementPath="filteringRules/filteringRule" name="scanQueryString" type="bool" defaultValue="false" />
+    <option elementPath="filteringRules/filteringRule" name="scanAllRaw" type="bool" defaultValue="false" />
+    <option elementPath="filteringRules/filteringRule" name="denyUnescapedPercent" type="bool" defaultValue="true" />
+    <option elementPath="filteringRules/filteringRule/scanHeaders/add" name="requestHeader" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="filteringRules/filteringRule/appliesTo/add" name="fileExtension" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="filteringRules/filteringRule/denyStrings/add" name="string" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.webServer/serverRuntime" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="" name="appConcurrentRequestLimit" type="uint" defaultValue="5000" />
+    <option elementPath="" name="maxRequestEntityAllowed" type="uint" defaultValue="4294967295" />
+    <option elementPath="" name="uploadReadAheadSize" type="uint" defaultValue="49152" validationType="integerRange" validationParameter="0,2147483647" />
+    <option elementPath="" name="alternateHostName" type="string" />
+    <option elementPath="" name="enableNagling" type="bool" defaultValue="false" />
+    <option elementPath="" name="frequentHitThreshold" type="uint" defaultValue="2" validationType="integerRange" validationParameter="1,2147483647" />
+    <option elementPath="" name="frequentHitTimePeriod" type="timeSpan" defaultValue="00:00:10" />
+    <option elementPath="" name="authenticatedUserOverride" type="enum" defaultValue="UseAuthenticatedUser" />
+  </section>
+  <section path="system.webServer/serverSideInclude" source="IIS_schema.xml">
+    <option elementPath="" name="ssiExecDisable" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/staticContent" source="IIS_schema.xml">
+    <option elementPath="clientCache" name="cacheControlMode" type="enum" defaultValue="NoControl" />
+    <option elementPath="clientCache" name="cacheControlMaxAge" type="timeSpan" defaultValue="1.00:00:00" />
+    <option elementPath="clientCache" name="httpExpires" type="string" />
+    <option elementPath="clientCache" name="cacheControlCustom" type="string" />
+    <option elementPath="clientCache" name="setEtag" type="bool" defaultValue="true" />
+    <option elementPath="" name="defaultDocFooter" type="string" />
+    <option elementPath="" name="isDocFooterFileName" type="bool" defaultValue="false" />
+    <option elementPath="" name="enableDocFooter" type="bool" defaultValue="false" />
+    <option elementPath="mimeMap" name="fileExtension" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="mimeMap" name="mimeType" type="string" required="true" validationType="nonEmptyString" />
+  </section>
+  <section path="system.webServer/tracing/traceFailedRequests" source="IIS_schema.xml">
+    <option elementPath="add" name="path" type="string" isUniqueKey="true" />
+    <option elementPath="add" name="customActionExe" type="string" />
+    <option elementPath="add" name="customActionParams" type="string" />
+    <option elementPath="add" name="customActionTriggerLimit" type="uint" defaultValue="1" validationType="integerRange" validationParameter="0,10000" />
+    <option elementPath="add/traceAreas/add" name="provider" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add/traceAreas/add" name="areas" type="string" />
+    <option elementPath="add/traceAreas/add" name="verbosity" type="enum" defaultValue="Warning" />
+    <option elementPath="add/failureDefinitions" name="timeTaken" type="timeSpan" defaultValue="00:00:00" />
+    <option elementPath="add/failureDefinitions" name="traceAllAfterTimeout" type="bool" defaultValue="false" />
+    <option elementPath="add/failureDefinitions" name="statusCodes" type="string" />
+    <option elementPath="add/failureDefinitions" name="verbosity" type="enum" defaultValue="Ignore" />
+  </section>
+  <section path="system.webServer/tracing/traceProviderDefinitions" source="IIS_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="guid" type="string" required="true" />
+    <option elementPath="add/areas/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add/areas/add" name="value" type="uint" required="true" />
+  </section>
+  <section path="system.webServer/urlCompression" source="IIS_schema.xml">
+    <option elementPath="" name="doStaticCompression" type="bool" defaultValue="true" />
+    <option elementPath="" name="doDynamicCompression" type="bool" defaultValue="true" />
+    <option elementPath="" name="dynamicCompressionBeforeCache" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/validation" source="IIS_schema.xml">
+    <option elementPath="" name="validateIntegratedModeConfiguration" type="bool" defaultValue="true" />
+  </section>
+  <section path="system.webServer/webSocket" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="" name="receiveBufferLimit" type="uint" defaultValue="4194304" validationType="integerRange" validationParameter="4096,2147483647" />
+    <option elementPath="" name="pingInterval" type="timeSpan" defaultValue="00:00:00" validationType="timeSpanRange" validationParameter="0,86400,1" />
+    <option elementPath="" name="readBufferBlockSize" type="uint" defaultValue="4096" validationType="integerRange" validationParameter="4096,4194304" />
+  </section>
+  <section path="configPaths" source="IIS_schema.xml">
+    <option elementPath="searchResult" name="path" type="string" />
+    <option elementPath="searchResult" name="locationPath" type="string" />
+    <option elementPath="searchResult" name="status" type="uint" />
+    <option elementPath="searchResult/section" name="name" type="string" isUniqueKey="true" />
+  </section>
+  <section path="moduleProviders" source="IIS_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="type" type="string" required="true" />
+  </section>
+  <section path="modules" source="IIS_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+  </section>
+  <section path="administratorsProviders" source="IIS_schema.xml">
+    <option elementPath="" name="defaultProvider" type="string" defaultValue="ConfigurationAuthorizationProvider" />
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="add" name="type" type="string" required="true" />
+  </section>
+  <section path="administrators" source="IIS_schema.xml">
+    <option elementPath="managementScope" name="path" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="managementScope/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="managementScope/add" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="managementScope/add" name="credentialType" type="enum" defaultValue="IISManager" />
+  </section>
+  <section path="configurationRedirection" source="IIS_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="path" type="string" />
+    <option elementPath="" name="userName" type="string" />
+    <option elementPath="" name="password" type="string" defaultValue="[enc:IISCngProvider::enc]" encrypted="true" />
+    <option elementPath="" name="enableUncPolling" type="bool" defaultValue="false" />
+    <option elementPath="" name="pollingPeriod" type="timeSpan" defaultValue="00:03:00" />
+  </section>
+  <section path="system.webServer/rewrite/globalRules" source="rewrite_schema.xml">
+    <option elementPath="" name="useOriginalURLEncoding" type="bool" defaultValue="true" />
+    <option elementPath="rule" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="rule" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="rule" name="patternSyntax" type="enum" defaultValue="ECMAScript" />
+    <option elementPath="rule" name="stopProcessing" type="bool" defaultValue="false" />
+    <option elementPath="rule" name="responseCacheDirective" type="enum" defaultValue="Auto" />
+    <option elementPath="rule/match" name="url" type="string" validationType="nonEmptyString" />
+    <option elementPath="rule/match" name="ignoreCase" type="bool" defaultValue="true" />
+    <option elementPath="rule/match" name="negate" type="bool" defaultValue="false" />
+    <option elementPath="rule/conditions" name="logicalGrouping" type="enum" defaultValue="MatchAll" />
+    <option elementPath="rule/conditions" name="trackAllCaptures" type="bool" defaultValue="false" />
+    <option elementPath="rule/conditions/add" name="input" type="string" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="matchType" type="enum" defaultValue="Pattern" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="pattern" type="string" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="ignoreCase" type="bool" defaultValue="true" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="negate" type="bool" defaultValue="false" isCombinedKey="true" />
+    <option elementPath="rule/serverVariables/set" name="name" type="string" required="true" isUniqueKey="true" validationType="requireTrimmedString" />
+    <option elementPath="rule/serverVariables/set" name="value" type="string" />
+    <option elementPath="rule/serverVariables/set" name="replace" type="bool" defaultValue="true" />
+    <option elementPath="rule/action" name="type" type="enum" defaultValue="None" />
+    <option elementPath="rule/action" name="url" type="string" validationType="requireTrimmedString" />
+    <option elementPath="rule/action" name="appendQueryString" type="bool" defaultValue="true" />
+    <option elementPath="rule/action" name="redirectType" type="enum" defaultValue="Permanent" />
+    <option elementPath="rule/action" name="statusCode" type="uint" defaultValue="0" validationType="integerRange" validationParameter="300,307,exclude" />
+    <option elementPath="rule/action" name="subStatusCode" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,999" />
+    <option elementPath="rule/action" name="statusReason" type="string" />
+    <option elementPath="rule/action" name="statusDescription" type="string" />
+  </section>
+  <section path="system.webServer/rewrite/allowedServerVariables" source="rewrite_schema.xml">
+    <option elementPath="add" name="name" type="string" required="true" isUniqueKey="true" />
+  </section>
+  <section path="system.webServer/rewrite/rules" source="rewrite_schema.xml">
+    <option elementPath="" name="useOriginalURLEncoding" type="bool" defaultValue="true" />
+    <option elementPath="rule" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="rule" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="rule" name="patternSyntax" type="enum" defaultValue="ECMAScript" />
+    <option elementPath="rule" name="stopProcessing" type="bool" defaultValue="false" />
+    <option elementPath="rule" name="responseCacheDirective" type="enum" defaultValue="Auto" />
+    <option elementPath="rule/match" name="url" type="string" validationType="nonEmptyString" />
+    <option elementPath="rule/match" name="ignoreCase" type="bool" defaultValue="true" />
+    <option elementPath="rule/match" name="negate" type="bool" defaultValue="false" />
+    <option elementPath="rule/conditions" name="logicalGrouping" type="enum" defaultValue="MatchAll" />
+    <option elementPath="rule/conditions" name="trackAllCaptures" type="bool" defaultValue="false" />
+    <option elementPath="rule/conditions/add" name="input" type="string" />
+    <option elementPath="rule/conditions/add" name="matchType" type="enum" defaultValue="Pattern" />
+    <option elementPath="rule/conditions/add" name="pattern" type="string" />
+    <option elementPath="rule/conditions/add" name="ignoreCase" type="bool" defaultValue="true" />
+    <option elementPath="rule/conditions/add" name="negate" type="bool" defaultValue="false" />
+    <option elementPath="rule/serverVariables/set" name="name" type="string" required="true" isUniqueKey="true" validationType="requireTrimmedString" />
+    <option elementPath="rule/serverVariables/set" name="value" type="string" />
+    <option elementPath="rule/serverVariables/set" name="replace" type="bool" defaultValue="true" />
+    <option elementPath="rule/action" name="type" type="enum" defaultValue="None" />
+    <option elementPath="rule/action" name="url" type="string" validationType="requireTrimmedString" />
+    <option elementPath="rule/action" name="appendQueryString" type="bool" defaultValue="true" />
+    <option elementPath="rule/action" name="logRewrittenUrl" type="bool" defaultValue="false" />
+    <option elementPath="rule/action" name="redirectType" type="enum" defaultValue="Permanent" />
+    <option elementPath="rule/action" name="statusCode" type="uint" validationType="integerRange" validationParameter="300,307,exclude" />
+    <option elementPath="rule/action" name="subStatusCode" type="uint" defaultValue="0" validationType="integerRange" validationParameter="0,999" />
+    <option elementPath="rule/action" name="statusReason" type="string" />
+    <option elementPath="rule/action" name="statusDescription" type="string" />
+  </section>
+  <section path="system.webServer/rewrite/outboundRules" source="rewrite_schema.xml">
+    <option elementPath="" name="rewriteBeforeCache" type="bool" defaultValue="false" />
+    <option elementPath="customTags/tags" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="customTags/tags/tag" name="name" type="string" required="true" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="customTags/tags/tag" name="attribute" type="string" required="true" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="preConditions/preCondition" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="preConditions/preCondition" name="logicalGrouping" type="enum" defaultValue="MatchAll" />
+    <option elementPath="preConditions/preCondition" name="patternSyntax" type="enum" defaultValue="ECMAScript" />
+    <option elementPath="preConditions/preCondition/add" name="input" type="string" isCombinedKey="true" />
+    <option elementPath="preConditions/preCondition/add" name="matchType" type="enum" defaultValue="Pattern" isCombinedKey="true" />
+    <option elementPath="preConditions/preCondition/add" name="pattern" type="string" isCombinedKey="true" />
+    <option elementPath="preConditions/preCondition/add" name="ignoreCase" type="bool" defaultValue="true" isCombinedKey="true" />
+    <option elementPath="preConditions/preCondition/add" name="negate" type="bool" defaultValue="false" isCombinedKey="true" />
+    <option elementPath="rule" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="rule" name="preCondition" type="string" />
+    <option elementPath="rule" name="enabled" type="bool" defaultValue="true" />
+    <option elementPath="rule" name="patternSyntax" type="enum" defaultValue="ECMAScript" />
+    <option elementPath="rule" name="stopProcessing" type="bool" defaultValue="false" />
+    <option elementPath="rule/match" name="filterByTags" type="flags" />
+    <option elementPath="rule/match" name="customTags" type="string" />
+    <option elementPath="rule/match" name="serverVariable" type="string" />
+    <option elementPath="rule/match" name="pattern" type="string" />
+    <option elementPath="rule/match" name="occurrences" type="int64" defaultValue="0" />
+    <option elementPath="rule/match" name="ignoreCase" type="bool" defaultValue="true" />
+    <option elementPath="rule/match" name="negate" type="bool" defaultValue="false" />
+    <option elementPath="rule/conditions" name="logicalGrouping" type="enum" defaultValue="MatchAll" />
+    <option elementPath="rule/conditions" name="trackAllCaptures" type="bool" defaultValue="true" />
+    <option elementPath="rule/conditions/add" name="input" type="string" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="matchType" type="enum" defaultValue="Pattern" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="pattern" type="string" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="ignoreCase" type="bool" defaultValue="true" isCombinedKey="true" />
+    <option elementPath="rule/conditions/add" name="negate" type="bool" defaultValue="false" isCombinedKey="true" />
+    <option elementPath="rule/action" name="type" type="enum" defaultValue="None" />
+    <option elementPath="rule/action" name="value" type="string" />
+    <option elementPath="rule/action" name="replace" type="bool" defaultValue="true" />
+  </section>
+  <section path="system.webServer/rewrite/providers" source="rewrite_schema.xml">
+    <option elementPath="provider" name="name" type="string" required="true" isUniqueKey="true" validationType="requireTrimmedString" />
+    <option elementPath="provider" name="type" type="string" required="true" validationType="requireTrimmedString" />
+    <option elementPath="provider/settings/add" name="key" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="provider/settings/add" name="value" type="string" />
+    <option elementPath="provider/settings/add" name="encryptedValue" type="string" defaultValue="[enc:AesProvider::enc]" encrypted="true" />
+  </section>
+  <section path="system.webServer/rewrite/rewriteMaps" source="rewrite_schema.xml">
+    <option elementPath="rewriteMap" name="name" type="string" required="true" isUniqueKey="true" validationType="requireTrimmedString" />
+    <option elementPath="rewriteMap" name="defaultValue" type="string" />
+    <option elementPath="rewriteMap" name="ignoreCase" type="bool" defaultValue="true" />
+    <option elementPath="rewriteMap/add" name="key" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="rewriteMap/add" name="value" type="string" />
+  </section>
+  <section path="system.applicationHost/sites" source="rscaext.xml">
+    <option elementPath="site" name="state" type="enum" />
+    <option elementPath="site/bindings/binding" name="isDsMapperEnabled" type="bool" />
+    <option elementPath="site/bindings/binding" name="certificateHash" type="string" />
+    <option elementPath="site/bindings/binding" name="certificateStoreName" type="string" />
+    <option elementPath="site/bindings/binding/AddSslCertificate/inputElement" name="certificateHash" type="string" />
+    <option elementPath="site/bindings/binding/AddSslCertificate/inputElement" name="certificateStoreName" type="string" defaultValue="MY" />
+    <option elementPath="site/bindings/binding/RebindSslCertificate/inputElement" name="certificateHash" type="string" />
+    <option elementPath="site/bindings/binding/RebindSslCertificate/inputElement" name="certificateStoreName" type="string" defaultValue="MY" />
+  </section>
+  <section path="system.applicationHost/applicationPools" source="rscaext.xml">
+    <option elementPath="add" name="state" type="enum" />
+    <option elementPath="add" name="applicationPoolSid" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess" name="processId" type="uint" isUniqueKey="true" />
+    <option elementPath="add/workerProcesses/workerProcess" name="guid" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess" name="state" type="enum" />
+    <option elementPath="add/workerProcesses/workerProcess" name="appPoolName" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/inputElement" name="timeElapsedFilter" type="uint" defaultValue="0" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="requestId" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="connectionId" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="verb" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="url" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="siteId" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="localPort" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="hostName" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="clientIpAddress" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="timeElapsed" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="pipeLineState" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="timeInState" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="currentModule" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="timeInModule" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/GetRequests/outputElement/request" name="localIpAddress" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/appDomains/appDomain" name="id" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/appDomains/appDomain" name="virtualPath" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/appDomains/appDomain" name="physicalPath" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/appDomains/appDomain" name="siteId" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/appDomains/appDomain" name="idle" type="uint" />
+    <option elementPath="add/workerProcesses/workerProcess/GetCustomData/inputElement" name="guidIdOfFunctionCall" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetCustomData/inputElement" name="parametersOfFunctionCall" type="string" />
+    <option elementPath="add/workerProcesses/workerProcess/GetCustomData/outputElement" name="data" type="string" />
+    <option elementPath="workerProcesses/workerProcess" name="processId" type="uint" isUniqueKey="true" />
+    <option elementPath="workerProcesses/workerProcess" name="guid" type="string" />
+    <option elementPath="workerProcesses/workerProcess" name="state" type="enum" />
+    <option elementPath="workerProcesses/workerProcess" name="appPoolName" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/inputElement" name="timeElapsedFilter" type="uint" defaultValue="0" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="requestId" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="connectionId" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="verb" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="url" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="siteId" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="localPort" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="hostName" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="clientIpAddress" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="timeElapsed" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="pipeLineState" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="timeInState" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="currentModule" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="timeInModule" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/GetRequests/outputElement/request" name="localIpAddress" type="string" />
+    <option elementPath="workerProcesses/workerProcess/appDomains/appDomain" name="id" type="string" />
+    <option elementPath="workerProcesses/workerProcess/appDomains/appDomain" name="virtualPath" type="string" />
+    <option elementPath="workerProcesses/workerProcess/appDomains/appDomain" name="physicalPath" type="string" />
+    <option elementPath="workerProcesses/workerProcess/appDomains/appDomain" name="siteId" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/appDomains/appDomain" name="idle" type="uint" />
+    <option elementPath="workerProcesses/workerProcess/GetCustomData/inputElement" name="guidIdOfFunctionCall" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetCustomData/inputElement" name="parametersOfFunctionCall" type="string" />
+    <option elementPath="workerProcesses/workerProcess/GetCustomData/outputElement" name="data" type="string" />
+  </section>
+  <section path="system.webServer/webdav/globalSettings" source="WebDAV_schema.xml">
+    <option elementPath="propertyStores/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="propertyStores/add" name="image" type="string" required="true" />
+    <option elementPath="propertyStores/add" name="image32" type="string" />
+    <option elementPath="lockStores/add" name="name" type="string" required="true" isUniqueKey="true" />
+    <option elementPath="lockStores/add" name="image" type="string" required="true" />
+    <option elementPath="lockStores/add" name="image32" type="string" />
+  </section>
+  <section path="system.webServer/webdav/authoring" source="WebDAV_schema.xml">
+    <option elementPath="" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="" name="requireSsl" type="bool" defaultValue="false" />
+    <option elementPath="" name="compatFlags" type="flags" defaultValue="MsAuthorVia, MultiProp, CompactXml, IsHidden, IsCollection" />
+    <option elementPath="" name="maxAllowedXmlRequestLength" type="uint" defaultValue="1000000" />
+    <option elementPath="fileSystem" name="allowHiddenFiles" type="bool" defaultValue="false" />
+    <option elementPath="fileSystem" name="useTransactionalIo" type="bool" defaultValue="false" />
+    <option elementPath="fileSystem" name="hideChildVirtualDirectories" type="bool" defaultValue="false" />
+    <option elementPath="fileSystem" name="readBufferSize" type="uint" defaultValue="1024" validationType="integerRange" validationParameter="32,134217727" />
+    <option elementPath="properties" name="allowAnonymousPropfind" type="bool" defaultValue="false" />
+    <option elementPath="properties" name="allowInfinitePropfindDepth" type="bool" defaultValue="false" />
+    <option elementPath="properties" name="allowCustomProperties" type="bool" defaultValue="true" />
+    <option elementPath="properties/add" name="xmlNamespace" type="string" required="true" isUniqueKey="true" validationType="nonEmptyString" />
+    <option elementPath="properties/add" name="propertyStore" type="string" required="true" validationType="nonEmptyString" />
+    <option elementPath="locks" name="enabled" type="bool" defaultValue="false" />
+    <option elementPath="locks" name="lockStore" type="string" />
+    <option elementPath="locks" name="requireLockForWriting" type="bool" defaultValue="false" />
+  </section>
+  <section path="system.webServer/webdav/authoringRules" source="WebDAV_schema.xml">
+    <option elementPath="" name="defaultAccess" type="flags" defaultValue="None" />
+    <option elementPath="" name="allowNonMimeMapFiles" type="bool" defaultValue="true" />
+    <option elementPath="" name="defaultMimeType" type="string" defaultValue="application/octet-stream" />
+    <option elementPath="add" name="users" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="roles" type="string" isCombinedKey="true" />
+    <option elementPath="add" name="path" type="string" isCombinedKey="true" validationType="nonEmptyString" />
+    <option elementPath="add" name="access" type="flags" defaultValue="Read" />
+  </section>
+  <riskRules>
+    <risk path="system.applicationHost/applicationPools/*" attribute="enable32BitAppOnWin64" operator="equals" value="true" severity="high" title="32-bit worker process enabled" comment="A 32-bit worker process has a substantially smaller user-mode address space and can encounter out-of-memory failures earlier than a 64-bit process." recommendation="Confirm that 32-bit dependencies require this setting and correlate memory pressure with private bytes, virtual bytes, and crash evidence." />
+    <risk path="system.applicationHost/applicationPools/*" attribute="queueLength" operator="greaterThan" value="1000" severity="medium" title="Application pool queue length increased" comment="A larger queue can retain more waiting requests, increasing latency and memory pressure while masking downstream saturation." recommendation="Validate sustained throughput, request latency, HTTPERR QueueFull records, and the capacity of downstream dependencies." />
+    <risk path="system.applicationHost/applicationPools/*" attribute="queueLength" operator="lessThan" value="1000" severity="medium" title="Application pool queue length reduced" comment="A smaller queue can reject bursts sooner and may increase HTTP 503 responses when worker processes are saturated or starting." recommendation="Correlate with HTTPERR QueueFull records and confirm that the reduced limit is intentional." />
+    <risk path="system.applicationHost/applicationPools/*/failure" attribute="rapidFailProtection" operator="equals" value="false" severity="high" title="Rapid-Fail Protection disabled" comment="Repeated worker-process crashes may continue without the application pool being stopped, increasing churn and resource consumption." recommendation="Confirm why crash-loop protection is disabled and review WAS and Application event logs for repeated failures." />
+    <risk path="system.applicationHost/applicationPools/*/processModel" attribute="loadUserProfile" operator="equals" value="true" severity="medium" title="Worker-process user profile loading enabled" comment="Profile loading can affect startup, registry access, temporary paths, and resource usage for the application pool identity." recommendation="Verify that the application requires a user profile and correlate profile service warnings with pool startup failures." />
+    <risk path="system.applicationHost/applicationPools/*/processModel" attribute="maxProcesses" operator="greaterThan" value="1" severity="medium" title="Web garden enabled" comment="Multiple worker processes can duplicate in-process cache and session state and complicate request affinity and memory analysis." recommendation="Confirm the application is designed for multiple worker processes and does not depend on in-process state." />
+    <risk path="system.applicationHost/applicationPools/*/recycling/periodicRestart" attribute="time" operator="notEquals" value="29:00:00" severity="low" title="Periodic recycle interval customized" comment="Custom recycle timing can cause cold starts or interrupt long-running work at a schedule that differs from the IIS default." recommendation="Correlate recycle events with traffic and ensure overlapped recycling and application warm-up are appropriate." />
+    <risk path="system.webServer/security/requestFiltering/requestLimits" attribute="maxAllowedContentLength" operator="greaterThan" value="30000000" severity="medium" title="Request body limit increased" comment="Allowing larger request bodies can increase upload time, disk use, and memory or bandwidth pressure." recommendation="Confirm the business requirement and align proxy, ASP.NET, and application-level request limits." />
+    <risk path="system.webServer/security/requestFiltering" attribute="allowDoubleEscaping" operator="equals" value="true" severity="high" title="Double escaping allowed" comment="Allowing double-escaped URL sequences broadens accepted input and can weaken path and request validation assumptions." recommendation="Keep disabled unless a verified application requirement exists and test canonicalization and authorization behavior." />
+    <risk path="system.webServer/directoryBrowse" attribute="enabled" operator="equals" value="true" severity="medium" title="Directory browsing enabled" comment="Directory listings can disclose file names, application structure, backups, or other unintended content." recommendation="Disable unless directory listing is an explicit feature and confirm authorization boundaries." />
+    <risk path="system.webServer/httpErrors" attribute="errorMode" operator="equals" value="Detailed" severity="medium" title="Detailed IIS errors enabled" comment="Detailed errors can expose implementation and environment information to clients." recommendation="Use detailed errors only in controlled troubleshooting scopes and return generic errors to remote production clients." />
+    <risk path="system.webServer/proxy" attribute="enabled" operator="equals" value="true" severity="medium" title="ARR proxy enabled" comment="The server is acting as a reverse proxy, so timeout, buffering, affinity, and upstream health settings can affect availability and latency." recommendation="Review proxy timeouts, preserve-host-header requirements, upstream health, and forwarded-header trust." />
+    <risk path="system.webServer/security/authentication/basicAuthentication" attribute="enabled" operator="equals" value="true" severity="high" title="Basic authentication enabled" comment="Basic authentication transmits reusable credentials and requires TLS protection for every request path." recommendation="Require HTTPS, disable plaintext access, and confirm credential delegation and storage requirements." />
+    <risk path="system.webServer/security/authentication/windowsAuthentication" attribute="enabled" operator="equals" value="true" severity="medium" title="Windows Authentication enabled" comment="Windows Authentication changes the request identity flow and can introduce repeated challenges, delegation constraints, and Kerberos or NTLM dependency issues." recommendation="Review providers, kernel-mode settings, SPNs, delegation, application-pool identity, and 401 substatus evidence." />
+    <risk path="system.webServer/security/authentication/anonymousAuthentication" attribute="enabled" operator="equals" value="true" severity="low" title="Anonymous authentication enabled" comment="Anonymous access may be expected for public sites but can expose resources if authorization rules are incomplete." recommendation="Confirm authorization rules and filesystem permissions for every anonymous application path." />
+    <risk path="system.web/compilation" attribute="debug" operator="equals" value="true" severity="high" title="ASP.NET debug compilation enabled" comment="Debug compilation increases execution overhead, disables important optimizations, and can extend request timeouts." recommendation="Disable in production and rebuild with production diagnostics and symbol handling." />
+    <risk path="system.web/httpRuntime" attribute="executionTimeout" operator="greaterThan" value="110" severity="medium" title="ASP.NET execution timeout increased" comment="Long execution timeouts can retain blocked requests and associated resources for longer during dependency failures." recommendation="Confirm the workload requires the higher timeout and correlate with request queues, thread usage, and downstream latency." />
+    <risk path="system.web/httpRuntime" attribute="maxRequestLength" operator="greaterThan" value="4096" severity="medium" title="ASP.NET request size limit increased" comment="Larger managed request bodies can increase memory, disk, and bandwidth pressure." recommendation="Align this limit with IIS requestFiltering and enforce application-specific upload validation." />
+    <risk path="system.web/sessionState" attribute="mode" operator="equals" value="InProc" severity="medium" title="In-process ASP.NET session state" comment="Session data consumes worker-process memory and is lost on recycle or crash; large sessions can amplify memory growth." recommendation="Measure session size and growth, and consider an out-of-process provider when resilience or scale-out is required." />
+    <risk path="system.web/customErrors" attribute="mode" operator="equals" value="Off" severity="medium" title="ASP.NET custom errors disabled" comment="Detailed exception information may be returned to remote clients." recommendation="Use RemoteOnly or On in production and preserve detailed diagnostics in protected server-side logs." />
+    <risk path="system.web/httpCookies" attribute="httpOnlyCookies" operator="equals" value="false" severity="medium" title="HttpOnly cookies disabled" comment="Client-side script can access cookies that do not set HttpOnly, increasing impact if script injection occurs." recommendation="Enable HttpOnly for cookies that do not require script access." />
+    <risk path="system.web/httpCookies" attribute="requireSSL" operator="equals" value="false" severity="medium" title="Secure cookies not required" comment="Cookies may be sent over unencrypted HTTP when the application is reachable without strict HTTPS enforcement." recommendation="Require HTTPS and Secure cookies for production authentication and session data." />
+    <risk path="system.web/identity" attribute="impersonate" operator="equals" value="true" severity="medium" title="ASP.NET impersonation enabled" comment="Request execution identity changes can broaden access paths and make authorization and auditing harder to reason about." recommendation="Verify the intended identity flow, least-privilege permissions, and delegation boundaries." />
+    <risk path="system.web/trace" attribute="enabled" operator="equals" value="true" severity="medium" title="ASP.NET tracing enabled" comment="Tracing can expose request, control, cookie, header, and server details and adds runtime overhead." recommendation="Disable after troubleshooting and restrict local-only access while enabled." />
+  </riskRules>
+</iisConfigurationReference>
