@@ -726,6 +726,40 @@ main {
   gap: 18px;
 }
 
+.sample-data-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 18px;
+  padding: 13px 15px;
+  color: #164f73;
+  border: 1px solid #b8d9ec;
+  border-radius: 9px;
+  background: #eef7fc;
+  box-shadow: var(--shadow-2);
+}
+
+.sample-data-notice svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.sample-data-notice strong,
+.sample-data-notice span {
+  display: block;
+}
+
+.sample-data-notice strong {
+  font-size: 13px;
+}
+
+.sample-data-notice span {
+  margin-top: 2px;
+  color: #41687e;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .scope-bar {
   display: grid;
   grid-template-columns: minmax(230px, 1fr) minmax(260px, 0.7fr) minmax(280px, auto);

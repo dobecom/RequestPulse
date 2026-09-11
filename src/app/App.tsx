@@ -10,7 +10,9 @@ import {
   X,
 } from 'lucide-react'
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { SampleDataNotice } from '../features/dashboard/SampleDataNotice'
 import { HomePage } from '../features/home/HomePage'
+import { sampleLogFiles } from '../features/logs/sampleLogs'
 import type { LogInputKind } from '../features/logs/types'
 import { useLogWorkspace } from '../features/workspace/useLogWorkspace'
 import {
@@ -55,21 +57,19 @@ export function App() {
   const w3Count = workspace.w3Files.length
   const httpErrCount = workspace.httpErrFiles.length
   const eventCount = workspace.eventFiles.length
-  const hasActiveTabData =
-    tab === 'home' ||
-    (tab === 'w3svc' && w3Count > 0) ||
-    (tab === 'httperr' && httpErrCount > 0) ||
-    (tab === 'events' && eventCount > 0)
+  const displayedW3Files = w3Count ? workspace.w3Files : sampleLogFiles.w3svc
+  const displayedHttpErrFiles = httpErrCount
+    ? workspace.httpErrFiles
+    : sampleLogFiles.httperr
+  const displayedEventFiles = eventCount
+    ? workspace.eventFiles
+    : sampleLogFiles.events
 
   useEffect(() => {
     void loadVisitorCounts(window.location.pathname || '/')
       .then(setVisitorCounts)
       .catch(() => setVisitorCounts(null))
   }, [])
-
-  useEffect(() => {
-    if (!hasActiveTabData) setTab('home')
-  }, [hasActiveTabData])
 
   const acceptExpected = (files: FileList, expected: LogInputKind) => {
     void workspace.addFiles(files, expected)
@@ -116,8 +116,7 @@ export function App() {
                   : id === 'events'
                     ? eventCount
                   : 0
-            const requiresFiles = id !== 'home' && count === 0
-            const disabled = workspace.isParsing || requiresFiles
+            const disabled = workspace.isParsing
             return (
               <button
                 type="button"
@@ -125,11 +124,9 @@ export function App() {
                 className={tab === id ? 'is-active' : undefined}
                 disabled={disabled}
                 title={
-                  requiresFiles
-                    ? `Upload ${label} logs to enable this tab.`
-                    : workspace.isParsing
-                      ? 'Wait for log processing to finish.'
-                      : undefined
+                  workspace.isParsing
+                    ? 'Wait for log processing to finish.'
+                    : undefined
                 }
                 onClick={() => setTab(id)}
               >
@@ -173,10 +170,23 @@ export function App() {
             }}
           />
         )}
+        {tab === 'w3svc' && !w3Count && <SampleDataNotice kind="W3SVC" />}
+        {tab === 'httperr' && !httpErrCount && (
+          <SampleDataNotice kind="HTTPERR" />
+        )}
+        {tab === 'events' && !eventCount && (
+          <SampleDataNotice kind="Event Viewer" />
+        )}
         <Suspense fallback={<div className="dashboard-loading">Loading dashboard…</div>}>
-          {tab === 'w3svc' && <W3Dashboard files={workspace.w3Files} />}
-          {tab === 'httperr' && <HttpErrDashboard files={workspace.httpErrFiles} />}
-          {tab === 'events' && <EventLogDashboard files={workspace.eventFiles} />}
+          {tab === 'w3svc' && (
+            <W3Dashboard files={displayedW3Files} />
+          )}
+          {tab === 'httperr' && (
+            <HttpErrDashboard files={displayedHttpErrFiles} />
+          )}
+          {tab === 'events' && (
+            <EventLogDashboard files={displayedEventFiles} />
+          )}
         </Suspense>
       </main>
 

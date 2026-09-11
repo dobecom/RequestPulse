@@ -1,5 +1,5 @@
 import { Check, ChevronDown } from 'lucide-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface CountedOption {
   value: string
@@ -22,9 +22,53 @@ export function MultiSelect({
   compact,
 }: MultiSelectProps) {
   const selectedSet = useMemo(() => new Set(selected), [selected])
+  const detailsRef = useRef<HTMLDetailsElement>(null)
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+
+    const closeWhenOutside = (target: EventTarget | null) => {
+      if (target instanceof Node && !detailsRef.current?.contains(target)) {
+        setOpen(false)
+      }
+    }
+    const handlePointerDown = (event: PointerEvent) => {
+      closeWhenOutside(event.target)
+    }
+    const handleFocusIn = (event: FocusEvent) => {
+      closeWhenOutside(event.target)
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        detailsRef.current?.querySelector('summary')?.focus()
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown, true)
+    document.addEventListener('focusin', handleFocusIn, true)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown, true)
+      document.removeEventListener('focusin', handleFocusIn, true)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [open])
+
   return (
-    <details className={`multi-select${compact ? ' multi-select--compact' : ''}`}>
-      <summary>
+    <details
+      ref={detailsRef}
+      className={`multi-select${compact ? ' multi-select--compact' : ''}`}
+      open={open}
+    >
+      <summary
+        aria-expanded={open}
+        onClick={(event) => {
+          event.preventDefault()
+          setOpen((current) => !current)
+        }}
+      >
         <span>
           {label}
           {selected.length > 0 && <b>{selected.length}</b>}
