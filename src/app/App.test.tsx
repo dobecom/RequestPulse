@@ -59,7 +59,12 @@ describe('App navigation and file processing state', () => {
     fireEvent.click(screen.getByRole('button', { name: 'W3SVC' }))
 
     expect(
-      await screen.findByText('No uploaded W3SVC logs are currently loaded.'),
+      await screen.findByText('This page is currently showing sample data.'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Upload your W3SVC log files to analyze your actual IIS traffic.',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -70,7 +75,7 @@ describe('App navigation and file processing state', () => {
 
     expect(
       await screen.findByText(
-        'No uploaded IIS configuration files are currently loaded.',
+        'Upload your applicationHost.config or web.config files to analyze your actual IIS environment.',
       ),
     ).toBeInTheDocument()
   })
@@ -88,7 +93,7 @@ describe('App navigation and file processing state', () => {
     fireEvent.click(screen.getByRole('button', { name: /W3SVC 1/ }))
 
     expect(
-      screen.queryByText('No uploaded W3SVC logs are currently loaded.'),
+      screen.queryByText('This page is currently showing sample data.'),
     ).not.toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /W3SVC 1/ }),

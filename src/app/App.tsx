@@ -184,19 +184,17 @@ export function App() {
             }}
           />
         )}
-        {tab === 'w3svc' && !w3Count && <SampleDataNotice kind="W3SVC" />}
+        {tab === 'w3svc' && !w3Count && (
+          <SampleDataNotice uploadGuidance="Upload your W3SVC log files to analyze your actual IIS traffic." />
+        )}
         {tab === 'httperr' && !httpErrCount && (
-          <SampleDataNotice kind="HTTPERR" />
+          <SampleDataNotice uploadGuidance="Upload your HTTPERR log files to analyze your actual HTTP.sys rejection evidence." />
         )}
         {tab === 'events' && !eventCount && (
-          <SampleDataNotice kind="Event Viewer" />
+          <SampleDataNotice uploadGuidance="Upload your Application and System Event Viewer log files to analyze your actual Windows event evidence." />
         )}
         {tab === 'config' && !configCount && (
-          <SampleDataNotice
-            kind="IIS configuration"
-            title="No uploaded IIS configuration files are currently loaded."
-            description="You are exploring synthetic applicationHost.config and web.config evidence with intentionally high-impact settings. Upload a matching file from Home to replace this preview."
-          />
+          <SampleDataNotice uploadGuidance="Upload your applicationHost.config or web.config files to analyze your actual IIS environment." />
         )}
         <Suspense fallback={<div className="dashboard-loading">Loading dashboard…</div>}>
           {tab === 'w3svc' && (
