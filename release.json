@@ -1,4 +1,4 @@
 {
-  "version": "v1.1.0",
-  "description": "Adds local IIS configuration upload, synthetic configuration previews, server topology visualization, schema-default comparison, and risk-focused applicationHost.config and web.config findings."
+  "version": "v1.2.0",
+  "description": "Adds browser-local IIS Failed Request Tracing analysis with multi-file error summaries, request pipeline failure visualization, evidence-linked guidance, and synthetic FREB previews."
 }

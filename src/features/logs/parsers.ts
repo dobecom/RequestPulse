@@ -1,5 +1,6 @@
 import { parseEventLogFile } from './eventLogParser'
 import { parseConfigText } from '../config/configParser'
+import { parseFrebText } from '../freb/frebParser'
 import type {
   LogInputKind,
   LogRow,
@@ -135,6 +136,10 @@ export function parseLogText(
 
 export async function parseBrowserFile(file: File, expectedKind?: LogInputKind) {
   const extension = file.name.toLowerCase().split('.').pop()
+  const isFrebRequest = expectedKind === 'freb'
+  if (isFrebRequest) {
+    return parseFrebText(await file.text(), file.name, file.size)
+  }
   const isConfigRequest =
     expectedKind === 'config' ||
     expectedKind === 'config-applicationhost' ||
@@ -150,6 +155,9 @@ export async function parseBrowserFile(file: File, expectedKind?: LogInputKind) 
 
   if (extension === 'xml') {
     const text = await file.text()
+    if (/<failedRequest(?:\s|>)/i.test(text)) {
+      return parseFrebText(text, file.name, file.size)
+    }
     if (/<configuration(?:\s|>)/i.test(text)) {
       return parseConfigText(text, file.name, file.size, expectedKind)
     }

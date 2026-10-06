@@ -128,6 +128,18 @@ export function HomePage({
           onFiles={onFiles}
           onPickFiles={onPickFiles}
         />
+        <DropZone
+          kind="freb"
+          title="Drop FREB logs"
+          description="Open one or many IIS Failed Request Tracing XML files to compare unique errors and locate the failing module in the request pipeline."
+          eyebrow="IIS Failed Request Tracing"
+          accept=".xml"
+          accent="red"
+          wide
+          busy={busy}
+          onFiles={onFiles}
+          onPickFiles={onPickFiles}
+        />
       </section>
 
       <section className="persistence-card">
@@ -217,6 +229,8 @@ export function HomePage({
                       ? 'W3SVC'
                       : file.kind === 'httperr'
                         ? 'HTTPERR'
+                        : file.kind === 'freb'
+                          ? `FREB ${file.freb?.statusCode || ''}`
                         : file.kind === 'event-application'
                           ? 'Application events'
                           : file.kind === 'event-system'
@@ -227,6 +241,8 @@ export function HomePage({
                     ·{' '}
                     {file.config
                       ? `${file.config.settings.length.toLocaleString()} explicit settings`
+                      : file.freb
+                        ? `${file.freb.events.length.toLocaleString()} trace events · ${file.freb.timeTaken.toLocaleString()} ms`
                       : `${file.rows.length.toLocaleString()} rows · ${file.fields.length} fields`}
                   </span>
                 </div>

@@ -1,7 +1,62 @@
 export type EventLogKind = 'event-application' | 'event-system'
 export type ConfigKind = 'config-applicationhost' | 'config-web'
-export type LogKind = 'w3svc' | 'httperr' | EventLogKind | ConfigKind
+export type LogKind = 'w3svc' | 'httperr' | 'freb' | EventLogKind | ConfigKind
 export type LogInputKind = LogKind | 'eventlog' | 'config'
+
+export type FrebPipelineStageId =
+  | 'receive'
+  | 'begin-request'
+  | 'authenticate'
+  | 'authorize'
+  | 'resolve-cache'
+  | 'map-handler'
+  | 'acquire-state'
+  | 'execute-handler'
+  | 'release-state'
+  | 'update-cache'
+  | 'log-request'
+  | 'end-request'
+
+export interface FrebTraceEvent {
+  index: number
+  timestamp: number
+  level: number
+  provider: string
+  opcode: string
+  moduleName: string
+  stageId?: FrebPipelineStageId
+  data: Record<string, string>
+  descriptions: Record<string, string>
+}
+
+export interface FrebError {
+  key: string
+  statusCode: string
+  moduleName: string
+  stageId: FrebPipelineStageId
+  stageLabel: string
+  opcode: string
+  errorCode: string
+  message: string
+}
+
+export interface ParsedFrebData {
+  url: string
+  siteId: string
+  appPoolId: string
+  processId: string
+  verb: string
+  authenticationType: string
+  activityId: string
+  failureReason: string
+  statusCode: string
+  triggerStatusCode: string
+  timeTaken: number
+  timestamp: number
+  computer: string
+  events: FrebTraceEvent[]
+  error?: FrebError
+}
 
 export interface ConfigSetting {
   id: string
@@ -65,6 +120,7 @@ export interface ParsedLogFile {
   warnings: string[]
   size: number
   config?: ParsedConfigData
+  freb?: ParsedFrebData
 }
 
 export interface ParseFailure {

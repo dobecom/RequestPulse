@@ -76,4 +76,27 @@ describe('log parser', () => {
     expect(parsed.kind).toBe('config-web')
     expect(parsed.config?.settings).toHaveLength(1)
   })
+
+  it('routes FREB XML to the local failed-request parser', async () => {
+    const xml = `<?xml version="1.0"?>
+      <failedRequest url="https://example.test/admin" siteId="1" appPoolId="Sample" processId="100" verb="GET" failureReason="STATUS_CODE" statusCode="401.503" triggerStatusCode="401.503" timeTaken="3">
+        <Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+          <System><Provider Name="WWW Server"/><Level>3</Level><TimeCreated SystemTime="2026-10-06T01:00:00.000Z"/><Computer>IIS01</Computer></System>
+          <EventData><Data Name="ModuleName">IpRestrictionModule</Data><Data Name="HttpStatus">401</Data><Data Name="HttpSubStatus">503</Data><Data Name="ErrorCode">2147942405</Data></EventData>
+          <RenderingInfo xmlns:freb="http://schemas.microsoft.com/win/2006/06/iis/freb"><Opcode>MODULE_SET_RESPONSE_ERROR_STATUS</Opcode><freb:Description Data="Notification">BEGIN_REQUEST</freb:Description><freb:Description Data="ErrorCode">Access is denied. (0x80070005)</freb:Description></RenderingInfo>
+        </Event>
+      </failedRequest>`
+    const file = new File([xml], 'fr000001.xml', { type: 'application/xml' })
+    Object.defineProperty(file, 'text', { value: async () => xml })
+
+    const parsed = await parseBrowserFile(file, 'freb')
+
+    expect(parsed.kind).toBe('freb')
+    expect(parsed.freb?.statusCode).toBe('401.503')
+    expect(parsed.freb?.error).toMatchObject({
+      moduleName: 'IpRestrictionModule',
+      stageId: 'begin-request',
+      errorCode: '0x80070005',
+    })
+  })
 })

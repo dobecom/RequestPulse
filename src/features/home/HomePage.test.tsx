@@ -34,6 +34,9 @@ describe('HomePage visitor metrics', () => {
       screen.getByRole('heading', { name: 'Drop IIS configuration files' }),
     ).toBeInTheDocument()
     expect(
+      screen.getByRole('heading', { name: 'Drop FREB logs' }),
+    ).toBeInTheDocument()
+    expect(
       screen.queryByText(/Configuration files can contain account names/i),
     ).not.toBeInTheDocument()
   })

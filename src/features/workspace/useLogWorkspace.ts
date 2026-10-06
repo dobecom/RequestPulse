@@ -132,6 +132,7 @@ export function useLogWorkspace() {
       try {
         const eventLog = expected === 'eventlog'
         const configuration = expected === 'config'
+        const freb = expected === 'freb'
         const handles = await window.showOpenFilePicker({
           multiple: true,
           types: [
@@ -140,6 +141,8 @@ export function useLogWorkspace() {
                 ? 'Windows Event logs'
                 : configuration
                   ? 'IIS configuration files'
+                  : freb
+                    ? 'IIS Failed Request Tracing logs'
                   : 'IIS text logs',
               accept: eventLog
                 ? {
@@ -151,6 +154,11 @@ export function useLogWorkspace() {
                       'application/xml': ['.config', '.xml'],
                       'text/xml': ['.config', '.xml'],
                     }
+                  : freb
+                    ? {
+                        'application/xml': ['.xml'],
+                        'text/xml': ['.xml'],
+                      }
                   : { 'text/plain': ['.log', '.txt'] },
             },
           ],
@@ -364,6 +372,10 @@ export function useLogWorkspace() {
       ),
     [files],
   )
+  const frebFiles = useMemo(
+    () => files.filter((file) => file.kind === 'freb'),
+    [files],
+  )
 
   return {
     files,
@@ -371,6 +383,7 @@ export function useLogWorkspace() {
     httpErrFiles,
     eventFiles,
     configFiles,
+    frebFiles,
     failures,
     isParsing,
     rememberFiles,

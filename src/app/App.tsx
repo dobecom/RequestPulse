@@ -3,6 +3,7 @@ import {
   AlertCircle,
   BarChart3,
   FileCog,
+  FileSearch,
   Home,
   LoaderCircle,
   LockKeyhole,
@@ -15,6 +16,7 @@ import { SampleDataNotice } from '../features/dashboard/SampleDataNotice'
 import { sampleConfigFiles } from '../features/config/sampleConfigs'
 import { HomePage } from '../features/home/HomePage'
 import { sampleLogFiles } from '../features/logs/sampleLogs'
+import { sampleFrebFiles } from '../features/freb/sampleFreb'
 import type { LogInputKind } from '../features/logs/types'
 import { useLogWorkspace } from '../features/workspace/useLogWorkspace'
 import {
@@ -22,7 +24,7 @@ import {
   type VisitorCounts,
 } from '../services/auditService'
 
-type Tab = 'home' | 'w3svc' | 'httperr' | 'events' | 'config'
+type Tab = 'home' | 'w3svc' | 'httperr' | 'events' | 'freb' | 'config'
 
 const W3Dashboard = lazy(() =>
   import('../features/dashboard/W3Dashboard').then((module) => ({
@@ -44,6 +46,11 @@ const ConfigDashboard = lazy(() =>
     default: module.ConfigDashboard,
   })),
 )
+const FrebDashboard = lazy(() =>
+  import('../features/freb/FrebDashboard').then((module) => ({
+    default: module.FrebDashboard,
+  })),
+)
 
 const tabs: Array<{
   id: Tab
@@ -54,6 +61,7 @@ const tabs: Array<{
   { id: 'w3svc', label: 'W3SVC', icon: BarChart3 },
   { id: 'httperr', label: 'HTTPERR', icon: ServerCrash },
   { id: 'events', label: 'Events', icon: MonitorCog },
+  { id: 'freb', label: 'FREB', icon: FileSearch },
   { id: 'config', label: 'Configs', icon: FileCog },
 ]
 
@@ -66,6 +74,7 @@ export function App() {
   const httpErrCount = workspace.httpErrFiles.length
   const eventCount = workspace.eventFiles.length
   const configCount = workspace.configFiles.length
+  const frebCount = workspace.frebFiles.length
   const displayedW3Files = w3Count ? workspace.w3Files : sampleLogFiles.w3svc
   const displayedHttpErrFiles = httpErrCount
     ? workspace.httpErrFiles
@@ -76,6 +85,7 @@ export function App() {
   const displayedConfigFiles = configCount
     ? workspace.configFiles
     : sampleConfigFiles
+  const displayedFrebFiles = frebCount ? workspace.frebFiles : sampleFrebFiles
 
   useEffect(() => {
     void loadVisitorCounts(window.location.pathname || '/')
@@ -127,6 +137,8 @@ export function App() {
                   ? httpErrCount
                   : id === 'events'
                     ? eventCount
+                    : id === 'freb'
+                      ? frebCount
                     : id === 'config'
                       ? configCount
                   : 0
@@ -196,6 +208,9 @@ export function App() {
         {tab === 'config' && !configCount && (
           <SampleDataNotice uploadGuidance="Upload your applicationHost.config or web.config files to analyze your actual IIS environment." />
         )}
+        {tab === 'freb' && !frebCount && (
+          <SampleDataNotice uploadGuidance="Upload one or more FREB XML files to analyze your actual IIS failed-request traces." />
+        )}
         <Suspense fallback={<div className="dashboard-loading">Loading dashboard…</div>}>
           {tab === 'w3svc' && (
             <W3Dashboard files={displayedW3Files} />
@@ -208,6 +223,9 @@ export function App() {
           )}
           {tab === 'config' && (
             <ConfigDashboard files={displayedConfigFiles} />
+          )}
+          {tab === 'freb' && (
+            <FrebDashboard files={displayedFrebFiles} />
           )}
         </Suspense>
       </main>
@@ -225,7 +243,7 @@ export function App() {
           <div>
             <Activity size={32} />
             <strong>Drop logs into this workspace</strong>
-            <span>W3SVC, HTTPERR, Event Viewer, and IIS configuration files are detected locally</span>
+            <span>W3SVC, HTTPERR, FREB, Event Viewer, and IIS configuration files are detected locally</span>
           </div>
         </div>
       )}

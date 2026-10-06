@@ -11,6 +11,7 @@ const { workspace } = vi.hoisted(() => ({
     httpErrFiles: [] as ParsedLogFile[],
     eventFiles: [] as ParsedLogFile[],
     configFiles: [] as ParsedLogFile[],
+    frebFiles: [] as ParsedLogFile[],
     failures: [],
     isParsing: false,
     rememberFiles: false,
@@ -45,6 +46,7 @@ describe('App navigation and file processing state', () => {
     workspace.httpErrFiles = []
     workspace.eventFiles = []
     workspace.configFiles = []
+    workspace.frebFiles = []
   })
 
   it('keeps dashboards available without uploaded files', async () => {
@@ -54,6 +56,7 @@ describe('App navigation and file processing state', () => {
     expect(screen.getByRole('button', { name: 'W3SVC' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'HTTPERR' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'Events' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'FREB' })).toBeEnabled()
     expect(screen.getByRole('button', { name: 'Configs' })).toBeEnabled()
 
     fireEvent.click(screen.getByRole('button', { name: 'W3SVC' }))
@@ -64,6 +67,18 @@ describe('App navigation and file processing state', () => {
     expect(
       screen.getByText(
         'Upload your W3SVC log files to analyze your actual IIS traffic.',
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('shows synthetic FREB evidence until FREB files are uploaded', async () => {
+    render(<App />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'FREB' }))
+
+    expect(
+      await screen.findByText(
+        'Upload one or more FREB XML files to analyze your actual IIS failed-request traces.',
       ),
     ).toBeInTheDocument()
   })

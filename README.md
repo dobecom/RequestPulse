@@ -2,13 +2,18 @@
 
 RequestPulse is a browser-only React application for exploring IIS W3SVC access
 logs, HTTP.sys HTTPERR logs, Windows Event Viewer evidence, and IIS
-configuration. Parsing, filtering, aggregation, configuration comparison, and
+configuration. It also analyzes IIS Failed Request Tracing (FREB) XML files.
+Parsing, filtering, aggregation, configuration comparison, and
 raw-row navigation happen locally in the browser. Raw evidence is never sent to
 an API.
 
 ## Features
 
 - Separate W3SVC and HTTPERR drag/drop zones plus file pickers and workspace drop
+- Wide multi-file FREB upload with per-request selection and browser-local XML parsing
+- Deduplicated Top 5 FREB error signatures across loaded traces
+- IIS request-pipeline visualization that identifies the failing stage and module
+- XML-managed FREB definitions, likely causes, and recommended actions
 - Side-by-side Event Viewer and IIS configuration upload areas
 - applicationHost.config topology dashboard for pools, sites, applications,
   virtual directories, bindings, FTP, modules, and ARR detection
@@ -76,6 +81,7 @@ Open `http://localhost:3001`. The container health endpoint is `/healthz`.
 - HTTPERR: an active `#Fields:` header must include `s-reason` and `s-queuename`.
 - IIS configuration: `applicationHost.config` and `web.config` must contain a
   valid XML `<configuration>` root.
+- FREB: each XML file must contain a `<failedRequest>` root and trace events.
 
 Headers may change within a file. RequestPulse applies the active header to each
 subsequent data row and preserves the original source file and line number.
@@ -92,6 +98,11 @@ The generated catalog contains schema defaults, types, validation metadata, and
 allowed enum values. Findings cover explicit non-default values only. Missing
 settings may be inherited from parent configuration and are not treated as
 disabled.
+
+The FREB analysis reference is stored at
+`src/features/freb/reference/freb-analysis-reference.xml`. It records the IIS
+pipeline stages and evidence-linked module, status, HRESULT, cause, and action
+rules used by the local dashboard.
 
 ## Privacy
 

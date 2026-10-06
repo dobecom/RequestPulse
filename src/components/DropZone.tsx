@@ -9,7 +9,8 @@ interface DropZoneProps {
   notice?: string
   eyebrow?: string
   accept?: string
-  accent: 'blue' | 'teal' | 'orange' | 'purple'
+  accent: 'blue' | 'teal' | 'orange' | 'purple' | 'red'
+  wide?: boolean
   busy: boolean
   onFiles: (files: FileList, expected: LogInputKind) => void
   onPickFiles: (expected: LogInputKind) => Promise<boolean>
@@ -23,6 +24,7 @@ export function DropZone({
   eyebrow,
   accept = '.log,.txt',
   accent,
+  wide = false,
   busy,
   onFiles,
   onPickFiles,
@@ -38,7 +40,7 @@ export function DropZone({
 
   return (
     <section
-      className={`drop-zone drop-zone--${accent}${isOver ? ' is-over' : ''}`}
+      className={`drop-zone drop-zone--${accent}${wide ? ' drop-zone--wide' : ''}${isOver ? ' is-over' : ''}`}
       onDragEnter={(event) => {
         event.preventDefault()
         setIsOver(true)

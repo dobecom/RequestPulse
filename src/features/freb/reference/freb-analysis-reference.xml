@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<frebReference generatedAt="2026-10-06">
+  <sources>
+    <source id="failed-request-tracing" title="Troubleshoot failed requests by using tracing in IIS" url="https://learn.microsoft.com/troubleshoot/developer/webapps/iis/health-diagnostic-performance/troubleshoot-failed-requests-using-tracing-in-iis-85" />
+    <source id="iis-architecture" title="Introduction to IIS Architectures" url="https://learn.microsoft.com/iis/get-started/introduction-to-iis/introduction-to-iis-architecture" />
+    <source id="tracing-config" title="Tracing configuration reference" url="https://learn.microsoft.com/iis/configuration/system.webserver/tracing/" />
+    <source id="http-errors" title="Troubleshoot 4xx and 5xx HTTP errors" url="https://learn.microsoft.com/troubleshoot/developer/webapps/iis/site-behavior-performance/troubleshoot-http-error-code" />
+  </sources>
+  <pipeline>
+    <stage id="receive" title="HTTP.sys to IIS" description="The request is accepted by HTTP.sys and handed to the IIS worker process." />
+    <stage id="begin-request" notification="BEGIN_REQUEST" title="Begin request" description="Native and managed modules can inspect or reject the request before authentication." />
+    <stage id="authenticate" notification="AUTHENTICATE_REQUEST" title="Authenticate" description="Authentication modules establish the request identity." />
+    <stage id="authorize" notification="AUTHORIZE_REQUEST" title="Authorize" description="Authorization modules decide whether the established identity can access the resource." />
+    <stage id="resolve-cache" notification="RESOLVE_REQUEST_CACHE" title="Resolve cache" description="IIS and application caches can satisfy the request before handler execution." />
+    <stage id="map-handler" notification="MAP_REQUEST_HANDLER" title="Map handler" description="IIS selects the handler responsible for the requested resource." />
+    <stage id="acquire-state" notification="ACQUIRE_REQUEST_STATE" title="Acquire state" description="Application state and session-related modules prepare request state." />
+    <stage id="execute-handler" notification="EXECUTE_REQUEST_HANDLER" title="Execute handler" description="The selected native, managed, FastCGI, or ASP.NET Core handler processes the request." />
+    <stage id="release-state" notification="RELEASE_REQUEST_STATE" title="Release state" description="Request state is persisted or released after handler execution." />
+    <stage id="update-cache" notification="UPDATE_REQUEST_CACHE" title="Update cache" description="Eligible responses can update IIS or application caches." />
+    <stage id="log-request" notification="LOG_REQUEST" title="Log request" description="IIS records request completion information." />
+    <stage id="end-request" notification="END_REQUEST" title="End request" description="Final response processing completes and the request leaves the pipeline." />
+  </pipeline>
+  <rules>
+    <rule id="ip-restriction-denied" module="IpRestrictionModule" status="401.503" errorCode="0x80070005" stage="begin-request">
+      <definition>IIS IP Address and Domain Restrictions rejected the client before authentication and handler execution.</definition>
+      <causes>
+        <cause>The client IP is denied by an explicit allow or deny rule.</cause>
+        <cause>A reverse proxy address is evaluated instead of the intended client address.</cause>
+        <cause>The effective site or application configuration inherits a restriction from a parent scope.</cause>
+      </causes>
+      <actions>
+        <action>Review the effective ipSecurity configuration at server, site, application, and path scope.</action>
+        <action>Confirm which address IIS evaluated and validate trusted proxy and forwarded-address behavior.</action>
+        <action>Change allow or deny rules only after confirming the blocked address is expected traffic.</action>
+      </actions>
+    </rule>
+    <rule id="request-filtering" module="RequestFilteringModule" statusPrefix="404">
+      <definition>IIS Request Filtering rejected the URL, verb, extension, sequence, header, or request size.</definition>
+      <causes>
+        <cause>A requestFiltering rule blocks the requested pattern.</cause>
+        <cause>The request exceeds configured content or URL limits.</cause>
+      </causes>
+      <actions>
+        <action>Use the HTTP substatus and FREB event data to identify the exact filtering rule.</action>
+        <action>Prefer the narrowest safe configuration change and retest the same request.</action>
+      </actions>
+    </rule>
+    <rule id="authentication" modulePattern="Authentication" statusPrefix="401">
+      <definition>An IIS authentication module could not establish or accept the request identity.</definition>
+      <causes>
+        <cause>The enabled authentication providers do not match the client and application requirements.</cause>
+        <cause>Credentials, SPNs, delegation, or provider order are incorrect.</cause>
+      </causes>
+      <actions>
+        <action>Correlate the HTTP substatus, Windows security events, and the selected authentication providers.</action>
+        <action>Verify identity and delegation changes in a controlled environment before production rollout.</action>
+      </actions>
+    </rule>
+    <rule id="authorization" modulePattern="Authorization" statusPrefix="401">
+      <definition>Authorization denied an authenticated or anonymous identity access to the resource.</definition>
+      <causes>
+        <cause>URL authorization, NTFS permissions, or application authorization rules deny the identity.</cause>
+      </causes>
+      <actions>
+        <action>Identify the effective identity, then review URL authorization and filesystem permissions separately.</action>
+      </actions>
+    </rule>
+    <rule id="configuration" status="500.19">
+      <definition>IIS could not load or validate the effective configuration for the request.</definition>
+      <causes>
+        <cause>The configuration contains invalid XML, an unrecognized section, a locked section, or inaccessible configuration data.</cause>
+      </causes>
+      <actions>
+        <action>Use the HRESULT and configuration path in the FREB event to locate the failing file and setting.</action>
+        <action>Check section locking, schema availability, file permissions, and duplicate declarations.</action>
+      </actions>
+    </rule>
+    <rule id="aspnet-core-startup" modulePattern="AspNetCoreModule" statusPrefix="500">
+      <definition>ASP.NET Core Module could not start, load, or communicate with the hosted application.</definition>
+      <causes>
+        <cause>The application failed during startup, the runtime is missing, or hosting configuration is invalid.</cause>
+      </causes>
+      <actions>
+        <action>Correlate the exact substatus with ANCM Event Viewer and stdout evidence.</action>
+        <action>Verify the deployed runtime, processPath, arguments, hosting model, and application startup logs.</action>
+      </actions>
+    </rule>
+    <rule id="handler-failure" stage="execute-handler" statusPrefix="500">
+      <definition>The selected request handler failed while processing the application request.</definition>
+      <causes>
+        <cause>Application code, a native extension, FastCGI, ASP.NET, or another handler returned an error.</cause>
+      </causes>
+      <actions>
+        <action>Use the failing module, HRESULT, and neighboring trace events to select the matching application or runtime logs.</action>
+        <action>Do not treat the final HTTP status alone as proof of the application root cause.</action>
+      </actions>
+    </rule>
+  </rules>
+</frebReference>
