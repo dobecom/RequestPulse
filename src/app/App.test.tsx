@@ -40,6 +40,7 @@ vi.mock('../services/auditService', () => ({
 
 describe('App navigation and file processing state', () => {
   beforeEach(() => {
+    vi.clearAllMocks()
     workspace.isParsing = false
     workspace.files = []
     workspace.w3Files = []
@@ -47,6 +48,31 @@ describe('App navigation and file processing state', () => {
     workspace.eventFiles = []
     workspace.configFiles = []
     workspace.frebFiles = []
+  })
+
+  it('accepts drops only through a dedicated log area', () => {
+    render(<App />)
+    const dataTransfer = {
+      files: [],
+      items: [],
+      types: ['Files'],
+    } as unknown as DataTransfer
+    const appShell = document.querySelector('.app-shell')
+    const dropZone = screen
+      .getByRole('heading', { name: 'Drop W3SVC logs' })
+      .closest('section')
+    expect(appShell).not.toBeNull()
+    expect(dropZone).not.toBeNull()
+
+    fireEvent.drop(appShell!, { dataTransfer })
+    expect(workspace.addDroppedFiles).not.toHaveBeenCalled()
+
+    fireEvent.drop(dropZone!, { dataTransfer })
+
+    expect(workspace.addDroppedFiles).toHaveBeenCalledWith(
+      dataTransfer,
+      'w3svc',
+    )
   })
 
   it('keeps dashboards available without uploaded files', async () => {

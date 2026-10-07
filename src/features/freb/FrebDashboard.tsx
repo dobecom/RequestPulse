@@ -3,7 +3,9 @@ import {
   ArrowRight,
   CheckCircle2,
   Circle,
+  CircleDashed,
   FileSearch,
+  MinusCircle,
   ShieldAlert,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
@@ -92,9 +94,13 @@ export function FrebDashboard({ files }: FrebDashboardProps) {
   const trace = selected.freb
   const error = trace.error
   const guidance = error ? getFrebGuidance(error) : null
-  const reachedStages = new Set(
+  const explicitlyReachedStages = new Set(
     trace.events.flatMap((event) => (event.stageId ? [event.stageId] : [])),
   )
+  const errorStageIndex = error
+    ? FREB_PIPELINE_STAGES.findIndex((stage) => stage.id === error.stageId)
+    : -1
+  const isSuccessfulTrace = /^2\d\d(?:\.|$)/.test(trace.statusCode)
   const referenceStats = getFrebReferenceStats()
 
   return (
@@ -182,24 +188,47 @@ export function FrebDashboard({ files }: FrebDashboardProps) {
           </div>
           <span>{error ? `${error.moduleName} · ${error.stageLabel}` : 'No failure event'}</span>
         </div>
+        <div className="freb-pipeline-legend" aria-label="Pipeline status legend">
+          <span><CheckCircle2 size={14} /> Observed in trace</span>
+          <span><CircleDashed size={14} /> Inferred before failure</span>
+          <span><MinusCircle size={14} /> Skipped / not observed on success</span>
+          <span><Circle size={14} /> Not observed</span>
+          <span><AlertTriangle size={14} /> Failure</span>
+        </div>
         <div className="freb-pipeline" role="list" aria-label="IIS request pipeline">
           {FREB_PIPELINE_STAGES.map((stage, index) => {
             const isError = error?.stageId === stage.id
-            const isReached = reachedStages.has(stage.id)
+            const isObserved = !isError && explicitlyReachedStages.has(stage.id)
+            const isInferred =
+              !isObserved &&
+              !isError &&
+              errorStageIndex >= 0 &&
+              index < errorStageIndex
+            const isSkipped =
+              !isObserved &&
+              !isError &&
+              !isInferred &&
+              isSuccessfulTrace
             const reference = getFrebStageReference(stage.id)
             return (
               <div className="freb-pipeline__item" role="listitem" key={stage.id}>
                 <article
                   className={[
                     isError ? 'is-error' : '',
-                    isReached ? 'is-reached' : '',
+                    isObserved ? 'is-observed' : '',
+                    isInferred ? 'is-inferred' : '',
+                    isSkipped ? 'is-skipped' : '',
                   ].filter(Boolean).join(' ')}
                   title={reference?.description}
                 >
                   {isError ? (
                     <AlertTriangle size={18} />
-                  ) : isReached ? (
+                  ) : isObserved ? (
                     <CheckCircle2 size={18} />
+                  ) : isInferred ? (
+                    <CircleDashed size={18} />
+                  ) : isSkipped ? (
+                    <MinusCircle size={18} />
                   ) : (
                     <Circle size={18} />
                   )}

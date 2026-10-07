@@ -15,6 +15,7 @@ interface HomePageProps {
   visitorCounts: VisitorCounts | null
   busy: boolean
   onFiles: (files: FileList, expected: LogInputKind) => void
+  onDropFiles: (dataTransfer: DataTransfer, expected: LogInputKind) => void
   onPickFiles: (expected: LogInputKind) => Promise<boolean>
   onRemove: (id: string) => void
   onRemoveAll: () => void
@@ -32,6 +33,7 @@ export function HomePage({
   visitorCounts,
   busy,
   onFiles,
+  onDropFiles,
   onPickFiles,
   onRemove,
   onRemoveAll,
@@ -94,6 +96,7 @@ export function HomePage({
           accent="blue"
           busy={busy}
           onFiles={onFiles}
+          onDropFiles={onDropFiles}
           onPickFiles={onPickFiles}
         />
         <DropZone
@@ -104,6 +107,7 @@ export function HomePage({
           accent="teal"
           busy={busy}
           onFiles={onFiles}
+          onDropFiles={onDropFiles}
           onPickFiles={onPickFiles}
         />
         <DropZone
@@ -115,6 +119,7 @@ export function HomePage({
           accent="orange"
           busy={busy}
           onFiles={onFiles}
+          onDropFiles={onDropFiles}
           onPickFiles={onPickFiles}
         />
         <DropZone
@@ -126,6 +131,7 @@ export function HomePage({
           accent="purple"
           busy={busy}
           onFiles={onFiles}
+          onDropFiles={onDropFiles}
           onPickFiles={onPickFiles}
         />
         <DropZone
@@ -138,6 +144,7 @@ export function HomePage({
           wide
           busy={busy}
           onFiles={onFiles}
+          onDropFiles={onDropFiles}
           onPickFiles={onPickFiles}
         />
       </section>

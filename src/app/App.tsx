@@ -67,7 +67,6 @@ const tabs: Array<{
 
 export function App() {
   const [tab, setTab] = useState<Tab>('home')
-  const [workspaceDrag, setWorkspaceDrag] = useState(false)
   const [visitorCounts, setVisitorCounts] = useState<VisitorCounts | null>(null)
   const workspace = useLogWorkspace()
   const w3Count = workspace.w3Files.length
@@ -97,23 +96,15 @@ export function App() {
     void workspace.addFiles(files, expected)
   }
 
+  const acceptDropped = (
+    dataTransfer: DataTransfer,
+    expected: LogInputKind,
+  ) => {
+    void workspace.addDroppedFiles(dataTransfer, expected)
+  }
+
   return (
-    <div
-      className="app-shell"
-      onDragEnter={(event) => {
-        event.preventDefault()
-        if (event.dataTransfer.types.includes('Files')) setWorkspaceDrag(true)
-      }}
-      onDragOver={(event) => event.preventDefault()}
-      onDragLeave={(event) => {
-        if (event.currentTarget === event.target) setWorkspaceDrag(false)
-      }}
-      onDrop={(event) => {
-        event.preventDefault()
-        setWorkspaceDrag(false)
-        void workspace.addDroppedFiles(event.dataTransfer)
-      }}
-    >
+    <div className="app-shell">
       <header className="app-header">
         <button
           type="button"
@@ -176,6 +167,7 @@ export function App() {
             visitorCounts={visitorCounts}
             busy={workspace.isParsing}
             onFiles={acceptExpected}
+            onDropFiles={acceptDropped}
             onPickFiles={workspace.pickFiles}
             onRemove={workspace.removeFile}
             onRemoveAll={() => {
@@ -237,16 +229,6 @@ export function App() {
           <a href="mailto:steve@dobecom.me">steve@dobecom.me</a>
         </span>
       </footer>
-
-      {workspaceDrag && (
-        <div className="workspace-overlay" aria-hidden="true">
-          <div>
-            <Activity size={32} />
-            <strong>Drop logs into this workspace</strong>
-            <span>W3SVC, HTTPERR, FREB, Event Viewer, and IIS configuration files are detected locally</span>
-          </div>
-        </div>
-      )}
 
       {workspace.isParsing && (
         <div

@@ -13,6 +13,7 @@ interface DropZoneProps {
   wide?: boolean
   busy: boolean
   onFiles: (files: FileList, expected: LogInputKind) => void
+  onDropFiles: (dataTransfer: DataTransfer, expected: LogInputKind) => void
   onPickFiles: (expected: LogInputKind) => Promise<boolean>
 }
 
@@ -27,6 +28,7 @@ export function DropZone({
   wide = false,
   busy,
   onFiles,
+  onDropFiles,
   onPickFiles,
 }: DropZoneProps) {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -43,17 +45,22 @@ export function DropZone({
       className={`drop-zone drop-zone--${accent}${wide ? ' drop-zone--wide' : ''}${isOver ? ' is-over' : ''}`}
       onDragEnter={(event) => {
         event.preventDefault()
+        event.stopPropagation()
         setIsOver(true)
       }}
-      onDragOver={(event) => event.preventDefault()}
+      onDragOver={(event) => {
+        event.preventDefault()
+        event.stopPropagation()
+      }}
       onDragLeave={(event) => {
+        event.stopPropagation()
         if (!event.currentTarget.contains(event.relatedTarget as Node)) setIsOver(false)
       }}
       onDrop={(event) => {
         event.preventDefault()
         event.stopPropagation()
         setIsOver(false)
-        onFiles(event.dataTransfer.files, kind)
+        onDropFiles(event.dataTransfer, kind)
       }}
     >
       <div className="drop-zone__icon" aria-hidden="true">

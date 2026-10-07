@@ -39,4 +39,82 @@ describe('FrebDashboard', () => {
     const firstSummary = screen.getByText('2 occurrences').closest('article')
     expect(firstSummary).toHaveTextContent('IpRestrictionModule')
   })
+
+  it('distinguishes observed, inferred, failed, and unobserved stages', () => {
+    render(<FrebDashboard files={sampleFrebFiles} />)
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /Sample-fr000103.xml/ }),
+    )
+
+    expect(screen.getByText('Observed in trace')).toBeInTheDocument()
+    expect(screen.getByText('Inferred before failure')).toBeInTheDocument()
+
+    expect(screen.getByText('HTTP.sys → IIS').closest('article')).toHaveClass(
+      'is-observed',
+    )
+    const inferredStages = [
+      'Begin request',
+      'Authenticate',
+      'Authorize',
+      'Resolve cache',
+    ]
+    inferredStages.forEach((label) => {
+      expect(screen.getByText(label).closest('article')).toHaveClass(
+        'is-inferred',
+      )
+    })
+    expect(screen.getByText('Map handler').closest('article')).toHaveClass(
+      'is-error',
+    )
+    expect(screen.getByText('Acquire state').closest('article')).not.toHaveClass(
+      'is-observed',
+      'is-inferred',
+      'is-error',
+    )
+  })
+
+  it('marks unobserved stages in a successful trace as skipped', () => {
+    const successfulFile = {
+      ...sampleFrebFiles[0],
+      id: 'sample:freb:success',
+      name: 'Sample-fr-success.xml',
+      freb: {
+        ...sampleFrebFiles[0].freb!,
+        statusCode: '200',
+        triggerStatusCode: '200',
+        error: undefined,
+        events: [
+          sampleFrebFiles[0].freb!.events[0],
+          {
+            ...sampleFrebFiles[0].freb!.events[0],
+            index: 1,
+            opcode: 'GENERAL_REQUEST_END',
+            stageId: 'end-request' as const,
+          },
+        ],
+      },
+    }
+
+    render(<FrebDashboard files={[successfulFile]} />)
+
+    expect(
+      screen.getByText('Skipped / not observed on success'),
+    ).toBeInTheDocument()
+    expect(screen.getByText('HTTP.sys → IIS').closest('article')).toHaveClass(
+      'is-observed',
+    )
+    expect(screen.getByText('Authorize').closest('article')).toHaveClass(
+      'is-skipped',
+    )
+    expect(screen.getByText('Acquire state').closest('article')).toHaveClass(
+      'is-skipped',
+    )
+    expect(screen.getByText('Log request').closest('article')).toHaveClass(
+      'is-skipped',
+    )
+    expect(screen.getByText('End request').closest('article')).toHaveClass(
+      'is-observed',
+    )
+  })
 })

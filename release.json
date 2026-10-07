@@ -1,4 +1,4 @@
 {
-  "version": "v1.2.0",
-  "description": "Adds browser-local IIS Failed Request Tracing analysis with multi-file error summaries, request pipeline failure visualization, evidence-linked guidance, and synthetic FREB previews."
+  "version": "v1.2.1",
+  "description": "Fixes dedicated log drop zones and improves FREB pipeline evidence states for observed, inferred, skipped, unobserved, and failed stages."
 }
