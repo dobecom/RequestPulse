@@ -1,5 +1,6 @@
 import type {
   DateRange,
+  EventChannelFilters,
   EventLogFilters,
   EventSeverity,
   EventWeekRange,
@@ -10,6 +11,13 @@ import type {
   TimelinePoint,
   W3Filters,
 } from './types'
+import {
+  isDefaultEventRow,
+  eventSourceKey,
+  eventSourceReference,
+  isSelectedEventSourceRow,
+  orderEventSources,
+} from './eventViewerReference'
 
 const normalized = (value: string) => value.toLowerCase()
 
@@ -53,53 +61,37 @@ export const emptyHttpErrFilters = (): HttpErrFilters => ({
   queueNames: [],
 })
 
-const IIS_EVENT_SOURCE_PATTERN =
-  /(?:^|[\s.-])(iis|w3svc|was|asp\.?net|aspnetcore|httpservice|http service)(?:$|[\s.-])|application error|\.net runtime|windows error reporting/i
-
-const IIS_EVENT_IDS = new Set([
-  '1000',
-  '1001',
-  '1007',
-  '1010',
-  '1026',
-  '1309',
-  '1310',
-  '1325',
-  '1334',
-  '2268',
-  '2269',
-  '5002',
-  '5009',
-  '5011',
-  '5021',
-  '5057',
-  '5059',
-  '5074',
-  '5076',
-  '5079',
-  '5080',
-  '5186',
-])
-
 export const defaultEventLogFilters = (rows: LogRow[]): EventLogFilters => {
-  const sources = valueCounts(rows, 'source')
-    .map(({ value }) => value)
-    .filter((source) => IIS_EVENT_SOURCE_PATTERN.test(source))
-  const sourceSet = new Set(sources)
-  const relevantRows = sources.length
-    ? rows.filter((row) => sourceSet.has(row.values.source ?? ''))
-    : rows
+  const relevantRows = rows.filter(isDefaultEventRow)
+  const orderedReferences = orderEventSources(relevantRows.map(eventSourceReference))
+  const sources = [...new Set([...relevantRows]
+    .sort((a, b) => orderedReferences.indexOf(eventSourceReference(a)) -
+      orderedReferences.indexOf(eventSourceReference(b)))
+    .map(eventSourceKey))]
   const eventIds = valueCounts(relevantRows, 'event-id')
     .map(({ value }) => value)
-    .filter((eventId) => IIS_EVENT_IDS.has(eventId))
 
   return { sources, eventIds }
 }
 
+export const defaultEventChannelFilters = (rows: LogRow[]): EventChannelFilters => ({
+  'event-application': defaultEventLogFilters(
+    rows.filter((row) => row.kind === 'event-application'),
+  ),
+  'event-system': defaultEventLogFilters(
+    rows.filter((row) => row.kind === 'event-system'),
+  ),
+})
+
 export function filterEventLogRows(rows: LogRow[], filters: EventLogFilters) {
   return rows.filter(
     (row) =>
-      includesSelected(row.values.source ?? '', filters.sources) &&
+      isSelectedEventSourceRow(
+        eventSourceKey(row),
+        row.values.message ?? '',
+        filters.sources,
+        eventSourceReference(row),
+      ) &&
       includesSelected(row.values['event-id'] ?? '', filters.eventIds),
   )
 }

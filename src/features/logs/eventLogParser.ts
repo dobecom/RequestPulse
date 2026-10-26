@@ -4,6 +4,7 @@ import type {
   LogRow,
   ParsedLogFile,
 } from './types'
+import { resolveEventSource } from './eventViewerReference'
 
 interface EvtxRecordLike {
   recordNum(): bigint
@@ -21,6 +22,12 @@ interface EvtxModule {
 const EVENT_FIELDS = [
   'level',
   'source',
+  'source-key',
+  'source-reference',
+  'provider-name',
+  'provider-guid',
+  'event-source-name',
+  'rendered-source',
   'event-id',
   'task-category',
   'record-id',
@@ -112,6 +119,7 @@ const inferChannel = (xml: string, fileName: string) => {
   const channel = elementText(xml, 'Channel')
   if (/^application$/i.test(channel)) return 'Application'
   if (/^system$/i.test(channel)) return 'System'
+  if (channel) return ''
   if (/application/i.test(fileName)) return 'Application'
   if (/system/i.test(fileName)) return 'System'
   return ''
@@ -166,12 +174,25 @@ function parseEventXml(
 
   const eventId = elementText(xml, 'EventID')
   const recordId = elementText(xml, 'EventRecordID')
-  const source =
-    attributeValue(providerTag, 'EventSourceName') ||
-    attributeValue(providerTag, 'Name')
+  const providerName = attributeValue(providerTag, 'Name')
+  const eventSourceName = attributeValue(providerTag, 'EventSourceName')
+  const providerGuid = attributeValue(providerTag, 'Guid')
+  const renderingInfo = xml.match(
+    /<(?:[\w.-]+:)?RenderingInfo(?:\s[^>]*)?>([\s\S]*?)<\/(?:[\w.-]+:)?RenderingInfo>/i,
+  )?.[1] ?? ''
+  const renderedSource = elementText(renderingInfo, 'Provider')
+  const source = resolveEventSource(
+    providerName || eventSourceName, providerGuid, renderedSource, kind,
+  )
   const values: Record<string, string> = {
     level: levelName(elementText(xml, 'Level')),
-    source,
+    source: source.displayName,
+    'source-key': source.identity,
+    'source-reference': source.referenceSource,
+    'provider-name': providerName,
+    'provider-guid': providerGuid,
+    'event-source-name': eventSourceName,
+    'rendered-source': renderedSource,
     'event-id': eventId,
     'task-category': elementText(xml, 'Task'),
     'record-id': recordId,

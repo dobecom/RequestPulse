@@ -1,6 +1,4 @@
 import {
-  ChevronLeft,
-  ChevronRight,
   Maximize2,
   Minimize2,
   Rows3,
@@ -46,29 +44,47 @@ export function EventRawTable({
   selectedRowId,
   onSelectedRowChange,
 }: EventRawTableProps) {
-  const [page, setPage] = useState(0)
+  const [loaded, setLoaded] = useState({ rows, limit: PAGE_SIZE })
   const [expandedRowId, setExpandedRowId] = useState('')
   const selectedRef = useRef<HTMLTableRowElement>(null)
-  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE))
-  const safePage = Math.min(page, pageCount - 1)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const limit = loaded.rows === rows ? loaded.limit : PAGE_SIZE
+  const visibleCount = Math.min(limit, rows.length)
   const visibleRows = useMemo(
-    () => rows.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE),
-    [rows, safePage],
+    () => rows.slice(0, visibleCount),
+    [rows, visibleCount],
   )
+  const selectedRowVisible = visibleRows.some((row) => row.id === selectedRowId)
+
+  const loadMore = () =>
+    setLoaded({ rows, limit: Math.min(visibleCount + PAGE_SIZE, rows.length) })
+
+  useEffect(() => {
+    setLoaded({ rows, limit: PAGE_SIZE })
+    if (scrollRef.current) scrollRef.current.scrollTop = 0
+  }, [rows])
 
   useEffect(() => {
     if (!selectedRowId) return
     const index = rows.findIndex((row) => row.id === selectedRowId)
-    if (index >= 0) setPage(Math.floor(index / PAGE_SIZE))
+    if (index >= 0) {
+      setLoaded((current) => ({
+        rows,
+        limit: Math.max(
+          current.rows === rows ? current.limit : PAGE_SIZE,
+          Math.ceil((index + 1) / PAGE_SIZE) * PAGE_SIZE,
+        ),
+      }))
+    }
   }, [rows, selectedRowId])
 
   useEffect(() => {
-    if (!selectedRowId || !visibleRows.some((row) => row.id === selectedRowId)) return
+    if (!selectedRowId || !selectedRowVisible) return
     const frame = requestAnimationFrame(() =>
       selectedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
     )
     return () => cancelAnimationFrame(frame)
-  }, [selectedRowId, visibleRows])
+  }, [selectedRowId, selectedRowVisible, rows])
 
   useEffect(() => {
     if (expandedRowId && !rows.some((row) => row.id === expandedRowId)) {
@@ -139,35 +155,32 @@ export function EventRawTable({
             </button>
           </div>
           <div className="pagination">
-            <span>
+            <span role="status">
               {rows.length
-                ? `${safePage * PAGE_SIZE + 1}–${Math.min((safePage + 1) * PAGE_SIZE, rows.length)} of ${rows.length.toLocaleString()}`
+                ? `1–${visibleCount} of ${rows.length.toLocaleString()}`
                 : '0 rows'}
             </span>
-            <button
-              type="button"
-              className="icon-button"
-              disabled={safePage === 0}
-              onClick={() => setPage((current) => Math.max(0, current - 1))}
-              aria-label={`Previous ${title} page`}
-            >
-              <ChevronLeft size={17} />
-            </button>
-            <button
-              type="button"
-              className="icon-button"
-              disabled={safePage >= pageCount - 1}
-              onClick={() =>
-                setPage((current) => Math.min(pageCount - 1, current + 1))
-              }
-              aria-label={`Next ${title} page`}
-            >
-              <ChevronRight size={17} />
-            </button>
           </div>
         </div>
       </div>
-      <div className="table-scroll event-table__scroll">
+      <div
+        ref={scrollRef}
+        className="table-scroll event-table__scroll"
+        role="region"
+        aria-label={`${title} scrollable rows`}
+        tabIndex={0}
+        onScroll={(event) => {
+          const { scrollTop, clientHeight, scrollHeight } = event.currentTarget
+          if (
+            visibleCount < rows.length &&
+            scrollHeight > clientHeight &&
+            scrollTop > 0 &&
+            scrollTop + clientHeight >= scrollHeight - 8
+          ) {
+            loadMore()
+          }
+        }}
+      >
         <table>
           <thead>
             <tr>
@@ -204,7 +217,13 @@ export function EventRawTable({
                   <td title={new Date(row.timestamp).toISOString()}>
                     {utcTimestamp(row.timestamp)}
                   </td>
-                  <td title={row.values.source}>{row.values.source}</td>
+                  <td title={[
+                    row.values.source,
+                    row.values['provider-name'] && `Provider.Name: ${row.values['provider-name']}`,
+                    row.values['provider-guid'] && `Provider.Guid: ${row.values['provider-guid']}`,
+                    row.values['event-source-name'] && `EventSourceName: ${row.values['event-source-name']}`,
+                    row.values['rendered-source'] && `Rendered Provider: ${row.values['rendered-source']}`,
+                  ].filter(Boolean).join('\n')}>{row.values.source}</td>
                   <td>{row.values['event-id']}</td>
                   <td
                     className="event-message"
@@ -219,6 +238,16 @@ export function EventRawTable({
         </table>
         {!rows.length && <div className="table-empty">No events to display.</div>}
       </div>
+      {visibleCount < rows.length && (
+        <button
+          type="button"
+          className="text-button"
+          onClick={loadMore}
+          aria-label={`Load more ${title} rows`}
+        >
+          Scroll to the bottom or load 50 more
+        </button>
+      )}
     </section>
   )
 }

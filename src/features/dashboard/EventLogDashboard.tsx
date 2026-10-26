@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { StatCard } from '../../components/StatCard'
 import {
   aggregateEventTimeline,
-  defaultEventLogFilters,
+  defaultEventChannelFilters,
   filterEventLogRows,
   filterEventRowsByWeek,
   filterEventRowsBySeverity,
@@ -17,12 +17,13 @@ import {
 } from '../logs/filtering'
 import { retainLatestEventMonth } from '../logs/eventLogParser'
 import type {
-  EventLogFilters,
+  EventChannelFilters,
   EventLogKind,
   EventSeverity,
   ParsedLogFile,
 } from '../logs/types'
 import { EventFilterPanel } from './EventFilterPanel'
+import { EventIdDetails } from './EventIdDetails'
 import { EventRawTable } from './EventRawTable'
 import { EventTimelineChart } from './EventTimelineChart'
 
@@ -39,10 +40,11 @@ export function EventLogDashboard({ files }: EventLogDashboardProps) {
     [files],
   )
   const fileSignature = files.map((file) => file.id).join('|')
-  const [filters, setFilters] = useState<EventLogFilters>({
-    sources: [],
-    eventIds: [],
-  })
+  const [filters, setFilters] = useState<EventChannelFilters>(
+    () => defaultEventChannelFilters(
+      filterEventRowsByWeek(allRows, eventWeekRanges(allRows).at(-1)),
+    ),
+  )
   const [selectedApplicationRowId, setSelectedApplicationRowId] = useState('')
   const [selectedSystemRowId, setSelectedSystemRowId] = useState('')
   const [selectedWeekId, setSelectedWeekId] = useState('')
@@ -55,7 +57,9 @@ export function EventLogDashboard({ files }: EventLogDashboardProps) {
   const weeks = useMemo(() => eventWeekRanges(allRows), [allRows])
 
   useEffect(() => {
-    setFilters(defaultEventLogFilters(allRows))
+    setFilters(defaultEventChannelFilters(
+      filterEventRowsByWeek(allRows, weeks.at(-1)),
+    ))
     setSelectedApplicationRowId('')
     setSelectedSystemRowId('')
     setSelectedWeekId(weeks.at(-1)?.id ?? '')
@@ -64,23 +68,32 @@ export function EventLogDashboard({ files }: EventLogDashboardProps) {
     setTableLayout('application')
   }, [allRows, fileSignature, weeks])
 
-  const selectedWeek = weeks.find((week) => week.id === selectedWeekId)
-  const filteredRows = useMemo(
-    () => filterEventLogRows(allRows, filters),
-    [allRows, filters],
+  const selectedWeek = weeks.find((week) => week.id === selectedWeekId) ?? weeks.at(-1)
+  const weekRows = useMemo(
+    () => filterEventRowsByWeek(allRows, selectedWeek),
+    [allRows, selectedWeek],
   )
-  const visibleRows = useMemo(
-    () => filterEventRowsByWeek(filteredRows, selectedWeek),
-    [filteredRows, selectedWeek],
+  const filteredRows = useMemo(
+    () => [
+      ...filterEventLogRows(
+        weekRows.filter((row) => row.kind === 'event-application'),
+        filters['event-application'],
+      ),
+      ...filterEventLogRows(
+        weekRows.filter((row) => row.kind === 'event-system'),
+        filters['event-system'],
+      ),
+    ],
+    [weekRows, filters],
   )
   const severityFilteredRows = useMemo(
     () =>
       filterEventRowsBySeverity(
-        visibleRows,
+        filteredRows,
         applicationSeverities,
         systemSeverities,
       ),
-    [visibleRows, applicationSeverities, systemSeverities],
+    [filteredRows, applicationSeverities, systemSeverities],
   )
   const applicationRows = useMemo(
     () =>
@@ -142,9 +155,11 @@ export function EventLogDashboard({ files }: EventLogDashboardProps) {
             <button
               key={week.id}
               type="button"
-              className={week.id === selectedWeekId ? 'is-active' : undefined}
+              className={week.id === selectedWeek?.id ? 'is-active' : undefined}
               onClick={() => {
+                if (week.id === selectedWeek?.id) return
                 setSelectedWeekId(week.id)
+                setFilters(defaultEventChannelFilters(filterEventRowsByWeek(allRows, week)))
                 setSelectedApplicationRowId('')
                 setSelectedSystemRowId('')
               }}
@@ -170,9 +185,12 @@ export function EventLogDashboard({ files }: EventLogDashboardProps) {
         />
         <StatCard
           icon={ListFilter}
-          label="Active defaults"
-          value={(filters.sources.length + filters.eventIds.length).toString()}
-          detail={`${filters.sources.length} sources · ${filters.eventIds.length} event IDs`}
+          label="Active filters"
+          value={Object.values(filters).reduce(
+            (count, channel) => count + channel.sources.length + channel.eventIds.length,
+            0,
+          ).toString()}
+          detail={`Application: ${filters['event-application'].sources.length} sources · System: ${filters['event-system'].sources.length} sources`}
         />
         <StatCard
           icon={Files}
@@ -182,7 +200,12 @@ export function EventLogDashboard({ files }: EventLogDashboardProps) {
         />
       </div>
 
-      <EventFilterPanel rows={allRows} filters={filters} onChange={setFilters} />
+      <EventFilterPanel
+        rows={weekRows}
+        countRows={severityFilteredRows}
+        filters={filters}
+        onChange={setFilters}
+      />
       <EventTimelineChart
         points={points}
         domain={domain}
@@ -214,6 +237,7 @@ export function EventLogDashboard({ files }: EventLogDashboardProps) {
           onSelectedRowChange={setSelectedSystemRowId}
         />
       </div>
+      <EventIdDetails rows={severityFilteredRows} />
     </div>
   )
 }

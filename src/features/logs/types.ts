@@ -158,6 +158,8 @@ export interface EventLogFilters {
   eventIds: string[]
 }
 
+export type EventChannelFilters = Record<EventLogKind, EventLogFilters>
+
 export type EventSeverity = 'Info' | 'Warn' | 'Err'
 
 export interface EventWeekRange {

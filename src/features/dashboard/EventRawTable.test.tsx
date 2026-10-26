@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import type { LogRow } from '../logs/types'
 import { EventRawTable } from './EventRawTable'
@@ -26,6 +26,81 @@ const eventRow = (
 })
 
 describe('EventRawTable', () => {
+  it('appends batches at the bottom independently for both channels and resets on evidence changes', () => {
+    const rows = Array.from({ length: 123 }, (_, index) => eventRow(
+      `row-${index}`, 'Error', '2026-09-09T01:10:00Z', `Message ${index}`,
+    ))
+    const systemRows = rows.map((row) => ({ ...row, kind: 'event-system' as const }))
+    const table = (tone: 'application' | 'system', evidence: LogRow[]) => (
+      <EventRawTable
+        title={`${tone === 'application' ? 'Application' : 'System'} raw data`}
+        tone={tone}
+        rows={evidence}
+        selectedSeverities={['Info', 'Warn', 'Err']}
+        onSelectedSeveritiesChange={vi.fn()}
+        isWidthExpanded={false}
+        onToggleWidth={vi.fn()}
+        selectedRowId=""
+        onSelectedRowChange={vi.fn()}
+      />
+    )
+    const { rerender } = render(<>{table('application', rows)}{table('system', systemRows)}</>)
+    const app = screen.getByRole('region', { name: 'Application raw data scrollable rows' })
+    const sys = screen.getByRole('region', { name: 'System raw data scrollable rows' })
+    Object.defineProperties(app, {
+      clientHeight: { value: 500, configurable: true },
+      scrollHeight: { value: 2000, configurable: true },
+    })
+    expect(within(app).getAllByRole('row')).toHaveLength(51)
+    fireEvent.scroll(app, { target: { scrollTop: 900 } })
+    expect(within(app).getAllByRole('row')).toHaveLength(51)
+    fireEvent.scroll(app, { target: { scrollTop: 1500 } })
+    expect(within(app).getAllByRole('row')).toHaveLength(101)
+    expect(within(sys).getAllByRole('row')).toHaveLength(51)
+    expect(within(app).getByText('Message 0')).toBeInTheDocument()
+    fireEvent.scroll(app, { target: { scrollTop: 1500 } })
+    expect(within(app).getAllByRole('row')).toHaveLength(124)
+    fireEvent.scroll(app, { target: { scrollTop: 1500 } })
+    expect(within(app).getAllByRole('row')).toHaveLength(124)
+    expect(screen.queryByRole('button', { name: 'Load more Application raw data rows' })).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Load more System raw data rows' }))
+    expect(within(sys).getAllByRole('row')).toHaveLength(101)
+    rerender(<>{table('application', rows.slice(10))}{table('system', systemRows)}</>)
+    expect(within(app).getAllByRole('row')).toHaveLength(51)
+    expect(app.scrollTop).toBe(0)
+    expect(within(app).queryByText('Message 0')).not.toBeInTheDocument()
+    expect(within(sys).getAllByRole('row')).toHaveLength(101)
+  })
+
+  it('loads the chart-selected row beyond the first batch and scrolls it into view', async () => {
+    const rows = Array.from({ length: 123 }, (_, index) => eventRow(
+      `row-${index}`, 'Error', '2026-09-09T01:10:00Z', `Message ${index}`,
+    ))
+    const scrollIntoView = vi.fn()
+    const original = HTMLElement.prototype.scrollIntoView
+    HTMLElement.prototype.scrollIntoView = scrollIntoView
+    try {
+      render(
+        <EventRawTable
+          title="Application raw data"
+          tone="application"
+          rows={rows}
+          selectedSeverities={['Info', 'Warn', 'Err']}
+          onSelectedSeveritiesChange={vi.fn()}
+          isWidthExpanded={false}
+          onToggleWidth={vi.fn()}
+          selectedRowId="row-111"
+          onSelectedRowChange={vi.fn()}
+        />,
+      )
+      expect(screen.getByText('Message 111').closest('tr')).toHaveClass('is-selected')
+      await waitFor(() => expect(scrollIntoView).toHaveBeenCalled())
+    } finally {
+      HTMLElement.prototype.scrollIntoView = original
+    }
+  })
+
   it('shows UTC timestamps, level filters, severity colors, and expandable details', () => {
     const rows = [
       eventRow(
@@ -69,6 +144,7 @@ describe('EventRawTable', () => {
       'aria-pressed',
       'true',
     )
+    expect(screen.queryByText('Source filter criteria')).not.toBeInTheDocument()
     expect(
       screen.getByRole('button', {
         name: 'Restore balanced Application and System widths',

@@ -1,4 +1,5 @@
 import type { EventLogKind, LogKind, LogRow, ParsedLogFile } from './types'
+import { resolveEventSource } from './eventViewerReference'
 
 const UTC_DAY = 24 * 60 * 60_000
 
@@ -39,6 +40,9 @@ const HTTPERR_FIELDS = [
 const EVENT_FIELDS = [
   'level',
   'source',
+  'source-key',
+  'source-reference',
+  'provider-name',
   'event-id',
   'task-category',
   'record-id',
@@ -223,10 +227,14 @@ const createEventFile = (
       const recordId = String(
         (application ? 4100 : 8100) + dayIndex * 100 + index,
       )
+      const source = resolveEventSource(pattern.source, '', '', kind)
       rows.push(
         createRow(kind, sourceName, rows.length + 1, timestamp, {
           level: pattern.level,
-          source: pattern.source,
+          source: source.displayName,
+          'source-key': source.identity,
+          'source-reference': source.referenceSource,
+          'provider-name': pattern.source,
           'event-id': pattern.eventId,
           'task-category': '0',
           'record-id': recordId,
@@ -276,10 +284,10 @@ export function createSampleLogFiles(anchorTimestamp = Date.now()): SampleLogFil
         'A sample web request exceeded the expected processing duration.',
     },
     {
-      source: 'IIS AspNetCore Module V2',
-      eventId: '1007',
-      level: 'Information',
-      message: 'The sample application started and is ready to receive requests.',
+      source: 'Microsoft-Windows-IIS-W3SVC-WP',
+      eventId: '2280',
+      level: 'Error',
+      message: 'The sample module DLL C:\\Sample\\ExampleModule.dll failed to load.',
     },
   ]
   const systemPatterns: EventPattern[] = [
@@ -298,16 +306,16 @@ export function createSampleLogFiles(anchorTimestamp = Date.now()): SampleLogFil
         'A worker process serving SampleAppPool reported a communication failure.',
     },
     {
-      source: 'Microsoft-Windows-IIS-W3SVC-WP',
-      eventId: '2269',
-      level: 'Warning',
-      message: 'A sample request queue delay was detected for the worker process.',
+      source: 'Microsoft-Windows-IIS-W3SVC',
+      eventId: '1007',
+      level: 'Error',
+      message: 'The sample site URL prefix could not be registered because its binding was already in use.',
     },
     {
-      source: 'Microsoft-Windows-HttpService',
-      eventId: '1010',
+      source: 'Microsoft-Windows-IIS-IISReset',
+      eventId: '3201',
       level: 'Information',
-      message: 'The sample HTTP service configuration was refreshed successfully.',
+      message: 'IIS start command received from sample user. Status code: 0.',
     },
   ]
 

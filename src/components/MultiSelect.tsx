@@ -3,6 +3,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface CountedOption {
   value: string
+  label?: string
+  title?: string
+  impact?: 'direct' | 'related' | null
   count?: number
 }
 
@@ -79,10 +82,10 @@ export function MultiSelect({
         {options.length === 0 ? (
           <p className="empty-option">No values</p>
         ) : (
-          options.map(({ value, count }) => {
+          options.map(({ value, label: optionLabel, title, impact, count }) => {
             const checked = selectedSet.has(value)
             return (
-              <label key={value || '(empty)'} className="check-option">
+              <label key={value || '(empty)'} title={title} className={`check-option${impact ? ` check-option--${impact}` : ''}`}>
                 <input
                   type="checkbox"
                   checked={checked}
@@ -95,7 +98,7 @@ export function MultiSelect({
                   }
                 />
                 <span className="check-box">{checked && <Check size={12} />}</span>
-                <span className="check-option__value">{value || '(empty)'}</span>
+                <span className="check-option__value">{optionLabel ?? (value || '(empty)')}</span>
                 {count !== undefined && <span className="count-badge">{count}</span>}
               </label>
             )

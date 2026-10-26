@@ -1,0 +1,441 @@
+{
+  "defaultSelectionNotes": [
+    "Source rules are scoped to the actual Application or System channel, never inferred from an Event ID alone.",
+    "All loaded IDs from direct IIS, ASP.NET, WAS and HTTP.sys providers are selected by default, including unreferenced IDs. An unknown ID is not evidence of an unrelated event.",
+    "Generic Windows providers use provider-specific ID defaults. Service Control Manager additionally requires an IIS-related service in the message.",
+    "These defaults are a troubleshooting starting point, not an exhaustive Windows event catalog or proof of IIS impact."
+  ],
+  "channelReferences": [
+    "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/process-termination-crash",
+    "https://learn.microsoft.com/en-us/aspnet/core/test/troubleshoot-azure-iis",
+    "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/troubleshoot-http-error-code"
+  ],
+  "sources": [
+    {
+      "id": "aspnetcore-module",
+      "channels": ["event-application"],
+      "providerNames": ["IIS AspNetCore Module", "IIS AspNetCore Module V2", "IIS Express AspNetCore Module", "IIS Express AspNetCore Module V2"],
+      "defaultEventIds": ["*"],
+      "priority": 10,
+      "impact": "direct",
+      "label": "IIS ASP.NET Core Module",
+      "patterns": ["aspnetcore", "asp net core module", "ancm"]
+    },
+    {
+      "id": "aspnet",
+      "channels": ["event-application"],
+      "providerNames": ["ASP.NET 2.0.50727.0", "ASP.NET 4.0.30319.0"],
+      "defaultEventIds": ["*"],
+      "priority": 20,
+      "impact": "direct",
+      "label": "ASP.NET",
+      "patterns": ["asp net", "aspnet"]
+    },
+    {
+      "id": "iis-worker",
+      "channels": ["event-application"],
+      "providerNames": ["Microsoft-Windows-IIS-W3SVC-WP", "W3SVC-WP"],
+      "defaultEventIds": ["*"],
+      "priority": 25,
+      "impact": "direct",
+      "label": "IIS worker process",
+      "patterns": ["iis w3svc wp", "w3svc wp"]
+    },
+    {
+      "id": "iis-w3svc",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-IIS-W3SVC", "IIS-W3SVC", "W3SVC"],
+      "defaultEventIds": ["*"],
+      "priority": 26,
+      "impact": "direct",
+      "label": "World Wide Web Publishing Service",
+      "patterns": ["iis w3svc", "w3svc"]
+    },
+    {
+      "id": "iis-reset",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-IIS-IISReset", "IIS-IISReset", "IISCTLS"],
+      "defaultEventIds": ["*"],
+      "priority": 27,
+      "impact": "direct",
+      "label": "IIS reset and service-control commands",
+      "patterns": ["iisreset", "iisctls"]
+    },
+    {
+      "id": "iis-logging",
+      "channels": ["event-system"],
+      "providerNames": ["IISLOG", "Microsoft-Windows-IIS-Logging", "IIS-Logging"],
+      "defaultEventIds": ["*"],
+      "priority": 28,
+      "impact": "direct",
+      "label": "IIS logging (ETW provider normally uses Microsoft-IIS-Logging/Logs)",
+      "patterns": ["iislog", "iis logging"]
+    },
+    {
+      "id": "iis-w3logging",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-W3LOGSVC", "Microsoft-Windows-IIS-W3LOGSVC", "IIS-W3LOGSVC", "W3LOGSVC"],
+      "defaultEventIds": ["*"],
+      "priority": 28,
+      "impact": "direct",
+      "label": "IIS W3C Logging Service",
+      "patterns": ["w3logsvc"]
+    },
+    {
+      "id": "iis-apphost",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-IIS-APPHOSTSVC", "IIS-APPHOSTSVC"],
+      "defaultEventIds": ["*"],
+      "priority": 29,
+      "impact": "direct",
+      "label": "IIS Application Host Helper Service",
+      "patterns": ["apphostsvc"]
+    },
+    {
+      "id": "iis-metabase",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-IIS-IisMetabaseAudit", "IIS-IisMetabaseAudit", "IIS-METABASE", "IIS Config", "IISWMI"],
+      "defaultEventIds": ["*"],
+      "priority": 30,
+      "impact": "direct",
+      "label": "IIS metabase, configuration and WMI",
+      "patterns": ["iismetabaseaudit", "iis metabase", "iis config", "iiswmi"]
+    },
+    {
+      "id": "iis-management",
+      "channels": ["event-application"],
+      "providerNames": ["Microsoft-Windows-IIS-IISManager", "IIS-IISManager", "Microsoft-Windows-IIS-WMSVC", "IIS-WMSVC"],
+      "defaultEventIds": ["*"],
+      "priority": 31,
+      "impact": "direct",
+      "label": "IIS Manager and Web Management Service",
+      "patterns": ["iismanager", "wmsvc"]
+    },
+    {
+      "id": "iis-counters",
+      "channels": ["event-application"],
+      "providerNames": ["Microsoft-Windows-IIS-W3SVC-PerfCounters", "IIS-W3SVC-PerfCounters", "W3Ctrs", "IISInfoCtrs"],
+      "defaultEventIds": ["*"],
+      "priority": 32,
+      "impact": "direct",
+      "label": "IIS performance counters",
+      "patterns": ["iisinfoctrs", "w3ctrs", "w3svc perfcounters"]
+    },
+    {
+      "id": "iis",
+      "channels": ["event-application", "event-system"],
+      "providerNames": ["IIS Express"],
+      "defaultEventIds": ["*"],
+      "priority": 35,
+      "impact": "direct",
+      "label": "IIS / W3SVC",
+      "patterns": ["iis", "w3svc", "world wide web publishing service"]
+    },
+    {
+      "id": "was-listener",
+      "channels": ["event-application"],
+      "providerNames": ["Microsoft-Windows-WAS-ListenerAdapter", "WAS-ListenerAdapter", "WAS-LA"],
+      "defaultEventIds": ["*"],
+      "priority": 39,
+      "impact": "direct",
+      "label": "WAS listener adapter",
+      "patterns": ["was listeneradapter", "was la"]
+    },
+    {
+      "id": "was",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-WAS", "WAS"],
+      "defaultEventIds": ["*"],
+      "priority": 40,
+      "impact": "direct",
+      "label": "Windows Process Activation Service (WAS)",
+      "patterns": ["windows process activation service", "was"]
+    },
+    {
+      "id": "httpservice",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-HttpService"],
+      "defaultEventIds": ["*"],
+      "priority": 50,
+      "impact": "direct",
+      "label": "HTTP Service / HTTP.sys",
+      "patterns": ["http service", "httpservice", "http.sys", "httpapi"]
+    },
+    {
+      "id": "httpevent",
+      "channels": ["event-system"],
+      "providerNames": ["Microsoft-Windows-HttpEvent", "HttpEvent", "Http"],
+      "defaultEventIds": ["*"],
+      "priority": 51,
+      "impact": "direct",
+      "label": "HTTP service errors and TLS bindings",
+      "patterns": ["httpevent", "http"]
+    },
+    {
+      "id": "application-error",
+      "channels": ["event-application"],
+      "defaultEventIds": ["1000"],
+      "priority": 60,
+      "impact": "related",
+      "label": "Application Error",
+      "patterns": ["application error"]
+    },
+    {
+      "id": "dotnet-runtime",
+      "channels": ["event-application"],
+      "defaultEventIds": ["1026"],
+      "priority": 70,
+      "impact": "related",
+      "label": ".NET Runtime",
+      "patterns": ["net runtime"]
+    },
+    {
+      "id": "application-hang",
+      "channels": ["event-application"],
+      "defaultEventIds": ["1002"],
+      "priority": 80,
+      "impact": "related",
+      "label": "Application Hang",
+      "patterns": ["application hang"]
+    },
+    {
+      "id": "windows-error-reporting",
+      "channels": ["event-application"],
+      "defaultEventIds": ["1001"],
+      "priority": 90,
+      "impact": "related",
+      "label": "Windows Error Reporting",
+      "patterns": ["windows error reporting"]
+    },
+    {
+      "id": "service-control-manager",
+      "channels": ["event-system"],
+      "defaultEventIds": ["7031", "7034", "7036"],
+      "priority": 100,
+      "impact": "related",
+      "label": "Service Control Manager",
+      "patterns": ["service control manager"],
+      "contextPatterns": [
+        "was",
+        "process activation service",
+        "w3svc",
+        "iisadmin",
+        "wmsvc",
+        "world wide web publishing service"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "sourceRuleId": "application-error",
+      "id": "1000",
+      "title": "Application process crashed",
+      "meaning": "Windows recorded an application fault. For IIS, confirm that the faulting application is w3wp.exe; this generic event is not proof by itself that IIS caused the crash.",
+      "likelyCauses": [
+        "Unhandled application exception or native module fault.",
+        "The faulting module and exception code identify the next investigation path."
+      ],
+      "recommendedActions": [
+        "Check the faulting application, module, exception code, and process ID in the raw event.",
+        "Correlate the timestamp with WAS 5011, .NET Runtime 1026, and IIS/HTTPERR evidence.",
+        "Capture a w3wp dump if the fault recurs and the event details do not identify the cause."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/process-termination-crash"
+    },
+    {
+      "sourceRuleId": "windows-error-reporting",
+      "id": "1001",
+      "title": "Windows Error Reporting record",
+      "meaning": "Windows Error Reporting recorded or submitted diagnostic details. It commonly accompanies a crash, but is not itself the faulting event.",
+      "likelyCauses": [
+        "An application or service fault generated a Windows Error Reporting record.",
+        "The report may include a bucket, report identifier, or dump location."
+      ],
+      "recommendedActions": [
+        "Use the report identifier and event details to locate matching diagnostic data.",
+        "Correlate with Application Error 1000 and verify whether the affected process was w3wp.exe."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/troubleshoot-application-service-crashing-behavior"
+    },
+    {
+      "sourceRuleId": "application-hang",
+      "id": "1002",
+      "title": "Application stopped responding",
+      "meaning": "Windows recorded an application hang. Confirm the affected process and duration; a hang event alone does not establish an IIS root cause.",
+      "likelyCauses": [
+        "A blocked request, deadlock, thread-pool starvation, or an external dependency that is not responding.",
+        "The process may be unresponsive without terminating."
+      ],
+      "recommendedActions": [
+        "Check the application name, process ID, and hang details in the event message.",
+        "If the process is w3wp.exe, capture a hang dump while the issue is present and correlate with request evidence."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/process-termination-crash"
+    },
+    {
+      "sourceRuleId": "dotnet-runtime",
+      "id": "1026",
+      "title": ".NET process terminated by an unhandled exception",
+      "meaning": "The .NET Runtime recorded an unhandled exception that terminated a process. In IIS, verify the process name and read the exception and stack details.",
+      "likelyCauses": [
+        "An application exception escaped the request or background-processing path.",
+        "The exception may be the managed failure associated with Application Error 1000."
+      ],
+      "recommendedActions": [
+        "Inspect the exception type, message, stack, application name, and process ID.",
+        "Correlate with Application Error 1000 and WAS 5011; use a dump when the event lacks enough context."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/process-termination-crash"
+    },
+    {
+      "sourceRuleId": "aspnet",
+      "id": "1309",
+      "title": "ASP.NET Web Event",
+      "meaning": "ASP.NET emitted a Web Event. The event ID is a container for multiple ASP.NET event codes, so inspect the event code, message, application path, and exception rather than treating every 1309 as the same failure.",
+      "likelyCauses": [
+        "An ASP.NET application exception, request failure, or configured health-monitoring event.",
+        "The specific event code and application details determine whether the event indicates user impact."
+      ],
+      "recommendedActions": [
+        "Read the complete event message and identify the ASP.NET event code and application path.",
+        "Correlate errors with IIS requests and the matching application-pool events before changing configuration."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/troubleshoot-http-error-code"
+    },
+    {
+      "sourceRuleId": "aspnet",
+      "id": "1310",
+      "title": "ASP.NET compilation error",
+      "meaning": "ASP.NET reported a compilation error. The event message contains the compiler error and affected application context.",
+      "likelyCauses": [
+        "Invalid or incompatible application code or assemblies.",
+        "The application-pool identity may lack required access to temporary compilation files."
+      ],
+      "recommendedActions": [
+        "Use the full compiler message and file/line details to identify the failing assembly or source.",
+        "Check application-pool identity permissions on the specific temporary path named by the event; avoid broad permission changes."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/certificates/certificateregistrationsvc-verify-request-error"
+    },
+    {
+      "sourceRuleId": "iis-worker",
+      "id": "2280",
+      "title": "IIS worker process could not load a module DLL",
+      "meaning": "The IIS worker-process provider reports that a configured module DLL failed to load. The exact DLL path and error code in the event determine the cause.",
+      "likelyCauses": [
+        "The DLL is missing, incompatible with the worker-process architecture, or has an unavailable dependency.",
+        "The application-pool identity or system configuration may not be able to read or initialize the module."
+      ],
+      "recommendedActions": [
+        "Verify the named DLL exists, matches the worker-process bitness, and has its required dependencies.",
+        "Review the IIS module registration and the event's error code; repair the module installation rather than removing modules blindly."
+      ],
+      "url": "https://learn.microsoft.com/en-us/answers/questions/1228993/recent-sp-security-update-causes-iis-to-throw-a-50"
+    },
+    {
+      "sourceRuleId": "was",
+      "id": "5002",
+      "title": "Application pool disabled after repeated worker-process failures",
+      "meaning": "WAS reports that the named application pool was automatically disabled after a series of failures in its worker processes. Read adjacent events to identify the underlying failures.",
+      "likelyCauses": [
+        "Invalid application-pool identity credentials or a worker process that repeatedly exits.",
+        "Application initialization or a module failure."
+      ],
+      "recommendedActions": [
+        "Verify the named pool's identity and credentials, then inspect nearby WAS and Application events.",
+        "Check whether the pool stopped through rapid-fail protection and diagnose the underlying worker-process error before restarting it."
+      ],
+      "url": "https://learn.microsoft.com/en-us/answers/questions/1228993/recent-sp-security-update-causes-iis-to-throw-a-50"
+    },
+    {
+      "sourceRuleId": "was",
+      "id": "5009",
+      "title": "Application-pool worker process terminated unexpectedly",
+      "meaning": "WAS recorded an unexpected worker-process termination. The process exit code and pool name are key evidence; the event does not identify the underlying fault by itself.",
+      "likelyCauses": [
+        "A process crash, unhandled exception, or worker-process startup/runtime failure.",
+        "A missing permission or dependency may also prevent a particular application-pool workload from operating."
+      ],
+      "recommendedActions": [
+        "Correlate the process ID and timestamp with Application Error 1000, .NET Runtime 1026, and WAS 5011.",
+        "Inspect the exit code and collect a process dump if the termination repeats."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/certificates/certificateregistrationsvc-verify-request-error"
+    },
+    {
+      "sourceRuleId": "was",
+      "id": "5011",
+      "title": "Worker process communication with WAS failed",
+      "meaning": "Microsoft documents this warning as evidence of an IIS application-pool process crash or fatal communication failure between the worker process and WAS.",
+      "likelyCauses": [
+        "The worker process terminated or became unable to communicate with WAS.",
+        "The event identifies when the process failure occurred, not necessarily the underlying code or module."
+      ],
+      "recommendedActions": [
+        "Record the application-pool name, process ID, timestamp, and error code.",
+        "Correlate Application Error 1000 and .NET Runtime 1026; capture a w3wp dump if needed."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/process-termination-crash"
+    },
+    {
+      "sourceRuleId": "was",
+      "id": "5013",
+      "title": "Application pool exceeded its shutdown time limit",
+      "meaning": "The worker process did not shut down within the configured ShutdownTimeLimit and WAS forcibly stopped/recycled it.",
+      "likelyCauses": [
+        "The configured shutdown limit is too low for in-flight work.",
+        "A request or application task is preventing the worker process from shutting down promptly."
+      ],
+      "recommendedActions": [
+        "Correlate repeated events with recycling and user-visible impact before changing the limit.",
+        "Inspect long-running requests and capture a w3wp dump during a recurrence."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/health-diagnostic-performance/application-pool-exceed-time-limits"
+    },
+    {
+      "sourceRuleId": "service-control-manager",
+      "id": "7031",
+      "title": "Related IIS service terminated unexpectedly",
+      "meaning": "The Service Control Manager reports that the named service terminated unexpectedly. This reference applies only when the event message identifies an IIS-related service.",
+      "likelyCauses": [
+        "The service process crashed or exited unexpectedly.",
+        "A dependent service, configuration, or resource problem may have stopped the service."
+      ],
+      "recommendedActions": [
+        "Confirm the service name in the event message is WAS, W3SVC, IISADMIN, or another IIS-related service.",
+        "Correlate the failure and recovery events with WAS, Application, IIS, and HTTPERR evidence before restarting services."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/outlook/connectivity/outlook-repeatedly-disconnects-and-reconnects"
+    },
+    {
+      "sourceRuleId": "service-control-manager",
+      "id": "7034",
+      "title": "Related IIS service terminated unexpectedly",
+      "meaning": "The Service Control Manager reports an unexpected service termination. Confirm the service name; this generic event does not identify the underlying failure.",
+      "likelyCauses": [
+        "The service process stopped unexpectedly or encountered a startup/runtime failure.",
+        "The cause may be recorded by the service itself or another provider near the same time."
+      ],
+      "recommendedActions": [
+        "Verify the named service is part of the IIS request path before treating this as an IIS incident.",
+        "Check nearby WAS and Application events and inspect the service-specific error details."
+      ],
+      "url": "https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/error-1053-1067-7034-after-update-openssh-doesnt-start"
+    },
+    {
+      "sourceRuleId": "service-control-manager",
+      "id": "7036",
+      "title": "Related IIS service state changed",
+      "meaning": "The Service Control Manager reports that a service entered a running or stopped state. This is status evidence, not by itself proof of a fault.",
+      "likelyCauses": [
+        "A service was started, stopped, or transitioned during normal operation.",
+        "An unexpected transition may follow a dependency failure, restart, or service crash."
+      ],
+      "recommendedActions": [
+        "Check the service name and state in the event message and correlate the transition with user impact.",
+        "Use adjacent WAS, IIS, and Application events to determine whether the transition was expected."
+      ],
+      "url": "https://learn.microsoft.com/en-us/windows/desktop/services/service-control-manager"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
 {
-  "version": "v1.2.1",
-  "description": "Fixes dedicated log drop zones and improves FREB pipeline evidence states for observed, inferred, skipped, unobserved, and failed stages."
+  "version": "v1.3.0",
+  "description": "Improves HTTPERR date scrolling; adds independent Application/System filters with Event Viewer-style IIS Source labels and preserved provider identities, expanded IIS references, weekly filter options and counts consistent with charts, raw rows and Event ID details, and progressive raw-row scrolling; adds RequestPulse favicon and link-preview metadata."
 }

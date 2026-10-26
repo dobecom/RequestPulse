@@ -293,12 +293,72 @@ describe('filtering and aggregation', () => {
     const filters = defaultEventLogFilters(eventRows)
 
     expect(filters).toEqual({
-      sources: ['Application Error', 'Microsoft-Windows-WAS'],
+      sources: ['Microsoft-Windows-WAS', 'Application Error'],
       eventIds: ['1000', '5002'],
     })
     expect(filterEventLogRows(eventRows, filters).map(({ id }) => id)).toEqual([
       'application',
       'system',
+    ])
+  })
+
+  it('includes related IIS providers and newly referenced IDs in source priority order', () => {
+    const eventRows = [
+      row(
+        'application-hang',
+        '2026-09-09T01:00:00Z',
+        { source: 'Application Hang', 'event-id': '1002' },
+        'event-application',
+      ),
+      row(
+        'module-load',
+        '2026-09-09T01:01:00Z',
+        { source: 'Microsoft-Windows-IIS-W3SVC-WP', 'event-id': '2280' },
+        'event-application',
+      ),
+      row(
+        'shutdown-timeout',
+        '2026-09-09T01:02:00Z',
+        { source: 'Microsoft-Windows-WAS', 'event-id': '5013' },
+        'event-system',
+      ),
+      row(
+        'unrelated-service',
+        '2026-09-09T01:03:00Z',
+        {
+          source: 'Service Control Manager',
+          'event-id': '7036',
+          message: 'The Windows Update service entered the running state.',
+        },
+        'event-system',
+      ),
+      row(
+        'iis-service',
+        '2026-09-09T01:04:00Z',
+        {
+          source: 'Service Control Manager',
+          'event-id': '7036',
+          message: 'The World Wide Web Publishing Service entered the running state.',
+        },
+        'event-system',
+      ),
+    ]
+    const filters = defaultEventLogFilters(eventRows)
+
+    expect(filters.sources).toEqual([
+      'Microsoft-Windows-IIS-W3SVC-WP',
+      'Microsoft-Windows-WAS',
+      'Application Hang',
+      'Service Control Manager',
+    ])
+    expect(filters.eventIds).toEqual(['1002', '2280', '5013', '7036'])
+    expect(
+      filterEventLogRows(eventRows, filters).map(({ id }) => id),
+    ).toEqual([
+      'application-hang',
+      'module-load',
+      'shutdown-timeout',
+      'iis-service',
     ])
   })
 

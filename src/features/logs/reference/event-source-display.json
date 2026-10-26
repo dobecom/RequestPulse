@@ -1,0 +1,31 @@
+{
+  "notes": [
+    "Exact IIS provider display mappings, not a global Microsoft-Windows prefix rewrite. Actual record channels always determine Application/System membership.",
+    "GUIDs and classic aliases are verified against installed Windows publisher/legacy EventLog metadata. Display labels follow IIS Source naming; unknown providers retain their original names.",
+    "IISLOG, IISInfoCtrs, IISWMI and IIS Config have no verified shared GUID with modern providers and remain separate identities.",
+    "W3LOGSVC is Microsoft-Windows-W3LOGSVC, not an invented Microsoft-Windows-IIS-W3SVCLog provider."
+  ],
+  "references": [
+    "https://learn.microsoft.com/en-us/windows/win32/wes/eventschema-provider-systempropertiestype-element",
+    "https://learn.microsoft.com/en-us/windows/win32/wes/eventschema-publisher-renderinginfotype-element",
+    "https://learn.microsoft.com/en-us/windows/win32/eventlog/event-sources"
+  ],
+  "providers": [
+    { "name": "Microsoft-Windows-IIS", "guid": "de4649c9-15e8-4fea-9d85-1cdda520c334", "displayName": "IIS", "aliases": ["IIS"] },
+    { "name": "Microsoft-Windows-IIS-IISReset", "guid": "da9a85bb-563d-40fb-a164-8e982ea6844b", "displayName": "IIS-IISReset", "aliases": ["IIS-IISReset", "IISCTLS"] },
+    { "name": "Microsoft-Windows-IIS-W3SVC", "guid": "05448e22-93de-4a7a-bba5-92e27486a8be", "displayName": "IIS-W3SVC", "aliases": ["IIS-W3SVC", "W3SVC"] },
+    { "name": "Microsoft-Windows-IIS-W3SVC-WP", "guid": "670080d9-742a-4187-8d16-41143d1290bd", "displayName": "IIS-W3SVC-WP", "aliases": ["IIS-W3SVC-WP", "W3SVC-WP"] },
+    { "name": "Microsoft-Windows-IIS-W3SVC-PerfCounters", "guid": "90303b54-419d-4081-a683-6dbcb532f261", "displayName": "IIS-W3SVC-PerfCounters", "aliases": ["IIS-W3SVC-PerfCounters", "W3Ctrs"] },
+    { "name": "Microsoft-Windows-IIS-APPHOSTSVC", "guid": "cac10856-9223-48fe-96ba-2a772274fb53", "displayName": "IIS-APPHOSTSVC", "aliases": ["IIS-APPHOSTSVC"] },
+    { "name": "Microsoft-Windows-IIS-IisMetabaseAudit", "guid": "bbb924b8-f415-4f57-aa45-1007f704c9b1", "displayName": "IIS-IisMetabaseAudit", "aliases": ["IIS-IisMetabaseAudit", "IIS-METABASE"] },
+    { "name": "Microsoft-Windows-IIS-IISManager", "guid": "", "displayName": "IIS-IISManager", "aliases": ["IIS-IISManager"] },
+    { "name": "Microsoft-Windows-IIS-WMSVC", "guid": "23108b68-1b7e-43fa-94fb-ec3066805744", "displayName": "IIS-WMSVC", "aliases": ["IIS-WMSVC"] },
+    { "name": "Microsoft-Windows-IIS-Logging", "guid": "7e8ad27f-b271-4ea2-a783-a47bde29143b", "displayName": "IIS-Logging", "aliases": ["IIS-Logging"] },
+    { "name": "Microsoft-Windows-IIS-Configuration", "guid": "dc0b8e51-4863-407a-bc3c-1b479b2978ac", "displayName": "IIS-Configuration", "aliases": ["IIS-Configuration"] },
+    { "name": "Microsoft-Windows-IIS-CentralCertificateProvider", "guid": "ab1d279a-75cc-4f2a-8fea-38e61f54d048", "displayName": "IIS-CentralCertificateProvider", "aliases": ["IIS-CentralCertificateProvider"] },
+    { "name": "Microsoft-Windows-IIS-FTP", "guid": "ab29f35c-8531-42ff-810d-b8552d23bc92", "displayName": "IIS-FTP", "aliases": ["IIS-FTP"] },
+    { "name": "Microsoft-Windows-W3LOGSVC", "guid": "ff6656cf-35a8-4194-a817-f79c7fdef697", "displayName": "IIS-W3LOGSVC", "aliases": ["W3LOGSVC", "IIS-W3LOGSVC", "Microsoft-Windows-IIS-W3LOGSVC"] },
+    { "name": "Microsoft-Windows-WAS", "guid": "524b5d04-133c-4a62-8362-64e8edb9ce40", "displayName": "WAS", "aliases": ["WAS"] },
+    { "name": "Microsoft-Windows-WAS-ListenerAdapter", "guid": "d60acc81-2608-4617-bfb7-2452bf002430", "displayName": "WAS-ListenerAdapter", "aliases": ["WAS-ListenerAdapter", "WAS-LA"] }
+  ]
+}

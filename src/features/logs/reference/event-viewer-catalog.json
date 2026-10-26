@@ -1,0 +1,3251 @@
+{
+  "provenance": {
+    "source": "Installed Windows provider metadata from Get-WinEvent -ListProvider; no event records are read.",
+    "windowsBuild": "26200.9711",
+    "scope": "Available IIS, WAS and HTTP providers linked to Application/System on the generating machine. Not an exhaustive catalog of every Windows Server or IIS version.",
+    "messageNotes": "Native message templates contain insertion placeholders such as %1. They are not rendered messages or proven causes. Conflicting templates and unavailable classic provider messages are omitted.",
+    "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent"
+  },
+  "providers": [
+    {
+      "name": "Microsoft-Windows-HttpEvent",
+      "sourceNames": [
+        "Http",
+        "HttpEvent",
+        "Microsoft-Windows-HttpEvent"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "15000",
+          "versions": [
+            0
+          ],
+          "message": "Unable to create log file %2. Make sure that the logging directory is correct and this computer has write access to that directory."
+        },
+        {
+          "id": "15001",
+          "versions": [
+            0
+          ],
+          "message": "Unable to create the log file for site W3SVC%2. Make sure that the logging directory for the site is correct and this computer has write access to that directory."
+        },
+        {
+          "id": "15002",
+          "versions": [
+            0
+          ],
+          "message": "Unable to write to the log file %2 for site W3SVC%3. Disk may be full. If this is a network path, make sure that network connectivity is not broken."
+        },
+        {
+          "id": "15003",
+          "versions": [
+            0
+          ],
+          "message": "Unable to create the centralized binary log file. Make sure that the logging directory is correct and this computer has write access to that directory."
+        },
+        {
+          "id": "15004",
+          "versions": [
+            0
+          ],
+          "message": "Unable to write to the centralized binary log file %2. Disk may be full. If this is a network path, make sure that network connectivity is not broken."
+        },
+        {
+          "id": "15005",
+          "versions": [
+            0
+          ],
+          "message": "Unable to bind to the underlying transport for %2. The IP Listen-Only list may contain a reference to an interface which may not exist on this machine.  The data field contains the error number."
+        },
+        {
+          "id": "15006",
+          "versions": [
+            0
+          ],
+          "message": "Owner of the log file or directory %2 is invalid. This could be because another user has already created the log file or the directory."
+        },
+        {
+          "id": "15007",
+          "versions": [
+            0
+          ],
+          "message": "Reservation for namespace identified by URL prefix %2 was successfully added."
+        },
+        {
+          "id": "15008",
+          "versions": [
+            0
+          ],
+          "message": "Reservation for namespace identified by URL prefix %2 was successfully deleted."
+        },
+        {
+          "id": "15009",
+          "versions": [
+            0
+          ],
+          "message": "An error occurred while initializing namespace reservations.  The error status code is contained within the returned data."
+        },
+        {
+          "id": "15010",
+          "versions": [
+            0
+          ],
+          "message": "An error occured while initializing namespace reservation identified by URL prefix %2.  The error status code is contained within the returned data."
+        },
+        {
+          "id": "15011",
+          "versions": [
+            0
+          ],
+          "message": "Unable to create the error log file. Make sure that the error logging directory is correct."
+        },
+        {
+          "id": "15012",
+          "versions": [
+            0
+          ],
+          "message": "Unable to write to the error log file. Disk may be full. The data field contains the error number."
+        },
+        {
+          "id": "15013",
+          "versions": [
+            0
+          ],
+          "message": "Error logging configuration failed. The data field contains the error number."
+        },
+        {
+          "id": "15014",
+          "versions": [
+            0
+          ],
+          "message": "Unable to convert IP Listen-Only list entry %2.  The data field contains the error number."
+        },
+        {
+          "id": "15015",
+          "versions": [
+            0
+          ],
+          "message": "Unable to convert all entries on IP Listen-Only list.  Driver will listen on all available interfaces."
+        },
+        {
+          "id": "15016",
+          "versions": [
+            0
+          ],
+          "message": "Unable to initialize the security package %2 for server side authentication.  The data field contains the error number."
+        },
+        {
+          "id": "15017",
+          "versions": [
+            0
+          ],
+          "message": "Unable to create the centralized W3C log file. Make sure that the logging directory is correct and this computer has write access to that directory."
+        },
+        {
+          "id": "15018",
+          "versions": [
+            0
+          ],
+          "message": "Unable to write to the centralized W3C log file %2. Disk may be full. If this is a network path, make sure that network connectivity is not broken."
+        },
+        {
+          "id": "15019",
+          "versions": [
+            0
+          ],
+          "message": "The host %2 has gone down as a result of the change in the IP Listen-Only list."
+        },
+        {
+          "id": "15020",
+          "versions": [
+            0
+          ],
+          "message": "The host %2 has come up as a result of the change in the IP Listen-Only list."
+        },
+        {
+          "id": "15021",
+          "versions": [
+            0
+          ],
+          "message": "An error occurred while using SSL configuration for endpoint %2.  The error status code is contained within the returned data."
+        },
+        {
+          "id": "15022",
+          "versions": [
+            0
+          ],
+          "message": "Http.sys failed to process a CPU hot-add event. Status: %2."
+        },
+        {
+          "id": "15300",
+          "versions": [
+            0
+          ],
+          "message": "SSL Certificate Settings deleted for endpoint : %2 ."
+        },
+        {
+          "id": "15301",
+          "versions": [
+            0
+          ],
+          "message": "SSL Certificate Settings created by an admin process for endpoint : %2 ."
+        },
+        {
+          "id": "15302",
+          "versions": [
+            0
+          ],
+          "message": "SSL Certificate Settings updated by an admin process for endpoint : %2 ."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-HttpService",
+      "sourceNames": [
+        "HttpService",
+        "Microsoft-Windows-HttpService"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "96",
+          "versions": [
+            0
+          ],
+          "message": "SSL handshake failed. Local IP: %2, Remote IP: %4, SNI: %5, Thumbprint: %7, Client Initiated Disconnect: %8, Abortive Disconnect: %9, Connection Status: %10"
+        },
+        {
+          "id": "97",
+          "versions": [
+            0
+          ],
+          "message": "HTTP error response sent. Url: %1, Verb: %2, Status Code: %3, Cache Send: %4, Request Queue: %5, PID: %6, TID: %7, Image Name: %8, Working Set(Bytes): %9, Send Status: %10, Thread Count: %11, Reason Phrase: %12, Error Cause: %13, Verbosity: %14"
+        },
+        {
+          "id": "98",
+          "versions": [
+            0
+          ],
+          "message": "SSL renegotiate timed out. Local IP: %2, Remote IP: %4, SNI: %5, Thumbprint: %7, Connection Buffer Full: %8"
+        },
+        {
+          "id": "99",
+          "versions": [
+            0
+          ],
+          "message": "HTTP 11 Required. Verb: %1, Fault Code: %2"
+        },
+        {
+          "id": "100",
+          "versions": [
+            0
+          ],
+          "message": "Version: %1 Counts: %2"
+        },
+        {
+          "id": "101",
+          "versions": [
+            0
+          ],
+          "message": "Version: %1 Counts: %2"
+        },
+        {
+          "id": "109",
+          "versions": [
+            0
+          ],
+          "message": "QUIC Registration Failed. Status: %1"
+        },
+        {
+          "id": "111",
+          "versions": [
+            0
+          ],
+          "message": "Create URL group %1. Status %2. Process Id %3 Executable path %4, User %5"
+        },
+        {
+          "id": "112",
+          "versions": [
+            0
+          ],
+          "message": "Attempted to reserve URL %1. Status %2. Process Id %3 Executable path %4, User %5"
+        },
+        {
+          "id": "113",
+          "versions": [
+            0
+          ],
+          "message": "Attempted to add URL (%2) to URL group (%1). Status: %3. Process Id %4 Executable path %5, User %6"
+        },
+        {
+          "id": "114",
+          "versions": [
+            0
+          ],
+          "message": "Removed URL (%2) from URL group (%1). Process Id %3 Executable path %4, User %5"
+        },
+        {
+          "id": "115",
+          "versions": [
+            0
+          ],
+          "message": "Removed all URLs from URL group %1. Process Id %2 Executable path %3, User %4"
+        },
+        {
+          "id": "117",
+          "versions": [
+            0
+          ],
+          "message": "Delete URL group %1. Status %2. Process Id %3 Executable path %4, User %5"
+        },
+        {
+          "id": "118",
+          "versions": [
+            0
+          ],
+          "message": "Status %1. Process Id %2 Executable path %3, User %4"
+        },
+        {
+          "id": "119",
+          "versions": [
+            0
+          ],
+          "message": "SSL Certificate Settings deleted for endpoint : %1. Status %2. Process Id %3 Executable path %4, User %5"
+        },
+        {
+          "id": "120",
+          "versions": [
+            0
+          ],
+          "message": "SSL Certificate Settings created by an admin process for endpoint : %1. Status %2. Process Id %3 Executable path %4, User %5"
+        },
+        {
+          "id": "121",
+          "versions": [
+            0
+          ],
+          "message": "SSL Certificate Settings updated by an admin process for endpoint : %1, Extended Param Type %2. Status %3. Process Id %4 Executable path %5, User %6"
+        },
+        {
+          "id": "122",
+          "versions": [
+            0
+          ],
+          "message": "Set the IP address to the listen only list %1. Status %2. Process Id %3 Executable path %4, User %5"
+        },
+        {
+          "id": "123",
+          "versions": [
+            0
+          ],
+          "message": "QUIC certificate load failed with status %1 and was ignored due to disabled TLS 1.3 (status %2)."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-IIS-APPHOSTSVC",
+      "sourceNames": [
+        "IIS-APPHOSTSVC",
+        "Microsoft-Windows-IIS-APPHOSTSVC"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "9000",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error while reading the data for SID mapping.  Please ensure that the application pool name data is correct in the configuration file.  To resolve this issue, please recommit the changes or restart this service.  The data field contains the error number."
+        },
+        {
+          "id": "9001",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error while adding the mapping for the application pool name '%1' to its SID.  That particular SID is already mapped to another application pool name, causing a conflict.  To resolve this issue, please change the name of this application pool.  The data field contains the error number."
+        },
+        {
+          "id": "9002",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error while mapping the application pool names to their respective SIDs.  Some app pool SIDs will not be resolved properly under the 'IIS APPPOOL' namespace.  To resolve this issue, please recommit the changes or restart the service.  The data field contains the error number."
+        },
+        {
+          "id": "9003",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error while removing the mapping for the application pool name '%1' to its SID.  To resolve this issue, please recommit the changes or restart the service.  The data field contains the error number."
+        },
+        {
+          "id": "9004",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error while adding multiple mappings for application pool names to their SIDs.  To resolve this issue, please recommit the changes and restart the service.  The data field contains the error number."
+        },
+        {
+          "id": "9005",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error while adding the mapping for the application pool name '%1' to its SID.  To resolve this issue, please recommit the changes or restart the service.  The data field contains the error number."
+        },
+        {
+          "id": "9006",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error trying to process the configuration data for config history.  The feature will be disabled.  To resolve this issue, please confirm that the configuration file is correct, has correct attribute values for config history and recommit the changes.  The feature will be enabled again if the configuration is correct.  The data field contains the error number."
+        },
+        {
+          "id": "9007",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error trying to read configuration data from file '%1', line number '%2'.  The error message is: '%3'.  The feature will be disabled.  To resolve this issue, please fix the configuration file and recommit the changes.  The feature will be enabled again if the configuration is correct.  The data field contains the error number."
+        },
+        {
+          "id": "9008",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error trying to read the property '%1' from configuration data from file '%2', line number '%3'. The feature will be disabled.  To resolve this issue, please fix the property in the file and recommit the changes.  The feature will be enabled again if the configuration is correct.  The data field contains the error number."
+        },
+        {
+          "id": "9009",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error trying to delete the history directory '%1'.  The directory will be skipped and ignored.  Note that the directory may still get deleted in the future if the service restarts.  The data field contains the error number."
+        },
+        {
+          "id": "9010",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service encountered an error trying to access the root history directory '%1'.  The directory either doesn't exist or the permissions on it don't allow the history service to access it. The config history feature is disabled for now and will be re-enabled after the issue is resolved. To resolve this issue, please ensure that the directory exists and that the Administrators group have read and write access to it.  The data field contains the error number."
+        },
+        {
+          "id": "9011",
+          "versions": [
+            0
+          ],
+          "message": "The directory specified for the root history directory is a UNC path, which is not allowed.  The feature will be disabled.  To resolve this issue, please set it to a local directory.  The feature will be enabled again if the configuration is correct. The data field contains the error number."
+        },
+        {
+          "id": "9012",
+          "versions": [
+            0
+          ],
+          "message": "The Application Host Helper Service has detected that %1 file doesn't contain valid configuration. Config history backup feature has been disabled. It will be re-enabled automatically once the configuration file is fixed."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-IIS-IisMetabaseAudit",
+      "sourceNames": [
+        "IIS-IisMetabaseAudit",
+        "IIS-METABASE",
+        "Microsoft-Windows-IIS-IisMetabaseAudit"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "4500",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Add Key.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Path: %4\r\n Caller PID: %5\r\n Caller Image Path: %6\r\n Result: %7"
+        },
+        {
+          "id": "4501",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Delete Key.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Path: %4\r\n Caller PID: %5\r\n Caller Image Path: %6\r\n Result: %7"
+        },
+        {
+          "id": "4502",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Delete Child Keys.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Path: %4\r\n Caller PID: %5\r\n Caller Image Path: %6\r\n Result: %7"
+        },
+        {
+          "id": "4503",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Copy Key.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Source Path: %4\r\n Destination Path: %5\r\n Caller PID: %6\r\n Caller Image Path: %7\r\n Result: %8"
+        },
+        {
+          "id": "4504",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Rename Key.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Source Path: %4\r\n New Key Name: %5\r\n Caller PID: %6\r\n Caller Image Path: %7\r\n Result: %8"
+        },
+        {
+          "id": "4505",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Set Data.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Path: %4\r\n Property ID: %5\r\n Property Name: %6\r\n Old Value: %7\r\n New Value: %8\r\n Caller PID: %9\r\n Caller Image Path: %10\r\n Result: %11"
+        },
+        {
+          "id": "4506",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Delete Data.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Path: %4\r\n Property ID: %5\r\n Property Name: %6\r\n Old Value: %7\r\n Caller PID: %8\r\n Caller Image Path: %9\r\n Result: %10"
+        },
+        {
+          "id": "4507",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Delete All Data.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Path: %4\r\n Caller PID: %5\r\n Caller Image Path: %6\r\n Result: %7"
+        },
+        {
+          "id": "4508",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Copy Data.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Source Path: %4\r\n Destination Path: %5\r\n Caller PID: %6\r\n Caller Image Path: %7\r\n Result: %8"
+        },
+        {
+          "id": "4509",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Set Last Change Time.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Path: %4\r\n Caller PID: %5\r\n Caller Image Path: %6\r\n Result: %7"
+        },
+        {
+          "id": "4510",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Restore.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Name of Backup: %4\r\n Caller PID: %5\r\n Caller Image Path: %6\r\n Result: %7"
+        },
+        {
+          "id": "4511",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Delete Backup.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Name of Backup: %4\r\n Caller PID: %5\r\n Caller Image Path: %6\r\n Result: %7"
+        },
+        {
+          "id": "4512",
+          "versions": [
+            0
+          ],
+          "message": "Metabase Import.\r\n \r\n Primary User Name: %1\r\n Primary User Domain: %2\r\n Primary Logon ID: %3\r\n Source Path: %4\r\n Destination Path: %5\r\n Filename: %6\r\n Caller PID: %7\r\n Caller Image Path: %8\r\n Result: %9"
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-IIS-IISReset",
+      "sourceNames": [
+        "IIS-IISReset",
+        "IISCTLS",
+        "Microsoft-Windows-IIS-IISReset"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "3201",
+          "versions": [
+            0
+          ],
+          "message": "IIS start command received from user %1. The logged data is the status code."
+        },
+        {
+          "id": "3202",
+          "versions": [
+            0
+          ],
+          "message": "IIS stop command received from user %1. The logged data is the status code."
+        },
+        {
+          "id": "3203",
+          "versions": [
+            0
+          ],
+          "message": "IIS reboot command received from user %1. The logged data is the status code."
+        },
+        {
+          "id": "3204",
+          "versions": [
+            0
+          ],
+          "message": "IIS kill command received from user %1. The logged data is the status code."
+        },
+        {
+          "id": "3205",
+          "versions": [
+            0
+          ],
+          "message": "Your computer is being shut down by %1. Save any work that may be lost!"
+        },
+        {
+          "id": "3206",
+          "versions": [
+            0
+          ],
+          "message": "IIS Reset encountered an error while stopping services, which was requested by %1.  The logged data is the status code.  Since the force option is on, IIS Reset will now terminate the services' processes.  This may cause SCM to report errors about the services exiting."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-IIS-W3SVC",
+      "sourceNames": [
+        "IIS-W3SVC",
+        "Microsoft-Windows-IIS-W3SVC",
+        "W3SVC"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "1003",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not register the URL prefix %1 for site %2. The URL may be invalid. The site has been disabled. The data field contains the error number."
+        },
+        {
+          "id": "1004",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not register the URL prefix %1 for site %2. The site has been disabled. The data field contains the error number."
+        },
+        {
+          "id": "1005",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) is stopping because it encountered an error. The data field contains the error number."
+        },
+        {
+          "id": "1007",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not register the URL prefix %1 for site %2. The necessary network binding may already be in use. The site has been disabled. The data field contains the error number."
+        },
+        {
+          "id": "1016",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not configure logging for site %1. The data field contains the error number."
+        },
+        {
+          "id": "1018",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service was not able to initialize performance counters. The service will run without the performance counters. Please restart the World Wide Web Publishing Service to reinitialize the performance counters. The data field contains the error number."
+        },
+        {
+          "id": "1019",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to intialize performance counters properly. The performance counters will run, but counter data may be inaccurate. The data field contains the error number."
+        },
+        {
+          "id": "1020",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to configure the HTTP.SYS control channel property '%1' properly. The data field contains the error number."
+        },
+        {
+          "id": "1026",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) encountered an error when it tried to secure the handle of application pool %1 from HTTP.sys. Edit the identification information for the application pool so that the WWW Service can secure the handle of the application pool again. The data field contains the error number."
+        },
+        {
+          "id": "1027",
+          "versions": [
+            0
+          ],
+          "message": "Application pool %1 has been disabled. The HTTP.sys request to enable the application pool failed. The data contains the error number."
+        },
+        {
+          "id": "1029",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not configure bindings for an application in site %1. The site has been disabled. The data field contains the error number."
+        },
+        {
+          "id": "1032",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not configure logging properties for site %1. The site's log file directory path may be a mapped network path. Using a mapped network path as the site's log file directory is not supported by IIS. Use a UNC path instead."
+        },
+        {
+          "id": "1033",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not configure the logging properties for site %1. The site's log file directory may contain an invalid computer or share name."
+        },
+        {
+          "id": "1034",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not configure the logging properties for site %1. The server does not have permission to access the site's log file directory."
+        },
+        {
+          "id": "1035",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not configure the logging properties for site %1. The site's log file directory is not fully qualified, which may be because it is missing the drive letter or other important information."
+        },
+        {
+          "id": "1037",
+          "versions": [
+            0
+          ],
+          "message": "The HTTP control channel for the World Wide Web Publishing Service (WWW Service) did not open. The data field contains the error number."
+        },
+        {
+          "id": "1041",
+          "versions": [
+            0
+          ],
+          "message": "The '%1' '%2' failed range validation for property '%3'.  The configured value '%4' is outside of the range '%5' to '%6'.  The value will default to '%7'."
+        },
+        {
+          "id": "1042",
+          "versions": [
+            0
+          ],
+          "message": "The AppPoolCommand property set for application pool '%1' is not a valid value.  The value is '%2'.  It must be either MD_APPPOOL_COMMAND_START = 1 or MD_APPPOOL_COMMAND_STOP = 2."
+        },
+        {
+          "id": "1043",
+          "versions": [
+            0
+          ],
+          "message": "The virtual site %1 is invalid because the World Wide Web Publishing Service (WWW Service) could not configure valid site bindings or no site bindings exist for the site."
+        },
+        {
+          "id": "1044",
+          "versions": [
+            0
+          ],
+          "message": "The virtual site %1 is invalid because the application pool ID for the site is null."
+        },
+        {
+          "id": "1062",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to configure the logging properties for the HTTP control channel. Logging Enabled is '%1'. Log File Directory is '%2'. Log Period is '%3'.  Log Truncate Size is '%4'. The data field contains the error number."
+        },
+        {
+          "id": "1071",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to enable global bandwidth throttling because QoS Packet Scheduler is not installed."
+        },
+        {
+          "id": "1072",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to enable bandwidth throttling on site '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "1073",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to enable global bandwidth throttling because QoS Packet Scheduler is not installed or it's not running."
+        },
+        {
+          "id": "1083",
+          "versions": [
+            0
+          ],
+          "message": "HTTP.SYS provided inconsistent site performance counter data to the World Wide Web Publishing Service (WWW Service), so the WWW Service will ignore the data."
+        },
+        {
+          "id": "1084",
+          "versions": [
+            0
+          ],
+          "message": "Application pool %1 was not disabled. The HTTP.sys request to disable the application pool failed. The data contains the error number."
+        },
+        {
+          "id": "1086",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to properly configure the load balancer capabilities on application pool '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "1087",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to properly configure the application pool queue length on app pool '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "1089",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not issue a demand start to HTTP.sys for application pool %1.  The data field contains the error number."
+        },
+        {
+          "id": "1095",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to delete the config group for the application '%1' in site '%2'. The data field contains the error number."
+        },
+        {
+          "id": "1096",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to remove the urls for the application '%1' in virtual site '%2'.  The data field contains the error number."
+        },
+        {
+          "id": "1097",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to set the application pool for the application '%1' in site '%2'. The data field contains the error number."
+        },
+        {
+          "id": "1098",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to set the max connections for the virtual site '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "1099",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service failed to set the connection timeout for the virtual site '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "1109",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to set the filter configuration for the control channel. The data field contains the error number."
+        },
+        {
+          "id": "1120",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to obtain cache counters from HTTP.SYS. The performance counters that were reported do not include performance counters for this gathering from HTTP.SYS. The data field contains the error number."
+        },
+        {
+          "id": "1121",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to obtain site performance counters from HTTP.SYS. The performance counters that were reported do not include counters for this gathering from HTTP.SYS. The data field contains the error number."
+        },
+        {
+          "id": "1122",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to publish the performance counters that it gathered from HTTP.SYS. The data field contains the error number."
+        },
+        {
+          "id": "1123",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to cancel the timer for gathering performance counters. The data field contains the error number."
+        },
+        {
+          "id": "1124",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to cancel the timer for the performance counter. The data field contains the error number."
+        },
+        {
+          "id": "1125",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to start the timer for gathering performance counters. The data field contains the error number."
+        },
+        {
+          "id": "1126",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to copy a change notification for processing, so the service may not be in sync with data currently in the IIS configuration store. The data field contains the error number."
+        },
+        {
+          "id": "1128",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to initialize ASP performance counters.  The service will run without ASP performance counters.  Restart the WWW Service to start ASP performance counter gathering.  The data field contains the error number."
+        },
+        {
+          "id": "1129",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not register the URL prefix %1 for site %2. Either the network endpoint for the site's IP address could not be created or the IP listen list for HTTP.sys did not have any usable IP addresses. The site has been disabled. The data field contains the error number."
+        },
+        {
+          "id": "1130",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not register the URL prefix %1 for site %2. The IP address for the site is not in the HTTP.sys IP listen list. The site has been disabled. The data field contains the error number."
+        },
+        {
+          "id": "1131",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not register the URL prefix %1 for site %2. HTTP.sys has been configured to listen to too many ports. The site has been disabled. The data field contains the error number."
+        },
+        {
+          "id": "1133",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) has both centralized binary logging and centralized W3C logging enabled. Only one type of logging can be enabled at a time, so the system will default to central W3C logging."
+        },
+        {
+          "id": "1134",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to configure centralized W3C logging properly. The data field contains the error number."
+        },
+        {
+          "id": "1135",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to configure the centralized W3C logging properties on the HTTP control channel. Logging Enabled is '%1'. Log File Directory is '%2'. Log Period is '%3'. Log Truncate Size is '%4'. Log Ext File Flags is '%5'. Local Time Rollover is '%6'. The data field contains the error number."
+        },
+        {
+          "id": "1168",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not create a relationship between %1 and application %2 in site %3. The site will be stopped because the WWW Service cannot notify HTTP.sys about the application. The data field contains the error number."
+        },
+        {
+          "id": "1172",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not construct valid URLs for virtual site %1. Therefore, the virtual site %1 will be stopped. This can be caused by invalid characters in the site bindings. The following characters are not allowed in a site binding: \"\\\"\" \"/\" \"\\\\\" \"[\" \"]\" \":\" \"|\" \" \" \"<\" \">\" \"+\" \"=\" \";\" \",\" \"?\" \"*\" \"%\" \"#\" \"@\" \"{\" \"}\" \"^\" \"`\". To fix this problem please remove invalid characters from the site bindings."
+        },
+        {
+          "id": "1173",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not initialize the HTTP driver, and was unable start. Please verify that the HTTP service is in an executable state.  The data field contains the error number."
+        },
+        {
+          "id": "1174",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to create binding string for site %1. Please verify that site binding (%2) is in correct format and do not contain any invalid characters."
+        },
+        {
+          "id": "1175",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to enable end point sharing for the HTTP control channel. The data field contains the error number."
+        },
+        {
+          "id": "1176",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to start dynamic site registration handler. The data field contains the error number."
+        },
+        {
+          "id": "1177",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to update dynamic site registration handler from configuration change. The data field contains the error number."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-IIS-W3SVC-PerfCounters",
+      "sourceNames": [
+        "IIS-W3SVC-PerfCounters",
+        "Microsoft-Windows-IIS-W3SVC-PerfCounters",
+        "W3Ctrs"
+      ],
+      "channels": [
+        "Application"
+      ],
+      "events": [
+        {
+          "id": "2000",
+          "versions": [
+            0
+          ],
+          "message": "Unable to query the W3SVC (HTTP) service performance data. The error code returned by the service is data DWORD 0."
+        },
+        {
+          "id": "2001",
+          "versions": [
+            0
+          ],
+          "message": "It has taken too long to refresh the W3SVC counters, the stale counters are being used instead."
+        },
+        {
+          "id": "2002",
+          "versions": [
+            0
+          ],
+          "message": "Setting up Web Service counters failed, please make sure your Web Service counters are registered correctly."
+        },
+        {
+          "id": "2003",
+          "versions": [
+            0
+          ],
+          "message": "It has taken too long to refresh the W3SVC counters, the stale counters are being used instead.  This is the second message within the past %1 (hours, minutes, seconds).  No more stale counter messages will be logged for this client session until the time limit expires. \r\nFor additional information specific to this message please visit the Microsoft Online Support site located at: http://go.microsoft.com/fwlink?linkid=538."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-IIS-W3SVC-WP",
+      "sourceNames": [
+        "IIS-W3SVC-WP",
+        "Microsoft-Windows-IIS-W3SVC-WP",
+        "W3SVC-WP"
+      ],
+      "channels": [
+        "Application"
+      ],
+      "events": [
+        {
+          "id": "2201",
+          "versions": [
+            0
+          ],
+          "message": "HTTP Server could not initialize its security.  The data is the error."
+        },
+        {
+          "id": "2203",
+          "versions": [
+            0
+          ],
+          "message": "HTTP Server could not initialize the socket library.  The data is the error."
+        },
+        {
+          "id": "2204",
+          "versions": [
+            0
+          ],
+          "message": "HTTP Server was unable to initialize due to a shortage of available memory.  The data is the error."
+        },
+        {
+          "id": "2206",
+          "versions": [
+            0
+          ],
+          "message": "HTTP Server could not create the main connection socket.  The data is the error."
+        },
+        {
+          "id": "2208",
+          "versions": [
+            0
+          ],
+          "message": "HTTP Server could not create a client connection object for user at host %1.  The connection to this user is terminated.  The data is the error."
+        },
+        {
+          "id": "2214",
+          "versions": [
+            0
+          ],
+          "message": "The HTTP Filter DLL %1 failed to load.  The data is the error."
+        },
+        {
+          "id": "2216",
+          "versions": [
+            0
+          ],
+          "message": "The script started from the URL '%1' has not responded within the configured timeout period.  The HTTP server is terminating the script."
+        },
+        {
+          "id": "2218",
+          "versions": [
+            0
+          ],
+          "message": "The HTTP server encountered an error processing the server side include file '%1'.<BR>The error was '%2'.<BR>"
+        },
+        {
+          "id": "2219",
+          "versions": [
+            0
+          ],
+          "message": "The HTTP server encountered an unhandled exception while processing the ISAPI Application '%1'."
+        },
+        {
+          "id": "2220",
+          "versions": [
+            0
+          ],
+          "message": "The HTTP server was unable to load the ISAPI Application '%1'. The data is the error."
+        },
+        {
+          "id": "2221",
+          "versions": [
+            0
+          ],
+          "message": "A server side include file has included itself or the maximum depth of server side includes has been exceeded."
+        },
+        {
+          "id": "2223",
+          "versions": [
+            0
+          ],
+          "message": "For compatibility with previous versions of IIS, the filter '%1' was loaded as a global filter from the registry. To control the filter with the Internet Service Manager, remove the filter from the registry and add it as a global filter with Internet Service Manager.  Filters in the registry are stored at \"HKLM\\System\\CurrentControlSet\\Services\\W3Svc\\Parameters\\Filter DLLs\"."
+        },
+        {
+          "id": "2226",
+          "versions": [
+            0
+          ],
+          "message": "The server was unable to read the file %1 due to a lack of access permissions."
+        },
+        {
+          "id": "2227",
+          "versions": [
+            0
+          ],
+          "message": "The server was unable to acquire a license for a SSL connection."
+        },
+        {
+          "id": "2228",
+          "versions": [
+            0
+          ],
+          "message": "The server stop serving requests for application '%1' because the number of Out of Process component crashes exceed a limit."
+        },
+        {
+          "id": "2229",
+          "versions": [
+            0
+          ],
+          "message": "The server failed to shut down application '%1'.  The error was '%2'."
+        },
+        {
+          "id": "2230",
+          "versions": [
+            0
+          ],
+          "message": "The server was unable to read the file %1. The file does not exist."
+        },
+        {
+          "id": "2231",
+          "versions": [
+            0
+          ],
+          "message": "The server was unable to read the file %1. The Windows 32 error returned from the attempt is %2."
+        },
+        {
+          "id": "2232",
+          "versions": [
+            0
+          ],
+          "message": "The server was unable to read the file %1. The file exceeds the maximum allowable size of %2."
+        },
+        {
+          "id": "2233",
+          "versions": [
+            0
+          ],
+          "message": "The server was unable to allocate a buffer to read the file %1."
+        },
+        {
+          "id": "2236",
+          "versions": [
+            0
+          ],
+          "message": "The server failed to load application '%1'.  The error was '%2'."
+        },
+        {
+          "id": "2237",
+          "versions": [
+            0
+          ],
+          "message": "Out of process application '%1' terminated unexpectedly."
+        },
+        {
+          "id": "2238",
+          "versions": [
+            0
+          ],
+          "message": "Job object query failed. The data is the error."
+        },
+        {
+          "id": "2239",
+          "versions": [
+            0
+          ],
+          "message": "Job object set limit failed. The data is the error."
+        },
+        {
+          "id": "2240",
+          "versions": [
+            0
+          ],
+          "message": "Schedule a work item for CPU Accounting or Limits failed. The data is the error."
+        },
+        {
+          "id": "2241",
+          "versions": [
+            0
+          ],
+          "message": "Site '%1' hit its CPU Limit. No action was taken."
+        },
+        {
+          "id": "2242",
+          "versions": [
+            0
+          ],
+          "message": "Site '%1' hit its CPU Limit. The priority of all process on that site has been lowered to idle class."
+        },
+        {
+          "id": "2243",
+          "versions": [
+            0
+          ],
+          "message": "Site '%1' hit its CPU Limit. All processes on that site have been terminated."
+        },
+        {
+          "id": "2244",
+          "versions": [
+            0
+          ],
+          "message": "Site '%1' hit its CPU Limit. The site has been paused."
+        },
+        {
+          "id": "2245",
+          "versions": [
+            0
+          ],
+          "message": "The server certificate for instance '%1' has expired or is not yet valid."
+        },
+        {
+          "id": "2246",
+          "versions": [
+            0
+          ],
+          "message": "The server certificate for instance '%1' has been revoked."
+        },
+        {
+          "id": "2247",
+          "versions": [
+            0
+          ],
+          "message": "The server certificate chain does not include a trusted root certificate."
+        },
+        {
+          "id": "2248",
+          "versions": [
+            0
+          ],
+          "message": "A certificate in the server certificate chain has an invalid signature."
+        },
+        {
+          "id": "2249",
+          "versions": [
+            0
+          ],
+          "message": "CPU Limits/Accounting failed to queue work item. The data is the error."
+        },
+        {
+          "id": "2250",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) could not retrieve the server certificate for instance '%1' because the associated IIS configuration store data is invalid. The error is '%2'."
+        },
+        {
+          "id": "2251",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not retrieve the server certificate for instance '%1' because of a CryptoAPI error. The error is '%2'."
+        },
+        {
+          "id": "2252",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not retrieve the server certificate for instance '%1' because the certificate could not be found in a certificate store. The error is '%2'."
+        },
+        {
+          "id": "2253",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not retrieve the server certificate for instance '%1' because of an internal error. The error is '%2'."
+        },
+        {
+          "id": "2254",
+          "versions": [
+            0
+          ],
+          "message": "The server Certificate Trust List for instance '%1' had invalid IIS configuration store data associated with it and could not be retrieved; the error encountered was '%2'."
+        },
+        {
+          "id": "2255",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) failed to retrieve the server Certificate Trust List for instance '%1' because of a CryptoAPI error. The error is '%2'."
+        },
+        {
+          "id": "2256",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not retrieve the server Certificate Trust List for instance '%1' because it could not be found in the certificate store. The error is '%2'."
+        },
+        {
+          "id": "2257",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service (WWW Service) did not retrieve the server certificate for instance '%1' because of an internal error. The error is %2."
+        },
+        {
+          "id": "2258",
+          "versions": [
+            0
+          ],
+          "message": "The server failed to close client connections to the following URLs during shutdown:  '%1'."
+        },
+        {
+          "id": "2259",
+          "versions": [
+            0
+          ],
+          "message": "The COM Application '%1' at '%2' failed to activate out of process."
+        },
+        {
+          "id": "2261",
+          "versions": [
+            0
+          ],
+          "message": "An attempt was made to load filter '%1' but it requires the SF_NOTIFY_READ_RAW_DATA filter notification and this notification is not supported in this IIS version."
+        },
+        {
+          "id": "2262",
+          "versions": [
+            0
+          ],
+          "message": "ISAPI '%1' reported itself as unhealthy for the following reason: '%2'."
+        },
+        {
+          "id": "2263",
+          "versions": [
+            0
+          ],
+          "message": "ISAPI '%1' reported itself as unhealthy.  No reason was given by the ISAPI."
+        },
+        {
+          "id": "2264",
+          "versions": [
+            0
+          ],
+          "message": "The directory specified for caching compressed content %1 is invalid.  Static compression is being disabled."
+        },
+        {
+          "id": "2265",
+          "versions": [
+            0
+          ],
+          "message": "The registry key for IIS subauthenticator is not configured correctly on local machine, the anonymous password sync feature is disabled."
+        },
+        {
+          "id": "2266",
+          "versions": [
+            0
+          ],
+          "message": "The account that the current worker process is running under does not have SeTcbPrivilege privilege, the anonymous password sync feature and the Digest authentication feature are disabled."
+        },
+        {
+          "id": "2268",
+          "versions": [
+            0
+          ],
+          "message": "Could not load all ISAPI filters for site '%1'.  Therefore site startup aborted."
+        },
+        {
+          "id": "2269",
+          "versions": [
+            0
+          ],
+          "message": "The worker process for app pool '%1', PID='%2', failed to initialize the http.sys communication when asked to start processing http requests and therefore will be considered ill by W3SVC and terminated.  The data field contains the error number."
+        },
+        {
+          "id": "2270",
+          "versions": [
+            0
+          ],
+          "message": "IIS Client certificate mapping configuration for site %1 failed to be loaded. The data field contains the error number."
+        },
+        {
+          "id": "2271",
+          "versions": [
+            0
+          ],
+          "message": "Could not initialize the logging module for site %1.  The site will therefore be non-functional."
+        },
+        {
+          "id": "2272",
+          "versions": [
+            0
+          ],
+          "message": "The registry key for IIS subauthenticator is not configured correctly on domain controller, the Digest feature is disabled."
+        },
+        {
+          "id": "2273",
+          "versions": [
+            0
+          ],
+          "message": "Worker process could not access IIS configuration store due to disconnection error.  Marking process as unhealthy."
+        },
+        {
+          "id": "2274",
+          "versions": [
+            0
+          ],
+          "message": "ISAPI Filter '%1' could not be loaded due to a configuration problem. The current configuration only supports loading images built for a %2 processor architecture. The data field contains the error number. To learn more about this issue, including how to troubleshooting this kind of processor architecture mismatch error, see http://go.microsoft.com/fwlink/?LinkId=29349."
+        },
+        {
+          "id": "2275",
+          "versions": [
+            0
+          ],
+          "message": "ETW Tracing support failed to intialize. Execution of IIS will continue although ETW Tracing support (or parts of it) will not be available. The data is the error."
+        },
+        {
+          "id": "2276",
+          "versions": [
+            0
+          ],
+          "message": "The worker process failed to initialize correctly and therefore could not be started.  The data is the error."
+        },
+        {
+          "id": "2280",
+          "versions": [
+            0
+          ],
+          "message": "The Module DLL %1 failed to load.  The data is the error."
+        },
+        {
+          "id": "2281",
+          "versions": [
+            0
+          ],
+          "message": "The worker process failed to initialize communication with the W3SVC and therefore could not be started.  The data is the error."
+        },
+        {
+          "id": "2282",
+          "versions": [
+            0
+          ],
+          "message": "The Module DLL '%1' could not be loaded due to a configuration problem. The current configuration only supports loading images built for a %2 processor architecture. The data field contains the error number. To learn more about this issue, including how to troubleshooting this kind of processor architecture mismatch error, see http://go.microsoft.com/fwlink/?LinkId=29349."
+        },
+        {
+          "id": "2283",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module failed to create directory '%3'. No logs will be generated until this condition is corrected. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2284",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module failed to write buffered events to log file for the request that matched failure definition. No logs will be generated until this condition is corrected. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2285",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module detected invalid configuration on path '%4'. Trace provider or tracing area name '%3' is not recognized. Check the <traceProviderDefinitions> section for currently supported list or providers and areas. No logs will be generated until this condition is corrected. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2286",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module detected invalid configuration on path '%4'. Attribute \"statusCode\" contains invalid value '%3'. Examples of valid status are '404' or '403.1'. No logs will be generated until this condition is corrected. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2287",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module encountered problem while reading configuration. Configuration system returned exception '%3' in file %4 on line %5. No logs will be generated until this condition is corrected. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2288",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module encountered problem while reading configuration. No logs will be generated until this condition is corrected. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2289",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing Module failed to delete at least one log file from the directory '%3'. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2290",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module encountered runtime error. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2291",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module detected invalid configuration on path '%4'. Attribute \"guid\" in <traceProviderDefinitions> section contains invalid value '%3'. No logs will be generated until this condition is corrected. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2292",
+          "versions": [
+            0
+          ],
+          "message": "FailedRequestTracing module failed to create XSL file '%3. Friendly rendering of log files will not be available. The problem happened at least %1 times in the last %2 minutes. The data is the error."
+        },
+        {
+          "id": "2293",
+          "versions": [
+            0
+          ],
+          "message": "The Module name %1 path %2 returned an error from registration.  The data is the error."
+        },
+        {
+          "id": "2294",
+          "versions": [
+            0
+          ],
+          "message": "The worker process failed to pre-load .Net Runtime version %1."
+        },
+        {
+          "id": "2295",
+          "versions": [
+            0
+          ],
+          "message": "Failed to find the RegisterModule entrypoint in the module DLL %1.  The data is the error."
+        },
+        {
+          "id": "2296",
+          "versions": [
+            0
+          ],
+          "message": "The Module name '%1' path '%2' has an invalid precondition '%3'."
+        },
+        {
+          "id": "2297",
+          "versions": [
+            0
+          ],
+          "message": "The worker process for application pool '%1' encountered an error '%2' trying to read global module configuration data from file '%3', line number '%4'.  Worker process startup aborted."
+        },
+        {
+          "id": "2298",
+          "versions": [
+            0
+          ],
+          "message": "The globalModules list is empty. No requests can be served successfully."
+        },
+        {
+          "id": "2299",
+          "versions": [
+            0
+          ],
+          "message": "An application has reported as being unhealthy. The worker process will now request a recycle. Reason given: %1. The data is the error."
+        },
+        {
+          "id": "2300",
+          "versions": [
+            0
+          ],
+          "message": "The worker process cannot access the CLR configuration file at '%1'.  Verify that the file exists and that the worker process has read access to the file."
+        },
+        {
+          "id": "2301",
+          "versions": [
+            0
+          ],
+          "message": "There was an error during processing of the HTTP Application Preload event.  Modules and/or applications relying upon this event may not have been initialized properly.  The data field contains the error code."
+        },
+        {
+          "id": "2302",
+          "versions": [
+            0
+          ],
+          "message": "There was an error during processing of the managed application service auto-start for configuration path: '%1'. The error message returned is: '%2'.  The worker process will be marked unhealthy and be shutdown.  The data field contains the error code."
+        },
+        {
+          "id": "2303",
+          "versions": [
+            0
+          ],
+          "message": "There was an error during processing of the managed application service auto-start for application pool: '%1'.  Some application services may not have been processed correctly.  Please check the configuration for application service auto-start for the application(s) assigned to this application pool.  The data field contains the error code."
+        },
+        {
+          "id": "2304",
+          "versions": [
+            0
+          ],
+          "message": "There was an unexpected error during the loading of managed runtime version: '%1'.  The managed runtime loader '%2' was unable to load the managed runtime.  The data field contains the error code."
+        },
+        {
+          "id": "2305",
+          "versions": [
+            0
+          ],
+          "message": "There was an error during processing of the managed application service auto-start for application pool: '%1'.  The configured .Net Framework for this application pool doesn't support managed application services.  As a result, no managed application service auto-start has been completed.  To resolve this issue, please change the .Net Framework version configured for this application pool to one that supports managed application service.  The data field contains the error code."
+        },
+        {
+          "id": "2306",
+          "versions": [
+            0
+          ],
+          "message": "There was an error during processing of the managed application service auto-start for application pool: '%1'.  The loading of application service provider objects is not supported if the pipeline mode is set to 'Classic' mode.  As a result, no managed application service auto-start has been completed.  To resolve this issue, please change the pipeline mode for this application pool to 'Integrated' mode.  The data field contains the error code."
+        },
+        {
+          "id": "2307",
+          "versions": [
+            0
+          ],
+          "message": "The worker process for application pool '%1' encountered an error '%2' trying to read configuration data from file '%3', line number '%4'.  The data field contains the error code."
+        },
+        {
+          "id": "2308",
+          "versions": [
+            0
+          ],
+          "message": "The loghttp module in the worker process with id '%2' could not obtain custom log data for '%1' requests. The data field contains the error code."
+        },
+        {
+          "id": "2309",
+          "versions": [
+            0
+          ],
+          "message": "The loghttp module in the worker process with id '%2' removed custom log data for '%1' request(s) which was not claimed by the W3C Logging Service."
+        },
+        {
+          "id": "2310",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with process id of '%1' serving application pool '%2' paged out due to inactivity. Application Pool timeout-action configuration was set to %3 minutes. A worker process will resume when needed."
+        },
+        {
+          "id": "2311",
+          "versions": [
+            0
+          ],
+          "message": "The worker process for application pool '%1', PID='%2', failed to duplicate the request queue handle and therefore will not be able to provide transport-level telemetry data during request processing.  The data field contains the error number."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-IIS-WMSVC",
+      "sourceNames": [
+        "IIS-WMSVC",
+        "Microsoft-Windows-IIS-WMSVC"
+      ],
+      "channels": [
+        "Application"
+      ],
+      "events": [
+        {
+          "id": "8001",
+          "versions": [
+            0
+          ],
+          "message": "The Web Management Service was stopped because it did not respond."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-W3LOGSVC",
+      "sourceNames": [
+        "IIS-W3LOGSVC",
+        "Microsoft-Windows-IIS-W3LOGSVC",
+        "Microsoft-Windows-W3LOGSVC",
+        "W3LOGSVC"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "6001",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to start."
+        },
+        {
+          "id": "6002",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to create the log file directory '%2' for site id '%1'."
+        },
+        {
+          "id": "6003",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to create log file '%2' for site id '%1'."
+        },
+        {
+          "id": "6004",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to write to the log file '%2' for site id '%1'."
+        },
+        {
+          "id": "6005",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to connect to the pipe server in the worker process with pipe name '%1'."
+        },
+        {
+          "id": "6006",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to write message to the pipe server in the worker process with id '%1'."
+        },
+        {
+          "id": "6007",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to stop."
+        },
+        {
+          "id": "6008",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service is stopping because it encountered an error. The data field contains the error number."
+        },
+        {
+          "id": "6009",
+          "versions": [
+            0
+          ],
+          "message": "Owner of log file or directory '%2' for site id '%1' is invalid."
+        },
+        {
+          "id": "6010",
+          "versions": [
+            0
+          ],
+          "message": "W3C Logging Service failed to read config for site id '%1'."
+        },
+        {
+          "id": "6011",
+          "versions": [
+            0
+          ],
+          "message": "'%1' ETW session events to W3C Logging Service were dropped. You will not find some entries in the log file."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-WAS",
+      "sourceNames": [
+        "Microsoft-Windows-WAS",
+        "WAS"
+      ],
+      "channels": [
+        "System"
+      ],
+      "events": [
+        {
+          "id": "5002",
+          "versions": [
+            0
+          ],
+          "message": "Application pool '%1' is being automatically disabled due to a series of failures in the process(es) serving that application pool."
+        },
+        {
+          "id": "5003",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5004",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5005",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) is stopping because it encountered an error. The data field contains the error number."
+        },
+        {
+          "id": "5006",
+          "versions": [
+            0
+          ],
+          "message": "WAS_NOT_USED_5006"
+        },
+        {
+          "id": "5007",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5009",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' terminated unexpectedly. The process id was '%2'. The process exit code was '0x%3'."
+        },
+        {
+          "id": "5010",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' failed to respond to a ping. The process id was '%2'."
+        },
+        {
+          "id": "5011",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' suffered a fatal communication error with the Windows Process Activation Service. The process id was '%2'. The data field contains the error number."
+        },
+        {
+          "id": "5012",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' exceeded time limits during start up. The process id was '%2'."
+        },
+        {
+          "id": "5013",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' exceeded time limits during shut down. The process id was '%2'."
+        },
+        {
+          "id": "5014",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered an internal error in its process management of worker process '%2' serving application pool '%1'. The data field contains the error number."
+        },
+        {
+          "id": "5015",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' was orphaned but the specified orphan action %2 could not be executed. The data field contains the error number."
+        },
+        {
+          "id": "5016",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5018",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5019",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5020",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5021",
+          "versions": [
+            0
+          ],
+          "message": "The identity of application pool %1 is invalid. The user name or password that is specified for the identity may be incorrect, or the user may not have batch logon rights. If the identity is not corrected, the application pool will be disabled when the application pool receives its first request.  If batch logon rights are causing the problem, the identity in the IIS configuration store must be changed after rights have been granted before Windows Process Activation Service (WAS) can retry the logon. If the identity remains invalid after the first request for the application pool is processed, the application pool will be disabled. The data field contains the error number."
+        },
+        {
+          "id": "5022",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to create a worker process for the application pool '%1'. The data field contains the error number."
+        },
+        {
+          "id": "5024",
+          "versions": [
+            0
+          ],
+          "message": "Virtual site '%1' is configured to truncate its log every '%2' bytes. Since this value must be at least 1048576 bytes ( 1 megabyte ), 1048576 bytes will be used."
+        },
+        {
+          "id": "5025",
+          "versions": [
+            0
+          ],
+          "message": "Application pool '%1' exceeded its job limit settings."
+        },
+        {
+          "id": "5026",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5027",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5028",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to add the worker process '%1' to the job object representing application pool '%2'.  The data field contains the error number."
+        },
+        {
+          "id": "5029",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5030",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service terminated unexpectedly and the system was not configured to restart it.  The Windows Process Activation Service has shut down."
+        },
+        {
+          "id": "5032",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5033",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5034",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5035",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5036",
+          "versions": [
+            0
+          ],
+          "message": "The configuration manager for Windows Process Activation Service (WAS) did not initialize. The data field contains the error number."
+        },
+        {
+          "id": "5037",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5039",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' reported a failure. The process id was '%2'.  The data field contains the error number."
+        },
+        {
+          "id": "5041",
+          "versions": [
+            0
+          ],
+          "message": "The '%1' '%2' failed range validation for property '%3'.  The configured value '%4' is outside of the range '%5' to '%6'.  The value will default to '%7'."
+        },
+        {
+          "id": "5042",
+          "versions": [
+            0
+          ],
+          "message": "The AppPoolCommand property set on the application pool '%1' is not a valid value.  It is '%2'.  It must be either MD_APPPOOL_COMMAND_START = 1 or MD_APPPOOL_COMMAND_STOP = 2."
+        },
+        {
+          "id": "5043",
+          "versions": [
+            0
+          ],
+          "message": "The virtual site %1 is invalid because valid site bindings could not be configured or no site bindings exist for the site."
+        },
+        {
+          "id": "5046",
+          "versions": [
+            0
+          ],
+          "message": "The server command property for virtual site '%1' is not a valid value.  It is set to '%2'.  It must be one of the following:  MD_SERVER_COMMAND_START = 1 or MD_SERVER_COMMAND_STOP = 2 or MD_SERVER_COMMAND_PAUSE = 3 or MD_SERVER_COMMAND_CONTINUE = 4."
+        },
+        {
+          "id": "5047",
+          "versions": [
+            0
+          ],
+          "message": "The application '%2' belonging to site '%1' has an AppPoolId set, but the property is empty.  Therefore, the application will be ignored."
+        },
+        {
+          "id": "5048",
+          "versions": [
+            0
+          ],
+          "message": "The application '%2' belonging to site '%1' has an invalid AppPoolId '%3' set.  Therefore, the application will be ignored."
+        },
+        {
+          "id": "5049",
+          "versions": [
+            0
+          ],
+          "message": "This message has become deprecated in IIS 7."
+        },
+        {
+          "id": "5050",
+          "versions": [
+            0
+          ],
+          "message": "The application pool id '%1' exceeds length limits.  It is '%2' characters and can not be more than '%3' characters.  The application pool will therefore be ignored."
+        },
+        {
+          "id": "5051",
+          "versions": [
+            0
+          ],
+          "message": "An application pool id was defined as a zero length string.  An application pool id must not be a zero length string. The application pool will therefore be ignored."
+        },
+        {
+          "id": "5052",
+          "versions": [
+            0
+          ],
+          "message": "The application '%2' belongs to an invalid site '%1'.  Therefore, the application will be ignored."
+        },
+        {
+          "id": "5053",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service received a change notification, but was unable to process it correctly.  The data field contains the error number."
+        },
+        {
+          "id": "5054",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) did not run the automatic shutdown executable %2 for application pool %1. The data field contains the error number."
+        },
+        {
+          "id": "5055",
+          "versions": [
+            0
+          ],
+          "message": "Site %1 was disabled because the application pool defined for site %2 is not a valid application pool."
+        },
+        {
+          "id": "5056",
+          "versions": [
+            0
+          ],
+          "message": "Site %1 was disabled because the root application defined for the site is invalid. See the previous event log message for information about why the root application is invalid."
+        },
+        {
+          "id": "5057",
+          "versions": [
+            0
+          ],
+          "message": "Application pool %1 has been disabled. Windows Process Activation Service (WAS) did not create a worker process to serve the application pool because the application pool identity is invalid."
+        },
+        {
+          "id": "5058",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered a failure while setting the affinity mask of application pool '%1'.  Probable cause:  The mask does not contain any processors available on this machine.  The data field contains the error number."
+        },
+        {
+          "id": "5059",
+          "versions": [
+            0
+          ],
+          "message": "Application pool %1 has been disabled. Windows Process Activation Service (WAS) encountered a failure when it started a worker process to serve the application pool."
+        },
+        {
+          "id": "5060",
+          "versions": [
+            0
+          ],
+          "message": "The job object associated with application pool '%1' encountered an error during configuration.  CPU monitoring may not function as expected.  The data field contains the error number."
+        },
+        {
+          "id": "5061",
+          "versions": [
+            0
+          ],
+          "message": "The job object attached to application pool '%1' failed to start its timer.  The application pool's CPU usage is being monitored and will eventually reach the limit and report a failure.  The data field contains the error number."
+        },
+        {
+          "id": "5062",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5063",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered a failure requesting IIS configuration store change notifications.  The data field contains the error number."
+        },
+        {
+          "id": "5064",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered a failure requesting IIS configuration store change notifications during recovery from inetinfo terminating unexpectedly. While the Windows Process Activation Service will continue to run, it is highly probable that it is no longer using current metabase data. Please restart the Windows Process Activation Service to correct this condition.  The data field contains the error number."
+        },
+        {
+          "id": "5065",
+          "versions": [
+            0
+          ],
+          "message": "Centralized logging is configured to truncate its log every '%1' bytes. Since this value must be at least 1048576 bytes ( 1 megabyte ), 1048576 bytes will be used."
+        },
+        {
+          "id": "5066",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered an error attempting to configure centralized logging. It is not configured as expected. The data field contains the error number."
+        },
+        {
+          "id": "5067",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service property '%1' failed range validation. The configured value, '%2' is outside of the range '%3' to '%4'. The default value, '%5', will be used."
+        },
+        {
+          "id": "5070",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to issue recycle requests to all worker processes of application pool '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5071",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5072",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5073",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5074",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with process id of '%1' serving application pool '%2' has requested a recycle because the worker process reached its allowed processing time limit."
+        },
+        {
+          "id": "5075",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with process id of '%1' serving application pool '%2' has requested a recycle because it reached its allowed request limit."
+        },
+        {
+          "id": "5076",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with process id of '%1' serving application pool '%2' has requested a recycle because it reached its scheduled recycle time."
+        },
+        {
+          "id": "5077",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with process id of '%1' serving application pool '%2' has requested a recycle because it reached its virtual memory limit."
+        },
+        {
+          "id": "5078",
+          "versions": [
+            0
+          ],
+          "message": "An ISAPI reported an unhealthy condition to its worker process. Therefore, the worker process with process id of '%1' serving application pool '%2' has requested a recycle."
+        },
+        {
+          "id": "5079",
+          "versions": [
+            0
+          ],
+          "message": "An administrator has requested a recycle of all worker processes in application pool '%1'."
+        },
+        {
+          "id": "5080",
+          "versions": [
+            0
+          ],
+          "message": "The worker processes serving application pool '%1' are being recycled due to 1 or more configuration changes in the application pool properties which necessitate a restart of the processes."
+        },
+        {
+          "id": "5081",
+          "versions": [
+            0
+          ],
+          "message": "The worker processes serving application pool '%1' are being recycled due to detected problems with the IIS configuration store that may make current cached metadata invalid."
+        },
+        {
+          "id": "5082",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with pid '%2' that serves application pool '%1' has been determined to be unhealthy (see previous event log message), but because a debugger is attached to it, the Windows Process Activation Service will ignore the error."
+        },
+        {
+          "id": "5083",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5084",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5085",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) did not apply configuration changes to application pool %1. The data field contains the error number."
+        },
+        {
+          "id": "5086",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5087",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5088",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to properly configure the job object for application pool '%1'. The data field contains the error number."
+        },
+        {
+          "id": "5089",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5091",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) did not run the automatic shutdown executable for application pool %1. The data field contains the error number."
+        },
+        {
+          "id": "5092",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to issue a request for the worker process '%2' of application pool '%1' to supply its performance counters. The data field contains the error number."
+        },
+        {
+          "id": "5093",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to overlap recycle for application pool '%1' worker process '%2'.  The data field contains the error number."
+        },
+        {
+          "id": "5094",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to disassociate the application '%1' from the virtual site '%2'. The data field contains the error number."
+        },
+        {
+          "id": "5095",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5096",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5097",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5098",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5099",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5100",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to create the application '%2' in site '%1'. The data field contains the error number."
+        },
+        {
+          "id": "5101",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) did not create application pool %1.  The data field contains the error number."
+        },
+        {
+          "id": "5102",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) did not create site %1. The data field contains the error number."
+        },
+        {
+          "id": "5103",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to delete the application '%2' in site '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5104",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) did not delete application pool %1. The data field contains the error number."
+        },
+        {
+          "id": "5105",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to delete site '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5106",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to modify the application '%2' in site '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5107",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) did not modify application pool %1. The data field contains the error number."
+        },
+        {
+          "id": "5108",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to modify site '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5109",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5117",
+          "versions": [
+            0
+          ],
+          "message": "A worker process serving application pool '%1' has requested a recycle because it reached its private bytes memory limit."
+        },
+        {
+          "id": "5118",
+          "versions": [
+            0
+          ],
+          "message": "After recovering from an unexpected termination of the inetinfo process, Windows Process Activation Service (WAS) did not identify records that require deletion from the metadata cache. The data field contains the error number."
+        },
+        {
+          "id": "5120",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5121",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5122",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5123",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5124",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5125",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5126",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5127",
+          "versions": [
+            0
+          ],
+          "message": "A worker process '%2' serving application pool '%1' is no longer trusted by the Windows Process Activation Service, based on ill-formed data the worker process sent to the service.  The data field contains the error number."
+        },
+        {
+          "id": "5128",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5129",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5130",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5131",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5132",
+          "versions": [
+            0
+          ],
+          "message": "Enable32bitAppOnWin64 setting will be ignored because IIS is currently running in IIS5 Compatibility mode."
+        },
+        {
+          "id": "5133",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5134",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5135",
+          "versions": [
+            0
+          ],
+          "message": "Event id used by World Wide Web Publishing Service."
+        },
+        {
+          "id": "5136",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) was unable to register protocol %1. The listener adapter for protocol %1 may not have received information about all application pools and applications for this protocol. To resolve this issue, restart the listener adapter. The data field contains the error number."
+        },
+        {
+          "id": "5137",
+          "versions": [
+            0
+          ],
+          "message": "A worker process '%2' serving application pool '%1' failed to start a listener channel for protocol '%4' in the allotted time.  The data field contains the error number."
+        },
+        {
+          "id": "5138",
+          "versions": [
+            0
+          ],
+          "message": "A worker process '%2' serving application pool '%1' failed to stop a listener channel for protocol '%4' in the allotted time.  The data field contains the error number."
+        },
+        {
+          "id": "5139",
+          "versions": [
+            0
+          ],
+          "message": "A listener channel for protocol '%4' in worker process '%2' serving application pool '%1' reported a listener channel failure.  The data field contains the error number."
+        },
+        {
+          "id": "5140",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) disabled protocol %1 because WAS received bad data about the protocol. To re-enable the protocol, resolve the issue and recycle WAS."
+        },
+        {
+          "id": "5141",
+          "versions": [
+            0
+          ],
+          "message": "This message has become deprecated in IIS 7."
+        },
+        {
+          "id": "5142",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) encountered an error trying to determine the correct security identifier (SID) for the listener adapter identity for protocol %1.  Because of this error, the service will not be able to allow the listener adapter to connect.  To fix this, check and/or modify the identity value for this protocol in the configuration file.  WAS was unable to determine the SID for the listener adapter identity for protocol %1. This error will prevent the listener adapter from connecting."
+        },
+        {
+          "id": "5143",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) did not process changes that affect supported protocols for site %1. The site will be stopped because the system is unable to guarantee that all messages intended for the site will be processed. The data field contains the error number"
+        },
+        {
+          "id": "5144",
+          "versions": [
+            0
+          ],
+          "message": "Application pool %1 has been disabled. Windows Process Activation Service (WAS) was unable to enable application pool %1, because the request that WAS sent to protocol %2 failed. The data field contains the error number."
+        },
+        {
+          "id": "5145",
+          "versions": [
+            0
+          ],
+          "message": "Application pool %1 was not be disabled. The request from protocol %2 to disable the application pool failed. Restart the application pool so that Windows Process Activation Service (WAS) can determine the correct state of the protocol. The data field contains the error number."
+        },
+        {
+          "id": "5146",
+          "versions": [
+            0
+          ],
+          "message": "Application pool %1 has been disabled. The request from protocol %2 to create the application pool failed. Restart the application pool so that Windows Process Activation Service (WAS) can determine the correct state of the protocol. The data field contains the error number."
+        },
+        {
+          "id": "5147",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) disabled protocol %1 because the protocol was unable to acknowledge a change in an application pool identity. To re-enable the protocol, resolve the issue and recycle WAS."
+        },
+        {
+          "id": "5148",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) is disabling protocol %1 because the protocol was unable to acknowledge a change in an application pool identity. To re-enable the protocol, resolve the issue and recycle the WAS."
+        },
+        {
+          "id": "5149",
+          "versions": [
+            0
+          ],
+          "message": "The World Wide Web Publishing Service property '%1' failed range validation. The configured value, '%2' is invalid. The default value, '%3', will be used."
+        },
+        {
+          "id": "5150",
+          "versions": [
+            0
+          ],
+          "message": "The request for protocol %1 to configure application %3 in virtual site %2 failed. The virtual site will be disabled because the protocol cannot configure the application. The data field contains the error number."
+        },
+        {
+          "id": "5151",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) did not send a request to protocol %1 to remove configuration for application %3 in virtual site %2. WAS will assume that the protocol is disabled. To guarantee the state, start and stop the virtual site. The data field contains the error number."
+        },
+        {
+          "id": "5152",
+          "versions": [
+            0
+          ],
+          "message": "The application pool '%1' has an IdleTimeout '%2' equal to or greater than the PeriodicRestart time value of '%3'. This means that the worker process will never idle timeout, since it will restart before the idle timeout is reached. Please confirm that this is the desired behavior and if so, consider disabling the idle timeout by setting it to '0'."
+        },
+        {
+          "id": "5153",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) encountered an error attempting to look up the built in IIS_IUSRS group.  There may be problems in viewing and setting security permissions with the IIS_IUSRS group.  This happens if the machine has been joined and promoted to be a Domain Controller in a legacy domain.  Please see the online help for more information and solutions to this problem.  The data field contains the error number."
+        },
+        {
+          "id": "5154",
+          "versions": [
+            0
+          ],
+          "message": "Available."
+        },
+        {
+          "id": "5155",
+          "versions": [
+            0
+          ],
+          "message": "Available."
+        },
+        {
+          "id": "5156",
+          "versions": [
+            0
+          ],
+          "message": "Available."
+        },
+        {
+          "id": "5157",
+          "versions": [
+            0
+          ],
+          "message": "Available."
+        },
+        {
+          "id": "5158",
+          "versions": [
+            0
+          ],
+          "message": "A listener adapter for protocol '%4' supporting a listener channel in worker process '%2' serving application pool '%1' failed.  The data field contains the error number."
+        },
+        {
+          "id": "5159",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) did not register protocol %1, because WAS cannot register a protocol when there are listener channels from a previous listener adapter connection for the protocol. This may occur because you have worker processes running under debuggers and because orphaning may not be turned on. In this condition, WAS can detect the stop of a listener adapter, but it cannot kill the processes that contain listener channels. For this reason, WAS must wait for an admin to end these processes before a new listener adapter can connect. The data field contains the error number."
+        },
+        {
+          "id": "5160",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service failed to create the internal protocol app pool object for app pool '%1' and protocol '%2'.  The virtual site of the application needing this app pool protocol combination will be disabled (see next message).  The data field contains the error number."
+        },
+        {
+          "id": "5161",
+          "versions": [
+            0
+          ],
+          "message": "Site %1 has no root application defined, so the site will be ignored."
+        },
+        {
+          "id": "5162",
+          "versions": [
+            0
+          ],
+          "message": "The application '%2' belonging to site '%1' has an invalid AppRoot set.  It should be '%4' but instead is '%3'.  Therefore, the application will be ignored."
+        },
+        {
+          "id": "5163",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) was unable to determine the security identifier (SID) for the worker process identity in application pool %1. WAS will be unable to provide the correct identity to listener adapters, which may prevent the worker process or processes in the application pool from processing requests for this protocol. To resolve this issue, change the worker process identity to a new identity and then change it back to the previous identity. The data field contains the error number."
+        },
+        {
+          "id": "5164",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) was unable to notify protocol %2 about an identity change for application pool %1. This may prevent the worker process or processes in the application pool from processing requests for this protocol. To resolve this issue, change the worker process identity to a new identity and then change it back to the previous identity.  The data field contains the error number."
+        },
+        {
+          "id": "5165",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) did not notify protocol %1 to enable request processing. Requests made to this protocol may be rejected. If this error occurred when WAS was starting, the service will not start. To resolve this issue, restart WAS. The data field contains the error number."
+        },
+        {
+          "id": "5167",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service encountered an error trying to track worker process '%1' that belongs to app pool '%2'. This will result in this worker process not showing up in global queries enumerating all worker processes.  It will also disable clients from being able to directly create a WORKER_PROCESS object to monitor this worker process.  A client can see find this worker process by querying all worker processes in the app pool that this process belongs to.  The data field contains the error number."
+        },
+        {
+          "id": "5168",
+          "versions": [
+            0
+          ],
+          "message": "Available."
+        },
+        {
+          "id": "5169",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service couldn't process configuration information for listener adapter '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5170",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to process configuration information to delete listener adapter '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5171",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service had an error setting the identity for listener adapter '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5172",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered an error trying to read configuration data from file '%1', line number '%2'.  The error message is: '%3'.  The data field contains the error number."
+        },
+        {
+          "id": "5173",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered an error trying to read configuration data for config section '%1' from file '%2', line number '%3'.  The error message is: '%4'.  The data field contains the error number."
+        },
+        {
+          "id": "5174",
+          "versions": [
+            0
+          ],
+          "message": "The '%1' '%2' has an invalid value for property '%3'.  The configured value '%4' is invalid.  The value will default to '%5'."
+        },
+        {
+          "id": "5175",
+          "versions": [
+            0
+          ],
+          "message": "The listener adapter serving the '%1' protocol disconnected unexpectedly."
+        },
+        {
+          "id": "5176",
+          "versions": [
+            0
+          ],
+          "message": "Available."
+        },
+        {
+          "id": "5177",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service (WAS) did not create a relationship between protocol %1 and application %2, which belongs to site %3. The listener adapter for this protocol will not be notified about this application. To resolve this issue, restart WAS. The data field contains the error number."
+        },
+        {
+          "id": "5178",
+          "versions": [
+            0
+          ],
+          "message": "An attempt was made to register protocol '%1', however protocol '%1' is all ready being handled by another listener adapter.  Therefore the registration was rejected.  The data field contains the error number."
+        },
+        {
+          "id": "5179",
+          "versions": [
+            0
+          ],
+          "message": "The config node '%1' has an invalid value for property '%2'.  The configured value '%3' is invalid.  The value will default to '%4'."
+        },
+        {
+          "id": "5180",
+          "versions": [
+            0
+          ],
+          "message": "The config node '%1' has an invalid value for property '%2'.  The configured value '%3' is invalid.  The value will default to '%4'.  Valid values are: '%5'."
+        },
+        {
+          "id": "5181",
+          "versions": [
+            0
+          ],
+          "message": "The protocol 'HTTPS' is not allowed in the property \"enabledProtocols\". If you wish to enable HTTPS, you must specify HTTP as the protocol.  The data field contains the error number."
+        },
+        {
+          "id": "5182",
+          "versions": [
+            0
+          ],
+          "message": "No virtual sites have been configured for the hostable web core instance. The data field contains the error number."
+        },
+        {
+          "id": "5183",
+          "versions": [
+            0
+          ],
+          "message": "Only one application pool is allowed for the hostable web core instance. The data field contains the error number."
+        },
+        {
+          "id": "5184",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service recovered from a previous error creating app pool '%1'.  See previously logged event(s)."
+        },
+        {
+          "id": "5185",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service recovered from a previous error creating site '%1'.  See previously logged event(s)."
+        },
+        {
+          "id": "5186",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with process id of '%1' serving application pool '%2' was shutdown due to inactivity.  Application Pool timeout configuration was set to %3 minutes.  A new worker process will be started when needed."
+        },
+        {
+          "id": "5187",
+          "versions": [
+            0
+          ],
+          "message": "Windows Process Activation Service was unable to create a listener adapter with a blank name '%1'.  Please provide a name for your listener adapter protocol.  The data field contains the error number."
+        },
+        {
+          "id": "5188",
+          "versions": [
+            0
+          ],
+          "message": "The directory specified for the temporary application pool config files is either missing or is not accessible by the Windows Process Activation Service. Please specify an existing directory and/or ensure that it has proper access flags. The data field contains the error number."
+        },
+        {
+          "id": "5189",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to generate an application pool config file for application pool '%1'. The error type is '%2'. To resolve this issue, please ensure that the applicationhost.config file is correct and recommit the last configuration changes made. The data field contains the error number."
+        },
+        {
+          "id": "5190",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service has encountered an error during the SID mapping for the application pool '%1'.  The application pool will be disabled.  This typically happens if there are more than one application pool name that maps to the same SID.  To resolve this issue, please change the name of the app pool and recommit the configuration changes.  The data field contains the error number."
+        },
+        {
+          "id": "5191",
+          "versions": [
+            0
+          ],
+          "message": "The directory specified for the temporary application pool config files is a UNC path, which is not allowed.  Please specify an existing local directory instead. The data field contains the error number."
+        },
+        {
+          "id": "5192",
+          "versions": [
+            0
+          ],
+          "message": "The dynamic idle load is '%1' percent of the dynamic idle threshold. The Windows Process Activation Service (WAS) will start to reduce worker process idle timeouts. Current number of worker processes: '%2', current total commit: '%3' MB, total physical memory: '%4' MB, current physical memory free: '%5' MB."
+        },
+        {
+          "id": "5193",
+          "versions": [
+            0
+          ],
+          "message": "The dynamic idle load is '%1' percent of the dynamic idle threshold. The Windows Process Activation Service (WAS) will start to aggressively reduce worker process idle timeouts. Current number of worker processes: '%2', current total commit: '%3' MB, total physical memory: '%4' MB, current physical memory free: '%5' MB."
+        },
+        {
+          "id": "5194",
+          "versions": [
+            0
+          ],
+          "message": "The dynamic idle load is '%1' percent of the dynamic idle threshold. The Windows Process Activation Service (WAS) will return worker process idle timeouts to their configured settings. Current number of worker processes: '%2', current total commit: '%3' MB, total physical memory: '%4' MB, current physical memory free: '%5' MB."
+        },
+        {
+          "id": "5195",
+          "versions": [
+            0
+          ],
+          "message": "A worker process with process id of '%1' serving application pool '%2' was shutdown due to inactivity.  The system is under high load and has decreased the idle timeout of this worker process to '%4' minutes from its original '%3' minutes.  A new worker process will be started when needed."
+        },
+        {
+          "id": "5196",
+          "versions": [
+            0
+          ],
+          "message": "A request to create a new worker process has arrived. The '%1' setting has been reached. The Windows Process Activation Service (WAS) will not start any worker processes until this drops."
+        },
+        {
+          "id": "5197",
+          "versions": [
+            0
+          ],
+          "message": "The dynamic idle has been disabled in configuration. The Windows Process Activation Service (WAS) will return worker process idle timeouts to their configured settings."
+        },
+        {
+          "id": "5198",
+          "versions": [
+            0
+          ],
+          "message": "The application pool '%1' has enabled 32-bit worker processes, but no SysWOW64 support has been found. The Windows Process Activation Service (WAS) will disable the application pool.  To resolve this issue, either disable running as 32-bit worker processes or install the SysWOW64 support.  The data field contains the error number."
+        },
+        {
+          "id": "5199",
+          "versions": [
+            0
+          ],
+          "message": "Application pool '%1' has identity type which is not allowed by the administrator. Contact system administrator to allow application pool to run as current identity or change the identity of the application pool to something else."
+        },
+        {
+          "id": "5200",
+          "versions": [
+            0
+          ],
+          "message": "System doesn't allow application pools to run as LocalSystem. WAS tried to run orphan action '%1' for application pool '%2' as application pool identity and failed. Contact system administrator to allow application pool to run as LocalSystem or verify identity of this application pool has permissions to run orphan action."
+        },
+        {
+          "id": "5201",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' reported a failure during application preloading or service loading. The process id was '%2'.  Please ensure that all application preload or service settings in the application pool are configured properly.  The data field contains the error number."
+        },
+        {
+          "id": "5202",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) was not able to add the mapping to the 'IIS APPPOOL' namespace and thus is unable to create or use application pool identities.  The operation error code is '%1'.  The data field contains the error number."
+        },
+        {
+          "id": "5203",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' reported a failure trying to read configuration during startup. The process id was '%2'.  Please check the Application Event Log for further event messages logged by the worker process on the specific error.  The data field contains the error number."
+        },
+        {
+          "id": "5204",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) encountered an error condition attempting to read the configuration file.  It will keep retrying to read the configuration.  Until then, it will continue to run on the current configuration.  The specific error was '%1' for configuration path '%2' for file '%3'.  The data field contains the error number."
+        },
+        {
+          "id": "5205",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) was able to recover from the configuration read error condition and successfully read the configuration file."
+        },
+        {
+          "id": "5207",
+          "versions": [
+            0
+          ],
+          "message": "The job object associated with application pool '%1' encountered an error during qeurying information about job object. CPU monitoring may not function as expected.  The data field contains the error number."
+        },
+        {
+          "id": "5208",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service failed to create a debugger process for the application pool '%1'. The data field contains the error number. Check registry 'Debugger' at HKLM\\SYSTEM\\CurrentControlSet\\Services\\WAS\\%1"
+        },
+        {
+          "id": "5209",
+          "versions": [
+            0
+          ],
+          "message": "A process serving application pool '%1' exceeded time limits during start up. The process id was '%2'. The worker process was configured to start under debugger. Check registry 'Debugger' at HKLM\\SYSTEM\\CurrentControlSet\\Services\\WAS\\%1 to see whether debugger command arguments are set properly."
+        },
+        {
+          "id": "5210",
+          "versions": [
+            0
+          ],
+          "message": "CPU time for application pool '%1' has been throttled."
+        },
+        {
+          "id": "5211",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) started with '%1' mode using '%2'"
+        },
+        {
+          "id": "5212",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) failed to insert data for registration site '%1'. The data field contains the error number."
+        },
+        {
+          "id": "5213",
+          "versions": [
+            0
+          ],
+          "message": "Binding information '%1' is unsupported with dynamic mode. The Windows Process Activation Service (WAS) restart is required to register that binding."
+        },
+        {
+          "id": "5214",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service encountered an error trying to read configuration data with AppHostProvider. The error message is: %1. The data field contains the error number."
+        },
+        {
+          "id": "5215",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) failed to execute initialization for offline setup. The data field contains the error number."
+        },
+        {
+          "id": "5216",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) encountered an error while handling migration. This will prevent WAS from starting corrently. The data field contains the error number."
+        },
+        {
+          "id": "5217",
+          "versions": [
+            0
+          ],
+          "message": "The Windows Process Activation Service (WAS) encountered an error while handling key generation. This will prevent WAS from starting corrently. The data field contains the error number."
+        }
+      ]
+    },
+    {
+      "name": "Microsoft-Windows-WAS-ListenerAdapter",
+      "sourceNames": [
+        "Microsoft-Windows-WAS-ListenerAdapter",
+        "WAS-LA",
+        "WAS-ListenerAdapter"
+      ],
+      "channels": [
+        "Application"
+      ],
+      "events": [
+        {
+          "id": "7001",
+          "versions": [
+            0
+          ],
+          "message": "Listener Adapter protocol '%1' failed to connect to Windows Process Activation Service due to identity permissions mismatch.  Cause: Configured Identity for protocol '%1' in applicationHost.config does not match identity of process '%2' hosting Listener Adapter.  Fix: Ensure that the identity for protocol '%1' is configured correctly in applicationHost.config."
+        },
+        {
+          "id": "7002",
+          "versions": [
+            0
+          ],
+          "message": "Listener Adapter protocol '%1' is waiting to connect to Windows Process Activation Service.  This event will only be logged once.  Cause: This could be caused by either Windows Process Activation Service not being started, the protocol not being configured in <listenerAdapters> section, or another process already connected as Listener Adapter for that protocol.  Fix: Ensure that Windows Process Activation Service is running, the protocol is configured in the <listenerAdapters> section, and that another process has not already connected as the Listener Adapter for that protocol."
+        },
+        {
+          "id": "7003",
+          "versions": [
+            0
+          ],
+          "message": "Listener Adapter protocol '%1' successfully connected to Windows Process Activation Service."
+        },
+        {
+          "id": "7004",
+          "versions": [
+            0
+          ],
+          "message": "Listener Adapter protocol '%1' is unable to connect to Windows Process Activation Service because it has been disabled.  Cause: Listener Adapter protocol '%1' has been marked as disabled by Windows Process Activation Service due catastrophic failure.  Fix: To fix this condition, stop Listener Adapter then Windows Process Activation Service, restart Windows Process Activation Service, and finally restart Listener Adapter."
+        },
+        {
+          "id": "7005",
+          "versions": [
+            0
+          ],
+          "message": "Listener Adapter protocol '%1' attempted to communicate to Windows Process Activation Service and failed. The Listener Adapter is now in a bad state.  Cause: This is caused by Out of Memory issues or failures between Windows Process Activation Service and Listener Adapter.  Fix: To fix this condition, stop Listener Adapter then Windows Process Activation Service, restart Windows Process Activation Service, and finally restart Listener Adapter."
+        },
+        {
+          "id": "7006",
+          "versions": [
+            0
+          ],
+          "message": "Listener Adapter protocol '%1' received bad data from Windows Process Activation Service and is shutting itself down.  Cause: Listener Adapter received bad data from Windows Process Activation Service. Fix: To fix this condition, stop Listener Adapter then Windows Process Activation Service, restart Windows Process Activation Service, and finally restart Listener Adapter."
+        }
+      ]
+    }
+  ]
+}
