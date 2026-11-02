@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<architectureReference schemaVersion="1" source="Microsoft IIS configuration reference (Microsoft Learn) and a default IIS 10 applicationHost.config" documentation="https://learn.microsoft.com/iis/configuration/">
+  <!-- Entry-point layers drawn in the architecture diagram, ordered from the outermost check inward. -->
+  <layers>
+    <layer id="ip-restrictions" label="IP restrictions" order="1" icon="layer-ip-restrictions" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/ipsecurity/">Allows or denies client IP addresses and domains, including dynamic request-rate blocking, before any content is served.</layer>
+    <layer id="request-filtering" label="Request filtering" order="2" icon="layer-request-filtering" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/requestfiltering/">Rejects requests by file extension, verb, URL, header, query string, size and custom rules.</layer>
+    <layer id="redirect" label="HTTP redirect" order="3" icon="layer-redirect" learn="https://learn.microsoft.com/iis/configuration/system.webserver/httpredirect/">Sends the client to another URL before the request reaches the site content.</layer>
+    <layer id="url-rewrite" label="URL Rewrite" order="4" icon="layer-url-rewrite" learn="https://learn.microsoft.com/iis/extensions/url-rewrite-module/url-rewrite-module-configuration-reference">Rewrites or redirects URLs with global and site rules; rules that point at a server farm hand the request to ARR.</layer>
+    <layer id="authentication" label="Authentication" order="5" icon="layer-authentication" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/authentication/">Identifies the caller with Anonymous, Windows, Basic, Digest, certificate or ASP.NET Forms authentication.</layer>
+    <layer id="arr-routing" label="ARR routing" order="6" icon="layer-arr-routing" learn="https://learn.microsoft.com/iis/extensions/planning-for-arr/using-the-application-request-routing-module">Application Request Routing forwards matching requests to the servers of a server farm.</layer>
+  </layers>
+
+  <!-- Maps configuration paths to the categories and groups shown in the detail balloon. -->
+  <groups>
+    <group id="pool-general" category="pool" label="General" path="system.applicationHost/applicationPools/add" />
+    <group id="pool-process-model" category="pool" label="Process model" path="system.applicationHost/applicationPools/add/processModel" />
+    <group id="pool-recycling" category="pool" label="Recycling" path="system.applicationHost/applicationPools/add/recycling" />
+    <group id="pool-failure" category="pool" label="Rapid-fail protection" path="system.applicationHost/applicationPools/add/failure" />
+    <group id="pool-cpu" category="pool" label="CPU limits" path="system.applicationHost/applicationPools/add/cpu" />
+
+    <group id="aspnet-compilation" category="aspnet" label="Compilation" path="system.web/compilation" />
+    <group id="aspnet-runtime" category="aspnet" label="HTTP runtime" path="system.web/httpRuntime" />
+    <group id="aspnet-session" category="aspnet" label="Session state" path="system.web/sessionState" />
+    <group id="aspnet-auth" category="aspnet" label="Authentication and authorization" path="system.web/authentication system.web/authorization system.web/membership system.web/roleManager" />
+    <group id="aspnet-errors" category="aspnet" label="Custom errors" path="system.web/customErrors" />
+    <group id="aspnet-identity" category="aspnet" label="Identity and trust" path="system.web/identity system.web/trust" />
+    <group id="aspnet-diagnostics" category="aspnet" label="Tracing and diagnostics" path="system.web/trace system.web/healthMonitoring" />
+    <group id="aspnet-cookies" category="aspnet" label="Cookies and keys" path="system.web/httpCookies system.web/machineKey" />
+    <group id="aspnet-connections" category="aspnet" label="Connection strings" path="connectionStrings" />
+    <group id="aspnet-appsettings" category="aspnet" label="Application settings" path="appSettings" />
+    <group id="aspnet-other" category="aspnet" label="Other ASP.NET settings" path="system.web system.net system.data system.diagnostics system.transactions system.codedom" />
+
+    <group id="ip-restrictions" category="iis" label="IP address and domain restrictions" layer="ip-restrictions" sub="ip" path="system.webServer/security/ipSecurity" />
+    <group id="dynamic-ip" category="iis" label="Dynamic IP restrictions" layer="ip-restrictions" sub="dynamic" path="system.webServer/security/dynamicIpSecurity" />
+
+    <group id="request-filtering" category="iis" label="Request filtering" layer="request-filtering" sub="general" path="system.webServer/security/requestFiltering" />
+    <group id="rf-extensions" category="iis" parent="request-filtering" label="File name extensions" layer="request-filtering" sub="extensions" path="system.webServer/security/requestFiltering/fileExtensions" />
+    <group id="rf-rules" category="iis" parent="request-filtering" label="Rules" layer="request-filtering" sub="rules" path="system.webServer/security/requestFiltering/filteringRules" />
+    <group id="rf-verbs" category="iis" parent="request-filtering" label="HTTP verbs" layer="request-filtering" sub="verbs" path="system.webServer/security/requestFiltering/verbs" />
+    <group id="rf-url" category="iis" parent="request-filtering" label="URL" layer="request-filtering" sub="url" path="system.webServer/security/requestFiltering/hiddenSegments system.webServer/security/requestFiltering/denyUrlSequences system.webServer/security/requestFiltering/alwaysAllowedUrls" />
+    <group id="rf-url-limit" category="iis" parent="request-filtering" label="URL" layer="request-filtering" sub="url" path="system.webServer/security/requestFiltering/requestLimits" attributes="maxUrl" />
+    <group id="rf-headers" category="iis" parent="request-filtering" label="Headers" layer="request-filtering" sub="headers" path="system.webServer/security/requestFiltering/requestLimits/headerLimits" />
+    <group id="rf-query" category="iis" parent="request-filtering" label="Query strings" layer="request-filtering" sub="query" path="system.webServer/security/requestFiltering/denyQueryStringSequences system.webServer/security/requestFiltering/alwaysAllowedQueryStrings" />
+    <group id="rf-query-limit" category="iis" parent="request-filtering" label="Query strings" layer="request-filtering" sub="query" path="system.webServer/security/requestFiltering/requestLimits" attributes="maxQueryString" />
+
+    <group id="http-redirect" category="iis" label="HTTP redirect" layer="redirect" path="system.webServer/httpRedirect" />
+
+    <group id="url-rewrite" category="iis" label="URL Rewrite" layer="url-rewrite" sub="general" path="system.webServer/rewrite" />
+    <group id="rewrite-global" category="iis" parent="url-rewrite" label="Global rules" layer="url-rewrite" sub="global" path="system.webServer/rewrite/globalRules" />
+    <group id="rewrite-rules" category="iis" parent="url-rewrite" label="Inbound rules" layer="url-rewrite" sub="inbound" path="system.webServer/rewrite/rules" />
+    <group id="rewrite-outbound" category="iis" parent="url-rewrite" label="Outbound rules" layer="url-rewrite" sub="outbound" path="system.webServer/rewrite/outboundRules" />
+    <group id="rewrite-maps" category="iis" parent="url-rewrite" label="Rewrite maps" layer="url-rewrite" sub="maps" path="system.webServer/rewrite/rewriteMaps" />
+
+    <group id="authentication" category="iis" label="Authentication" layer="authentication" sub="methods" path="system.webServer/security/authentication" />
+    <group id="authorization" category="iis" label="Authorization rules" layer="authentication" sub="authorization" path="system.webServer/security/authorization" />
+    <group id="ssl-settings" category="iis" label="SSL settings" layer="authentication" sub="ssl" path="system.webServer/security/access" />
+
+    <group id="arr-proxy" category="iis" label="ARR proxy" layer="arr-routing" sub="proxy" path="system.webServer/proxy" />
+    <group id="arr-farm" category="iis" label="ARR server farm" layer="arr-routing" sub="farm" path="webFarms/webFarm" />
+    <group id="arr-global" category="iis" label="ARR global settings" layer="arr-routing" sub="proxy" path="webFarms" />
+
+    <group id="default-document" category="iis" label="Default document" path="system.webServer/defaultDocument" />
+    <group id="http-protocol" category="iis" label="HTTP response headers" path="system.webServer/httpProtocol" />
+    <group id="http-errors" category="iis" label="Error pages" path="system.webServer/httpErrors" />
+    <group id="static-content" category="iis" label="Static content and caching" path="system.webServer/staticContent" />
+    <group id="compression" category="iis" label="Compression" path="system.webServer/urlCompression" />
+    <group id="directory-browse" category="iis" label="Directory browsing" path="system.webServer/directoryBrowse" />
+    <group id="logging" category="iis" label="Logging" path="system.applicationHost/sites/site/logFile system.webServer/httpLogging" />
+    <group id="tracing" category="iis" label="Failed request tracing" path="system.applicationHost/sites/site/traceFailedRequestsLogging system.webServer/tracing" />
+    <group id="runtime" category="iis" label="Server runtime and ASP" path="system.webServer/serverRuntime system.webServer/asp" />
+    <group id="site-limits" category="iis" label="Site limits" path="system.applicationHost/sites/site/limits" />
+    <group id="site" category="iis" label="Site" path="system.applicationHost/sites/site" />
+    <group id="site-hsts" category="iis" label="HSTS" path="system.applicationHost/sites/site/hsts" />
+    <group id="application" category="iis" label="Application" path="system.applicationHost/sites/site/application" />
+    <group id="virtual-directory" category="iis" label="Virtual directory" path="system.applicationHost/sites/site/application/virtualDirectory" />
+    <group id="ftp" category="iis" label="FTP server" path="system.applicationHost/sites/site/ftpServer system.ftpServer" />
+    <group id="ftp-ssl" category="iis" parent="ftp" label="FTP SSL" path="system.applicationHost/sites/site/ftpServer/security/ssl" />
+    <group id="ftp-auth" category="iis" parent="ftp" label="FTP authentication" path="system.applicationHost/sites/site/ftpServer/security/authentication" />
+    <group id="ftp-authz" category="iis" parent="ftp" label="FTP authorization" path="system.ftpServer/security/authorization" />
+    <group id="ftp-isolation" category="iis" parent="ftp" label="FTP user isolation" path="system.applicationHost/sites/site/ftpServer/userIsolation" />
+    <group id="ftp-firewall" category="iis" parent="ftp" label="FTP firewall support" path="system.ftpServer/firewallSupport" />
+    <group id="iis-other" category="iis" label="Other IIS settings" path="system.webServer system.applicationHost" />
+  </groups>
+
+  <!-- Built-in IIS collection entries. Entries that match these are not reported as changes. -->
+  <defaultCollections>
+    <collection path="system.webServer/security/requestFiltering/fileExtensions">
+      <item fileExtension=".asa" allowed="false" />
+      <item fileExtension=".asax" allowed="false" />
+      <item fileExtension=".ascx" allowed="false" />
+      <item fileExtension=".master" allowed="false" />
+      <item fileExtension=".skin" allowed="false" />
+      <item fileExtension=".browser" allowed="false" />
+      <item fileExtension=".sitemap" allowed="false" />
+      <item fileExtension=".config" allowed="false" />
+      <item fileExtension=".cs" allowed="false" />
+      <item fileExtension=".csproj" allowed="false" />
+      <item fileExtension=".vb" allowed="false" />
+      <item fileExtension=".vbproj" allowed="false" />
+      <item fileExtension=".webinfo" allowed="false" />
+      <item fileExtension=".licx" allowed="false" />
+      <item fileExtension=".resx" allowed="false" />
+      <item fileExtension=".resources" allowed="false" />
+      <item fileExtension=".mdb" allowed="false" />
+      <item fileExtension=".vjsproj" allowed="false" />
+      <item fileExtension=".java" allowed="false" />
+      <item fileExtension=".jsl" allowed="false" />
+      <item fileExtension=".ldb" allowed="false" />
+      <item fileExtension=".dsdgm" allowed="false" />
+      <item fileExtension=".ssdgm" allowed="false" />
+      <item fileExtension=".lsad" allowed="false" />
+      <item fileExtension=".ssmap" allowed="false" />
+      <item fileExtension=".cd" allowed="false" />
+      <item fileExtension=".dsprototype" allowed="false" />
+      <item fileExtension=".lsaprototype" allowed="false" />
+      <item fileExtension=".sdm" allowed="false" />
+      <item fileExtension=".sdmDocument" allowed="false" />
+      <item fileExtension=".mdf" allowed="false" />
+      <item fileExtension=".ldf" allowed="false" />
+      <item fileExtension=".ad" allowed="false" />
+      <item fileExtension=".dd" allowed="false" />
+      <item fileExtension=".ldd" allowed="false" />
+      <item fileExtension=".sd" allowed="false" />
+      <item fileExtension=".adprototype" allowed="false" />
+      <item fileExtension=".lddprototype" allowed="false" />
+      <item fileExtension=".exclude" allowed="false" />
+      <item fileExtension=".refresh" allowed="false" />
+      <item fileExtension=".compiled" allowed="false" />
+      <item fileExtension=".msgx" allowed="false" />
+      <item fileExtension=".vsdisco" allowed="false" />
+      <item fileExtension=".rules" allowed="false" />
+    </collection>
+    <collection path="system.webServer/security/requestFiltering/hiddenSegments">
+      <item segment="web.config" />
+      <item segment="bin" />
+      <item segment="App_code" />
+      <item segment="App_GlobalResources" />
+      <item segment="App_LocalResources" />
+      <item segment="App_WebReferences" />
+      <item segment="App_Data" />
+      <item segment="App_Browsers" />
+    </collection>
+    <collection path="system.webServer/defaultDocument/files">
+      <item value="Default.htm" />
+      <item value="Default.asp" />
+      <item value="index.htm" />
+      <item value="index.html" />
+      <item value="iisstart.htm" />
+      <item value="default.aspx" />
+    </collection>
+    <collection path="system.webServer/httpErrors">
+      <item statusCode="401" path="401.htm" />
+      <item statusCode="403" path="403.htm" />
+      <item statusCode="404" path="404.htm" />
+      <item statusCode="405" path="405.htm" />
+      <item statusCode="406" path="406.htm" />
+      <item statusCode="412" path="412.htm" />
+      <item statusCode="431" path="431.htm" />
+      <item statusCode="500" path="500.htm" />
+      <item statusCode="501" path="501.htm" />
+      <item statusCode="502" path="502.htm" />
+    </collection>
+    <collection path="system.webServer/httpProtocol/customHeaders">
+      <item name="X-Powered-By" value="ASP.NET" />
+    </collection>
+    <collection path="system.webServer/security/authorization">
+      <item accessType="Allow" users="*" />
+    </collection>
+    <collection path="system.webServer/security/authentication/windowsAuthentication/providers">
+      <item value="Negotiate" />
+      <item value="NTLM" />
+    </collection>
+    <collection path="system.ftpServer/security/requestFiltering/hiddenSegments">
+      <item segment="_vti_bin" />
+    </collection>
+  </defaultCollections>
+
+  <!-- Collections that stock IIS fills at server scope; entries there are installation baseline, not tuning. -->
+  <serverBaselineCollections>
+    <collection path="system.webServer/security/isapiCgiRestriction" />
+    <collection path="system.webServer/security/applicationDependencies" />
+    <collection path="system.webServer/tracing/traceProviderDefinitions" />
+    <collection path="system.ftpServer/providerDefinitions" />
+    <collection path="system.webServer/management/trustedProviders" />
+    <collection path="system.webServer/httpProtocol/redirectHeaders" />
+  </serverBaselineCollections>
+
+  <!-- Defaults that differ from the schema value in a stock IIS applicationHost.config. -->
+  <valueDefaults>
+    <default path="system.applicationHost/applicationPools/add" name="managedRuntimeVersion" value="v4.0" />
+    <default path="system.webServer/security/authentication/windowsAuthentication" name="authPersistNonNTLM" value="true" />
+  </valueDefaults>
+
+  <!-- Connection-string engine detection; the first matching engine wins. -->
+  <databaseEngines>
+    <engine id="azure-sql" label="Azure SQL" host="\.database\.(windows\.net|chinacloudapi\.cn|usgovcloudapi\.net|cloudapi\.de)$|\.sql\.azuresynapse\.net$" />
+    <engine id="cosmos" label="Cosmos DB" keys="accountendpoint" />
+    <engine id="oracle" label="Oracle" provider="oracle|oraclient|odp\.net|oledb\.oracle" keys="\(description\s*=" />
+    <engine id="mysql" label="MySQL / MariaDB" provider="mysql|mariadb" keys="\buid\s*=.*\bpwd\s*=|\bport\s*=\s*3306" />
+    <engine id="postgres" label="PostgreSQL" provider="npgsql|postgres" keys="\bhost\s*=|\bport\s*=\s*5432" />
+    <engine id="mssql" label="SQL Server" provider="sqlclient|sqlserver|sqlncli|sqloledb|entityclient" keys="initial catalog|integrated security|trusted_connection|multipleactiveresultsets" />
+    <engine id="file" label="Local file database" provider="sqlite|sqlserverce|jet\.oledb|ace\.oledb" keys="\.(sdf|mdb|accdb|db|sqlite)\b|attachdbfilename|\|datadirectory\|" />
+    <engine id="state" label="ASP.NET State Server" />
+    <engine id="other" label="Database" />
+  </databaseEngines>
+</architectureReference>

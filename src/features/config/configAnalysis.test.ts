@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { analyzeConfigFile, getReferenceStats } from './configAnalysis'
 import { parseConfigText } from './configParser'
-import { sampleConfigFiles } from './sampleConfigs'
+import { getSampleConfigFiles } from './sampleConfigs'
 
 const applicationHostXml = `<?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -104,6 +104,7 @@ describe('IIS configuration analysis', () => {
   })
 
   it('provides dramatic synthetic configuration findings', () => {
+    const sampleConfigFiles = getSampleConfigFiles()
     const findings = sampleConfigFiles.flatMap(analyzeConfigFile)
     const titles = findings.map((finding) => finding.title)
 

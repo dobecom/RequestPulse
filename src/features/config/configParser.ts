@@ -7,6 +7,16 @@ import type {
   LogInputKind,
   ParsedLogFile,
 } from '../logs/types'
+import { isSkippedTag, toXNode } from './topology/xnode'
+import type { ConfigModel, ScopeBlock, XNode } from './topology/types'
+
+const normalizeScopePath = (value: string) =>
+  value
+    .trim()
+    .replace(/\\/g, '/')
+    .replace(/^MACHINE\/WEBROOT\/APPHOST\/?/i, '')
+    .replace(/^\.$/, '')
+    .replace(/^\/+|\/+$/g, '')
 
 const elementChildren = (element: Element) =>
   Array.from(element.children) as Element[]
@@ -177,6 +187,71 @@ const buildInventory = (document: XMLDocument): ConfigInventory => {
   }
 }
 
+const buildModel = (document: XMLDocument): ConfigModel => {
+  const root = document.documentElement
+  const serverChildren: XNode[] = []
+  const locationBlocks: ScopeBlock[] = []
+  const applicationHost = directChild(root, 'system.applicationHost')
+  const poolsElement = applicationHost && directChild(applicationHost, 'applicationPools')
+  const sitesElement = applicationHost && directChild(applicationHost, 'sites')
+  const webFarmsElement = directChild(root, 'webFarms')
+
+  elementChildren(root).forEach((child) => {
+    if (child.tagName === 'location') {
+      locationBlocks.push({
+        path: normalizeScopePath(child.getAttribute('path') ?? ''),
+        root: {
+          name: 'configuration',
+          attrs: {},
+          children: elementChildren(child)
+            .filter((node) => !isSkippedTag(node.tagName))
+            .map(toXNode),
+        },
+      })
+      return
+    }
+    if (
+      child.tagName === 'system.applicationHost' ||
+      child.tagName === 'webFarms' ||
+      isSkippedTag(child.tagName)
+    ) {
+      return
+    }
+    serverChildren.push(toXNode(child))
+  })
+
+  const optionalNode = (parent: Element | null | undefined, name: string) => {
+    const element = parent && directChild(parent, name)
+    return element ? toXNode(element) : null
+  }
+
+  const globalModulesElement = document.querySelector(
+    'system\\.webServer > globalModules',
+  )
+
+  return {
+    scopes: [
+      {
+        path: '',
+        root: { name: 'configuration', attrs: {}, children: serverChildren },
+      },
+      ...locationBlocks,
+    ],
+    pools: poolsElement ? directChildren(poolsElement, 'add').map(toXNode) : [],
+    poolDefaults: optionalNode(poolsElement, 'applicationPoolDefaults'),
+    sites: sitesElement ? directChildren(sitesElement, 'site').map(toXNode) : [],
+    siteDefaults: optionalNode(sitesElement, 'siteDefaults'),
+    applicationDefaults: optionalNode(sitesElement, 'applicationDefaults'),
+    virtualDirectoryDefaults: optionalNode(sitesElement, 'virtualDirectoryDefaults'),
+    webFarms: webFarmsElement ? toXNode(webFarmsElement) : null,
+    globalModules: globalModulesElement
+      ? directChildren(globalModulesElement, 'add').map(
+          (module) => module.getAttribute('name') || '',
+        )
+      : [],
+  }
+}
+
 export function parseConfigText(
   text: string,
   fileName: string,
@@ -197,6 +272,7 @@ export function parseConfigText(
     size,
     config: {
       settings,
+      model: buildModel(document),
       inventory:
         kind === 'config-applicationhost'
           ? buildInventory(document)

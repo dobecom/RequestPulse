@@ -15,6 +15,7 @@ import type {
   ParsedLogFile,
   ParseFailure,
 } from '../logs/types'
+import { describeKind, type UploadScope } from './uploadTargets'
 
 interface FileCandidate {
   file: File
@@ -49,6 +50,7 @@ export function useLogWorkspace() {
   const addCandidates = useCallback(async (
     candidates: FileCandidate[],
     expected?: LogInputKind,
+    scope?: UploadScope,
   ) => {
     if (!candidates.length) return
     setIsParsing(true)
@@ -68,6 +70,14 @@ export function useLogWorkspace() {
       results.forEach((result, index) => {
         if (result.status === 'fulfilled') {
           const { parsed, handle, rememberedId } = result.value
+          if (scope && !scope.accepts.includes(parsed.kind)) {
+            rejected.push({
+              fileName: candidates[index].file.name,
+              message: `This is ${describeKind(parsed.kind)}, which this page does not accept.`,
+              guidance: scope.guidance,
+            })
+            return
+          }
           accepted.push(parsed)
           if (handle) {
             handlesByFileId.current.set(parsed.id, handle)
@@ -91,6 +101,7 @@ export function useLogWorkspace() {
               result.reason instanceof Error
                 ? result.reason.message
                 : 'The file could not be parsed.',
+            guidance: scope?.guidance,
           })
         }
       })
@@ -117,17 +128,22 @@ export function useLogWorkspace() {
   }, [])
 
   const addFiles = useCallback(
-    async (incoming: FileList | File[], expected?: LogInputKind) => {
+    async (
+      incoming: FileList | File[],
+      expected?: LogInputKind,
+      scope?: UploadScope,
+    ) => {
       await addCandidates(
         Array.from(incoming).map((file) => ({ file })),
         expected,
+        scope,
       )
     },
     [addCandidates],
   )
 
   const pickFiles = useCallback(
-    async (expected: LogInputKind) => {
+    async (expected: LogInputKind, scope?: UploadScope) => {
       if (!window.showOpenFilePicker) return false
       try {
         const eventLog = expected === 'eventlog'
@@ -169,7 +185,7 @@ export function useLogWorkspace() {
             handle,
           })),
         )
-        await addCandidates(candidates, expected)
+        await addCandidates(candidates, expected, scope)
       } catch (error) {
         if (isProtectedSystemFolderError(error)) {
           setPersistenceMessage(PROTECTED_SYSTEM_FOLDER_MESSAGE)
@@ -183,12 +199,16 @@ export function useLogWorkspace() {
   )
 
   const addDroppedFiles = useCallback(
-    async (dataTransfer: DataTransfer, expected?: LogInputKind) => {
+    async (
+      dataTransfer: DataTransfer,
+      expected?: LogInputKind,
+      scope?: UploadScope,
+    ) => {
       const items = Array.from(dataTransfer.items).filter(
         (item) => item.kind === 'file',
       )
       if (!items.length) {
-        await addFiles(dataTransfer.files, expected)
+        await addFiles(dataTransfer.files, expected, scope)
         return
       }
 
@@ -206,7 +226,7 @@ export function useLogWorkspace() {
         )
       ).filter((candidate): candidate is FileCandidate => candidate !== null)
 
-      await addCandidates(candidates, expected)
+      await addCandidates(candidates, expected, scope)
     },
     [addCandidates, addFiles],
   )

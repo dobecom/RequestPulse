@@ -1,3 +1,5 @@
+import type { ConfigModel } from '../config/topology/types'
+
 export type EventLogKind = 'event-application' | 'event-system'
 export type ConfigKind = 'config-applicationhost' | 'config-web'
 export type LogKind = 'w3svc' | 'httperr' | 'freb' | EventLogKind | ConfigKind
@@ -98,6 +100,7 @@ export interface ConfigInventory {
 export interface ParsedConfigData {
   settings: ConfigSetting[]
   inventory: ConfigInventory
+  model?: ConfigModel
 }
 
 export interface LogRow {
@@ -126,6 +129,8 @@ export interface ParsedLogFile {
 export interface ParseFailure {
   fileName: string
   message: string
+  /** Which files the rejecting page accepts; set only for page-scoped uploads. */
+  guidance?: string
 }
 
 export interface DateRange {

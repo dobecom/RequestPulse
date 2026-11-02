@@ -12,13 +12,14 @@ import {
   X,
 } from 'lucide-react'
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { ScrollToTopButton } from '../components/ScrollToTopButton'
 import { SampleDataNotice } from '../features/dashboard/SampleDataNotice'
-import { sampleConfigFiles } from '../features/config/sampleConfigs'
 import { HomePage } from '../features/home/HomePage'
 import { sampleLogFiles } from '../features/logs/sampleLogs'
 import { sampleFrebFiles } from '../features/freb/sampleFreb'
 import type { LogInputKind } from '../features/logs/types'
 import { useLogWorkspace } from '../features/workspace/useLogWorkspace'
+import { UPLOAD_TARGETS, type UploadTab } from '../features/workspace/uploadTargets'
 import {
   loadVisitorCounts,
   type VisitorCounts,
@@ -58,11 +59,11 @@ const tabs: Array<{
   icon: typeof Home
 }> = [
   { id: 'home', label: 'Home', icon: Home },
+  { id: 'config', label: 'Configs', icon: FileCog },
   { id: 'w3svc', label: 'W3SVC', icon: BarChart3 },
   { id: 'httperr', label: 'HTTPERR', icon: ServerCrash },
   { id: 'events', label: 'Events', icon: MonitorCog },
   { id: 'freb', label: 'FREB', icon: FileSearch },
-  { id: 'config', label: 'Configs', icon: FileCog },
 ]
 
 export function App() {
@@ -81,9 +82,6 @@ export function App() {
   const displayedEventFiles = eventCount
     ? workspace.eventFiles
     : sampleLogFiles.events
-  const displayedConfigFiles = configCount
-    ? workspace.configFiles
-    : sampleConfigFiles
   const displayedFrebFiles = frebCount ? workspace.frebFiles : sampleFrebFiles
 
   useEffect(() => {
@@ -102,6 +100,28 @@ export function App() {
   ) => {
     void workspace.addDroppedFiles(dataTransfer, expected)
   }
+
+  const renderSampleNotice = (target: UploadTab) => {
+    const { expected, accept, notice, scope } = UPLOAD_TARGETS[target]
+    return (
+      <SampleDataNotice
+        uploadGuidance={notice}
+        accept={accept}
+        busy={workspace.isParsing}
+        onFiles={(files) => {
+          void workspace.addFiles(files, expected, scope)
+        }}
+        onDropFiles={(dataTransfer) => {
+          void workspace.addDroppedFiles(dataTransfer, expected, scope)
+        }}
+        onPickFiles={() => workspace.pickFiles(expected, scope)}
+      />
+    )
+  }
+
+  const failureGuidance = workspace.failures.find(
+    (failure) => failure.guidance,
+  )?.guidance
 
   return (
     <div className="app-shell">
@@ -188,21 +208,11 @@ export function App() {
             }}
           />
         )}
-        {tab === 'w3svc' && !w3Count && (
-          <SampleDataNotice uploadGuidance="Upload your W3SVC log files to analyze your actual IIS traffic." />
-        )}
-        {tab === 'httperr' && !httpErrCount && (
-          <SampleDataNotice uploadGuidance="Upload your HTTPERR log files to analyze your actual HTTP.sys rejection evidence." />
-        )}
-        {tab === 'events' && !eventCount && (
-          <SampleDataNotice uploadGuidance="Upload your Application and System Event Viewer log files to analyze your actual Windows event evidence." />
-        )}
-        {tab === 'config' && !configCount && (
-          <SampleDataNotice uploadGuidance="Upload your applicationHost.config or web.config files to analyze your actual IIS environment." />
-        )}
-        {tab === 'freb' && !frebCount && (
-          <SampleDataNotice uploadGuidance="Upload one or more FREB XML files to analyze your actual IIS failed-request traces." />
-        )}
+        {tab === 'w3svc' && !w3Count && renderSampleNotice('w3svc')}
+        {tab === 'httperr' && !httpErrCount && renderSampleNotice('httperr')}
+        {tab === 'events' && !eventCount && renderSampleNotice('events')}
+        {tab === 'config' && !configCount && renderSampleNotice('config')}
+        {tab === 'freb' && !frebCount && renderSampleNotice('freb')}
         <Suspense fallback={<div className="dashboard-loading">Loading dashboard…</div>}>
           {tab === 'w3svc' && (
             <W3Dashboard files={displayedW3Files} />
@@ -214,7 +224,11 @@ export function App() {
             <EventLogDashboard files={displayedEventFiles} />
           )}
           {tab === 'config' && (
-            <ConfigDashboard files={displayedConfigFiles} />
+            <ConfigDashboard
+              key={configCount ? 'uploaded' : 'sample'}
+              files={workspace.configFiles}
+              useSample={!configCount}
+            />
           )}
           {tab === 'freb' && (
             <FrebDashboard files={displayedFrebFiles} />
@@ -245,27 +259,33 @@ export function App() {
         </div>
       )}
 
-      {workspace.failures.length > 0 && (
-        <aside className="error-toast" role="alert">
-          <AlertCircle size={20} />
-          <div>
-            <strong>Some files were not added</strong>
-            {workspace.failures.map((failure) => (
-              <p key={`${failure.fileName}:${failure.message}`}>
-                <b>{failure.fileName}:</b> {failure.message}
-              </p>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="icon-button"
-            aria-label="Dismiss errors"
-            onClick={workspace.clearFailures}
-          >
-            <X size={16} />
-          </button>
-        </aside>
-      )}
+      <div className="floating-corner">
+        {workspace.failures.length > 0 && (
+          <aside className="error-toast" role="alert">
+            <AlertCircle size={20} />
+            <div>
+              <strong>Some files were not added</strong>
+              {workspace.failures.map((failure) => (
+                <p key={`${failure.fileName}:${failure.message}`}>
+                  <b>{failure.fileName}:</b> {failure.message}
+                </p>
+              ))}
+              {failureGuidance && (
+                <p className="error-toast__guidance">{failureGuidance}</p>
+              )}
+            </div>
+            <button
+              type="button"
+              className="icon-button"
+              aria-label="Dismiss errors"
+              onClick={workspace.clearFailures}
+            >
+              <X size={16} />
+            </button>
+          </aside>
+        )}
+        <ScrollToTopButton />
+      </div>
     </div>
   )
 }

@@ -24,8 +24,33 @@ an API.
   Event ID, and channel severity filters
 - Source-specific event explanations with explicit Unknown handling for
   unreferenced IDs
-- applicationHost.config topology dashboard for pools, sites, applications,
-  virtual directories, bindings, FTP, modules, and ARR detection
+- Configs is the first tab after Home (Home, Configs, W3SVC, HTTPERR, Events,
+  FREB). On every page, a round arrow button appears at the bottom-right once
+  the page is scrolled down and returns to the top (smooth scroll, reduced-motion
+  aware); it stacks below any file-type notice so they never overlap
+- Configs page order: the local schema-analysis note, jump links to the
+  applicationHost.config and web.config findings (smooth scroll, reduced-motion
+  aware), the architecture diagram, then the two schema-comparison tables.
+  Pools, sites, applications, virtual directories, bindings, FTP and ARR are
+  shown once, in the diagram
+- 2.5D isometric IIS architecture diagram at the top of Configs: client
+  requests animate through layered entry-point filters (URL Rewrite/redirect,
+  IP and domain restrictions, Request Filtering, authentication, ARR routing)
+  into web/FTP sites, the application pools they use, and database links parsed
+  from connection strings. Application pool status, binding ports, endpoint
+  URLs, virtual-directory trees, enabled authentication and ARR server farms
+  with enabled state and rule-to-farm routing are included. The layout is
+  responsive and switches to a stacked flow on narrow screens
+- Every dashboard that is showing synthetic sample data (W3SVC, HTTPERR, Events,
+  FREB, Configs) has a dashed "This page is currently showing sample data."
+  area with an Add files button. Files can also be dropped onto that area. Only
+  the tab's own file type is accepted; other files are refused with a
+  bottom-right notice that says which files the tab expects
+  (`src/features/workspace/uploadTargets.ts`)
+- Selecting a site, FTP site, application, virtual directory, ARR farm or
+  entry layer opens a balloon with collapsible App pool / ASP.NET / IIS
+  categories listing only settings changed from IIS defaults. A web.config can
+  be attached to a scope to merge its overrides; secrets are masked
 - applicationHost.config and web.config comparison against a bundled XML
   catalog generated from every IIS configuration schema installed on Windows
 - Focused risk guidance for high-signal application pool, request, proxy,
@@ -110,6 +135,18 @@ The generated catalog contains schema defaults, types, validation metadata, and
 allowed enum values. Findings cover explicit non-default values only. Missing
 settings may be inherited from parent configuration and are not treated as
 disabled.
+
+The architecture diagram uses static, locally bundled assets rather than remote
+images: isometric SVG icons in `src/features/config/diagram/assets/`, the
+default-diff reference in
+`src/features/config/reference/architecture-reference.xml`, and ARR/URL
+Rewrite/proxy defaults and routing semantics in
+`src/features/config/reference/arr-configuration-reference.xml`. The sample
+shown without uploaded files is
+`src/features/config/samples/synthetic-applicationHost.config` plus
+`synthetic-web.config`; every host name, address and secret in them is
+synthetic. The sample declares three web sites (Commerce Storefront, Commerce
+API, Reports Legacy) and two FTP sites.
 
 The FREB analysis reference is stored at
 `src/features/freb/reference/freb-analysis-reference.xml`. It records the IIS

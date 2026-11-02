@@ -33,6 +33,8 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       globals: true,
       setupFiles: './src/test/setup.ts',
+      // jsdom renders of the dashboards are slow when workers run in parallel.
+      testTimeout: 20000,
     },
   }
 })

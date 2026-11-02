@@ -100,3 +100,69 @@ describe('useLogWorkspace remembered files', () => {
     )
   })
 })
+
+describe('useLogWorkspace page-scoped uploads', () => {
+  const parsedFile = (id: string, kind: string) => ({
+    id,
+    name: `${id}.log`,
+    kind,
+    fields: [],
+    rows: [],
+    warnings: [],
+    size: 1,
+  })
+  const scope = {
+    accepts: ['w3svc' as const],
+    guidance: 'Add W3SVC log files here.',
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mocks.listRememberedFileHandles.mockResolvedValue([])
+    mocks.saveRememberedFileHandle.mockResolvedValue(undefined)
+  })
+
+  it('rejects files of another kind and explains what the page accepts', async () => {
+    mocks.parseBrowserFile.mockImplementation(async (file: File) =>
+      file.name === 'web.config'
+        ? parsedFile('web', 'config-web')
+        : parsedFile('access', 'w3svc'),
+    )
+    const { result } = renderHook(() => useLogWorkspace())
+
+    await act(async () => {
+      await result.current.addFiles(
+        [
+          new File(['a'], 'u_ex.log'),
+          new File(['<configuration />'], 'web.config'),
+        ],
+        'w3svc',
+        scope,
+      )
+    })
+
+    expect(result.current.files.map((file) => file.id)).toEqual(['access'])
+    expect(result.current.failures).toEqual([
+      {
+        fileName: 'web.config',
+        message: 'This is a web.config file, which this page does not accept.',
+        guidance: scope.guidance,
+      },
+    ])
+  })
+
+  it('attaches the guidance to parse errors only for scoped uploads', async () => {
+    mocks.parseBrowserFile.mockRejectedValue(new Error('Not a W3SVC log.'))
+    const { result } = renderHook(() => useLogWorkspace())
+
+    await act(async () => {
+      await result.current.addFiles([new File(['a'], 'a.log')], 'w3svc', scope)
+    })
+    expect(result.current.failures[0].guidance).toBe(scope.guidance)
+
+    await act(async () => {
+      await result.current.addFiles([new File(['a'], 'a.log')], 'w3svc')
+    })
+    expect(result.current.failures[0].guidance).toBeUndefined()
+  })
+})
