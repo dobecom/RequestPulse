@@ -79,6 +79,7 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [anchorId, setAnchorId] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const [showAllPools, setShowAllPools] = useState(false)
   const [layout, setLayout] = useState<Layout>(EMPTY_LAYOUT)
   const [balloonSize, setBalloonSize] = useState({ width: 0, height: 0 })
   const boardRef = useRef<HTMLDivElement>(null)
@@ -117,7 +118,7 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
 
   useLayoutEffect(() => {
     measure()
-  }, [measure, architecture, expanded, selectedId, mode])
+  }, [measure, architecture, expanded, selectedId, mode, showAllPools])
 
   useEffect(() => {
     const board = boardRef.current
@@ -242,6 +243,15 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [architecture])
+  const unusedPoolCount = pools.filter((pool) => pool.appCount === 0).length
+  const visiblePools = showAllPools ? pools : pools.filter((pool) => pool.appCount > 0)
+  const toggleAllPools = () => {
+    if (showAllPools && selectedId?.startsWith('pool:')) {
+      const selected = pools.find((pool) => pool.id === selectedId)
+      if (selected && selected.appCount === 0) setSelectedId(null)
+    }
+    setShowAllPools(!showAllPools)
+  }
   const databases = useMemo(() => {
     const poolIndex = new Map(pools.map((pool, index) => [pool.name.toLowerCase(), index]))
     const rank = (id: string) => {
@@ -361,11 +371,27 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
           </div>
 
           <div className="arch__col arch__col--pools">
-            <h3 className="arch__caption">Application pools</h3>
-            {pools.map((pool) => (
+            <div className="arch__caption-row">
+              <h3 className="arch__caption">Application pools</h3>
+              {unusedPoolCount > 0 && (
+                <button
+                  type="button"
+                  className="arch__toggle"
+                  aria-pressed={showAllPools}
+                  title={`${unusedPoolCount} pool${unusedPoolCount === 1 ? '' : 's'} with 0 apps ${showAllPools ? 'shown' : 'hidden'}`}
+                  onClick={toggleAllPools}
+                >
+                  Show all
+                </button>
+              )}
+            </div>
+            {visiblePools.map((pool) => (
               <PoolCard key={pool.id} pool={pool} context={context} />
             ))}
             {!pools.length && <p className="arch__empty">No application pool is declared.</p>}
+            {pools.length > 0 && !visiblePools.length && (
+              <p className="arch__empty">No application pool has apps. Use Show all to list the pools with 0 apps.</p>
+            )}
           </div>
 
           <div className="arch__col arch__col--data">

@@ -117,6 +117,27 @@ describe('ArchitectureDiagram', () => {
     expect(legacy).not.toHaveTextContent('Proxy archive to legacy-reports-farm')
   })
 
+  it('hides pools with 0 apps until Show all is switched on', () => {
+    const { container } = renderDiagram()
+    const unused = architecture.pools.filter((pool) => pool.appCount === 0)
+    const used = architecture.pools.filter((pool) => pool.appCount > 0)
+    expect(unused.length).toBeGreaterThan(0)
+    const poolIds = () =>
+      [...container.querySelectorAll<HTMLElement>('[data-arch-id^="pool:"]')].map((node) => node.dataset.archId)
+
+    expect(poolIds()).toEqual(expect.arrayContaining(used.map((pool) => pool.id)))
+    unused.forEach((pool) => expect(poolIds()).not.toContain(pool.id))
+
+    const toggle = screen.getByRole('button', { name: 'Show all' })
+    expect(toggle).toHaveAttribute('aria-pressed', 'false')
+    fireEvent.click(toggle)
+    expect(toggle).toHaveAttribute('aria-pressed', 'true')
+    unused.forEach((pool) => expect(poolIds()).toContain(pool.id))
+
+    fireEvent.click(toggle)
+    unused.forEach((pool) => expect(poolIds()).not.toContain(pool.id))
+  })
+
   it('shows the request flow without lens tabs or client port chips', () => {
     renderDiagram()
     expect(screen.queryByRole('group', { name: 'Diagram lens' })).not.toBeInTheDocument()

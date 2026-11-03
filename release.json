@@ -1,4 +1,4 @@
 {
-  "version": "v1.5.1",
-  "description": "[Chore] - Groups version history into Fix, Improve, Feature, Security and Chore sections with separate change lists; - Displays release dates without times in UTC; - Removes commit IDs from the version history page."
+  "version": "v1.5.2",
+  "description": "[Improve] - Hides Application Pools with 0 apps in the Configs architecture diagram by default; - Adds a Show all toggle beside the Application pools caption to reveal them."
 }
