@@ -106,6 +106,17 @@ The unlinked `/version` route reads release history from
 release; Core-DevOps records its version, description, and Git revision during
 deployment.
 
+Release descriptions use `[Fix]`, `[Improve]`, `[Feature]`, `[Security]` and
+`[Chore]` headings followed by individual changes. Keep `release.json`'s
+description on one line for the deployment scripts, separating items with
+semicolons, for example:
+`[Fix] - Corrects chart values; - Fixes filter reset [Improve] - Simplifies navigation`.
+The page also accepts newline-separated headings and bullets. Older untagged
+descriptions are split into individual sentences/clauses and grouped using
+their leading Adds, Fixes, Improves or Reworks wording (otherwise Improve).
+Existing immutable release rows are not rewritten. Release dates display as
+UTC `YYYY-MM-DD`; times and source revisions remain stored but are not shown.
+
 ## Quality checks
 
 ```powershell

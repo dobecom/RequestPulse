@@ -3,6 +3,7 @@ import {
   loadVersionHistory,
   type ApplicationVersion,
 } from '../../services/versionService'
+import { parseReleaseNotes } from './releaseNotes'
 
 export function VersionPage() {
   const [versions, setVersions] = useState<ApplicationVersion[]>([])
@@ -46,14 +47,24 @@ export function VersionPage() {
               <li key={release.version}>
                 <div>
                   <strong>{release.version}</strong>
-                  <time dateTime={release.releasedAt}>
-                    {new Date(release.releasedAt).toLocaleString()}
+                  <time dateTime={release.releasedAt.slice(0, 10)}>
+                    {release.releasedAt.slice(0, 10)}
                   </time>
                 </div>
-                <p>{release.description}</p>
-                {release.sourceRevision && (
-                  <code>{release.sourceRevision.slice(0, 7)}</code>
-                )}
+                {parseReleaseNotes(release.description).map((group) => (
+                  <section
+                    className="version-notes"
+                    key={group.category}
+                    aria-label={`${release.version} ${group.category}`}
+                  >
+                    <h2>[{group.category}]</h2>
+                    <ul>
+                      {group.items.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
               </li>
             ))}
           </ol>

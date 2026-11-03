@@ -1,4 +1,4 @@
 {
-  "version": "v1.5.0",
-  "description": "Reworks how the Configs architecture diagram shows Application Request Routing. The entry point is now split into a Global rules tier (IIS Home URL Rewrite and ARR rules from applicationHost.config, evaluated before site-level rewrite rules) and a Server-level settings tier (IP restrictions, Request filtering, HTTP redirect, URL Rewrite and Authentication inherited by every site), while each site card lists its own site-level layers and any site-level ARR rule. ARR is drawn as a separate server-level lane with its routing rules grouped as Global, Server or Site, and a server farm that no rewrite rule targets is shown as idle with no wire. Farm wires drop cleanly down the lane, and the balloon opens beside the slab that was clicked. The synthetic sample gains a global ARR rule, a conditional redirect and extra server-level IP and Request Filtering settings."
+  "version": "v1.5.1",
+  "description": "[Chore] - Groups version history into Fix, Improve, Feature, Security and Chore sections with separate change lists; - Displays release dates without times in UTC; - Removes commit IDs from the version history page."
 }
