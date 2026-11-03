@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <architectureReference schemaVersion="1" source="Microsoft IIS configuration reference (Microsoft Learn) and a default IIS 10 applicationHost.config" documentation="https://learn.microsoft.com/iis/configuration/">
-  <!-- Entry-point layers drawn in the architecture diagram, ordered from the outermost check inward. -->
+  <!--
+    Layers drawn in the architecture diagram, grouped by scope.
+    scope="global": server-wide rules in applicationHost.config, evaluated first for every request.
+    scope="inherited": server-level values that every site inherits unless the site overrides them.
+    order is display order inside a group, not execution order.
+  -->
   <layers>
-    <layer id="ip-restrictions" label="IP restrictions" order="1" icon="layer-ip-restrictions" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/ipsecurity/">Allows or denies client IP addresses and domains, including dynamic request-rate blocking, before any content is served.</layer>
-    <layer id="request-filtering" label="Request filtering" order="2" icon="layer-request-filtering" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/requestfiltering/">Rejects requests by file extension, verb, URL, header, query string, size and custom rules.</layer>
-    <layer id="redirect" label="HTTP redirect" order="3" icon="layer-redirect" learn="https://learn.microsoft.com/iis/configuration/system.webserver/httpredirect/">Sends the client to another URL before the request reaches the site content.</layer>
-    <layer id="url-rewrite" label="URL Rewrite" order="4" icon="layer-url-rewrite" learn="https://learn.microsoft.com/iis/extensions/url-rewrite-module/url-rewrite-module-configuration-reference">Rewrites or redirects URLs with global and site rules; rules that point at a server farm hand the request to ARR.</layer>
-    <layer id="authentication" label="Authentication" order="5" icon="layer-authentication" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/authentication/">Identifies the caller with Anonymous, Windows, Basic, Digest, certificate or ASP.NET Forms authentication.</layer>
-    <layer id="arr-routing" label="ARR routing" order="6" icon="layer-arr-routing" learn="https://learn.microsoft.com/iis/extensions/planning-for-arr/using-the-application-request-routing-module">Application Request Routing forwards matching requests to the servers of a server farm.</layer>
+    <layer id="global-rules" label="Global URL Rewrite" order="1" scope="global" icon="layer-url-rewrite" learn="https://learn.microsoft.com/iis/extensions/url-rewrite-module/url-rewrite-module-configuration-reference">URL Rewrite global rules (IIS Home → URL Rewrite). They are defined only in applicationHost.config, apply to every request and cannot be overridden by a web.config. They are evaluated first, at PreBeginRequest, before site and application rules (BeginRequest). A rule that rewrites to a server farm or proxy host is an ARR routing rule and is listed under ARR routing, not here.</layer>
+    <layer id="arr-routing" label="ARR routing" order="2" scope="global" icon="layer-arr-routing" learn="https://learn.microsoft.com/iis/extensions/planning-for-arr/using-the-application-request-routing-module">Application Request Routing is an HTTP-level reverse proxy and load balancer. Its routing rules are URL Rewrite rules that rewrite to a server farm or proxy host. Creating a farm in IIS Manager offers to add a global rule (ARR_&lt;farm&gt;_loadbalance), but a rule in a site's web.config also works and is then site-level. When a rule changes the URL, ARR sets its handler at MapRequestHandler and proxies at ExecuteRequestHandler instead of running the site's own content handler. Enable proxy is a server-level setting (system.webServer/proxy).</layer>
+    <layer id="ip-restrictions" label="IP restrictions" order="3" scope="inherited" icon="layer-ip-restrictions" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/ipsecurity/">Allows or denies client IP addresses and domains, including dynamic request-rate blocking, before any content is served.</layer>
+    <layer id="request-filtering" label="Request filtering" order="4" scope="inherited" icon="layer-request-filtering" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/requestfiltering/">Rejects requests by file extension, verb, URL, header, query string, size and custom rules.</layer>
+    <layer id="redirect" label="HTTP redirect" order="5" scope="inherited" icon="layer-redirect" learn="https://learn.microsoft.com/iis/configuration/system.webserver/httpredirect/">Sends the client to another URL before the request reaches the site content.</layer>
+    <layer id="url-rewrite" label="URL Rewrite" order="6" scope="inherited" icon="layer-url-rewrite" learn="https://learn.microsoft.com/iis/extensions/url-rewrite-module/url-rewrite-module-configuration-reference">Inbound and outbound rules and rewrite maps set at server level. Sites inherit them and can add their own rules in web.config, which are evaluated at BeginRequest, after the global rules. Global rules and ARR routing rules are listed in the global group.</layer>
+    <layer id="authentication" label="Authentication" order="7" scope="inherited" icon="layer-authentication" learn="https://learn.microsoft.com/iis/configuration/system.webserver/security/authentication/">Identifies the caller with Anonymous, Windows, Basic, Digest, certificate or ASP.NET Forms authentication.</layer>
   </layers>
 
   <!-- Maps configuration paths to the categories and groups shown in the detail balloon. -->
@@ -46,7 +52,7 @@
     <group id="http-redirect" category="iis" label="HTTP redirect" layer="redirect" path="system.webServer/httpRedirect" />
 
     <group id="url-rewrite" category="iis" label="URL Rewrite" layer="url-rewrite" sub="general" path="system.webServer/rewrite" />
-    <group id="rewrite-global" category="iis" parent="url-rewrite" label="Global rules" layer="url-rewrite" sub="global" path="system.webServer/rewrite/globalRules" />
+    <group id="rewrite-global" category="iis" parent="url-rewrite" label="Global rules" layer="global-rules" sub="global" path="system.webServer/rewrite/globalRules" />
     <group id="rewrite-rules" category="iis" parent="url-rewrite" label="Inbound rules" layer="url-rewrite" sub="inbound" path="system.webServer/rewrite/rules" />
     <group id="rewrite-outbound" category="iis" parent="url-rewrite" label="Outbound rules" layer="url-rewrite" sub="outbound" path="system.webServer/rewrite/outboundRules" />
     <group id="rewrite-maps" category="iis" parent="url-rewrite" label="Rewrite maps" layer="url-rewrite" sub="maps" path="system.webServer/rewrite/rewriteMaps" />

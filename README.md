@@ -34,12 +34,26 @@ an API.
   Pools, sites, applications, virtual directories, bindings, FTP and ARR are
   shown once, in the diagram
 - 2.5D isometric IIS architecture diagram at the top of Configs: client
-  requests animate through layered entry-point filters (URL Rewrite/redirect,
-  IP and domain restrictions, Request Filtering, authentication, ARR routing)
-  into web/FTP sites, the application pools they use, and database links parsed
-  from connection strings. Application pool status, binding ports, endpoint
-  URLs, virtual-directory trees, enabled authentication and ARR server farms
-  with enabled state and rule-to-farm routing are included. The layout is
+  requests animate into an entry stack that separates two scopes. The
+  **Global rules** tier holds what only applicationHost.config can define
+  (global URL Rewrite rules and global ARR routing rules). The **Server-level
+  settings** tier holds IP and domain restrictions, Request Filtering, HTTP
+  redirect, distributed URL Rewrite rules and authentication, which sites
+  inherit and may override. Each site card shows only its own site-level
+  overrides. The stack then leads into web/FTP sites, the application pools
+  they use, and database links parsed from connection strings. No ordering is
+  claimed between the layers of the inherited tier.
+- ARR is drawn as a separate, server-level lane, not a filter layer. Its
+  routing rule is a URL Rewrite rule that targets a server farm or a proxy
+  host. It is usually a global rule (the farm wizard creates
+  `ARR_<farm>_loadbalance`), but a rule in a site's web.config also works and
+  is labelled "Site" in the lane. The request still arrives through the site
+  that matches its binding; a matching rule proxies it instead of the site's
+  content handler. A farm that no rule references routes nothing and is shown
+  as idle. Rules are listed once, in the lane, and kept out of the URL Rewrite
+  layer counts. Application pool status, binding ports, endpoint URLs,
+  virtual-directory trees, enabled authentication and ARR server farms with
+  enabled state and rule-to-farm routing are included. The layout is
   responsive and switches to a stacked flow on narrow screens
 - Every dashboard that is showing synthetic sample data (W3SVC, HTTPERR, Events,
   FREB, Configs) has a dashed "This page is currently showing sample data."

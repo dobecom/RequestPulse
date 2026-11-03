@@ -8,6 +8,7 @@ import type {
   FarmNode,
   LayerStat,
   PoolNode,
+  RouteLevel,
   RouteRule,
   SiteNode,
   TreeRow,
@@ -20,7 +21,7 @@ export interface NodeContext {
   /** Ids that stay lit while something is selected; null when nothing is selected. */
   lit: Set<string> | null
   expanded: Set<string>
-  onSelect: (id: string) => void
+  onSelect: (id: string, anchorId?: string) => void
   onToggleRows: (siteId: string) => void
 }
 
@@ -54,38 +55,47 @@ export function ClientNode() {
   )
 }
 
-export function EntryStack({ layers, context }: { layers: LayerStat[]; context: NodeContext }) {
+function Slab({
+  layer,
+  index,
+  archId,
+  context,
+}: {
+  layer: LayerStat
+  index: number
+  archId?: string
+  context: NodeContext
+}) {
+  const id = `layer:${layer.id}`
+  const selected = context.selectedId === id
+  return (
+    <li style={{ '--i': index } as CSSProperties}>
+      <button
+        type="button"
+        className="arch-slab"
+        data-arch-id={archId ?? id}
+        data-layer={layer.id}
+        data-state={layer.count > 0 ? 'custom' : 'default'}
+        data-selected={selected || undefined}
+        aria-expanded={selected}
+        aria-controls="arch-balloon"
+        title={layer.lines.join('\n') || 'IIS defaults'}
+        onClick={() => context.onSelect(id, archId)}
+      >
+        <img className="arch-icon" src={assetUrl(layer.icon)} alt="" width={40} height={40} />
+        <span className="arch-slab__text">
+          <strong>{layer.label}</strong>
+          <small>{layer.count > 0 ? layer.lines.slice(0, 2).join(' · ') || 'Customised' : 'IIS defaults'}</small>
+        </span>
+        {layer.count > 0 && <span className="arch-slab__count">{layer.count}</span>}
+      </button>
+    </li>
+  )
+}
+
+export function EntryStack({ entry, context }: { entry: Architecture['entry']; context: NodeContext }) {
   return (
     <div className="arch-entry" data-arch-id="entry-stack">
-      <ol className="arch-slabs" aria-label="Entry point layers, in request order">
-        {layers.map((layer, index) => {
-          const id = `layer:${layer.id}`
-          const selected = context.selectedId === id
-          return (
-            <li key={layer.id} style={{ '--i': index } as CSSProperties}>
-              <button
-                type="button"
-                className="arch-slab"
-                data-arch-id={id}
-                data-layer={layer.id}
-                data-state={layer.count > 0 ? 'custom' : 'default'}
-                data-selected={selected || undefined}
-                aria-expanded={selected}
-                aria-controls="arch-balloon"
-                title={layer.lines.join('\n') || 'IIS defaults'}
-                onClick={() => context.onSelect(id)}
-              >
-                <img className="arch-icon" src={assetUrl(layer.icon)} alt="" width={40} height={40} />
-                <span className="arch-slab__text">
-                  <strong>{layer.label}</strong>
-                  <small>{layer.count > 0 ? layer.lines.slice(0, 2).join(' · ') || 'Customised' : 'IIS defaults'}</small>
-                </span>
-                {layer.count > 0 && <span className="arch-slab__count">{layer.count}</span>}
-              </button>
-            </li>
-          )
-        })}
-      </ol>
       <div className="arch-gateway arch-card" data-arch-id="entry">
         <img className="arch-icon" src={assetUrl('entry-gateway')} alt="" width={48} height={48} />
         <span>
@@ -93,6 +103,38 @@ export function EntryStack({ layers, context }: { layers: LayerStat[]; context: 
           <small>http.sys · W3SVC · FTPSVC</small>
         </span>
       </div>
+
+      {entry.global.length > 0 && (
+        <section className="arch-tier" data-tier="global" data-arch-id="entry-global" aria-label="Global rules">
+          <header className="arch-tier__head">
+            <strong>Global rules</strong>
+            <small>IIS Home · applicationHost.config · evaluated before site-level rewrite rules</small>
+          </header>
+          <ol className="arch-slabs">
+            {entry.global.map((layer, index) => (
+              <Slab
+                key={layer.id}
+                layer={layer}
+                index={index}
+                archId={layer.id === 'arr-routing' ? 'entry-arr' : undefined}
+                context={context}
+              />
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <section className="arch-tier" data-tier="server" data-arch-id="entry-server" aria-label="Server-level settings">
+        <header className="arch-tier__head">
+          <strong>Server-level settings</strong>
+          <small>Inherited by every site unless the site overrides them</small>
+        </header>
+        <ol className="arch-slabs">
+          {entry.inherited.map((layer, index) => (
+            <Slab key={layer.id} layer={layer} index={index} context={context} />
+          ))}
+        </ol>
+      </section>
     </div>
   )
 }
@@ -164,10 +206,10 @@ export function SiteCard({ site, context }: { site: SiteNode; context: NodeConte
   const selected = context.selectedId === site.id
   const rows = site.tree.filter((row) => row.kind !== 'site')
   const customLayers = site.layers.filter((layer) => layer.count > 0)
-  const highlights = routingHighlights(context.architecture.target(site.id)?.changes ?? [])
-  const farmNames = site.farmIds
-    .map((id) => context.architecture.farms.find((farm) => farm.id === id)?.name)
-    .filter((name): name is string => Boolean(name))
+  const proxyRuleNames = new Set(
+    context.architecture.routes.filter((route) => route.siteId === site.id).map((route) => route.name.toLowerCase()),
+  )
+  const highlights = routingHighlights(context.architecture.target(site.id)?.changes ?? [], 2, proxyRuleNames)
 
   return (
     <article
@@ -229,7 +271,8 @@ export function SiteCard({ site, context }: { site: SiteNode; context: NodeConte
       </div>
 
       {customLayers.length > 0 && (
-        <div className="arch-site__layers" role="group" aria-label="Customised entry layers">
+        <div className="arch-site__layers" role="group" aria-label="Site-level layers">
+          <span className="arch-site__caption">Site-level layers</span>
           {customLayers.map((layer) => {
             const id = `layer:${layer.id}@${site.id}`
             const active = context.selectedId === id
@@ -267,9 +310,9 @@ export function SiteCard({ site, context }: { site: SiteNode; context: NodeConte
         </ul>
       )}
 
-      {farmNames.length > 0 && (
+      {site.routeTargets.length > 0 && (
         <p className="arch-site__farm">
-          <ArrowRight size={12} aria-hidden="true" /> Proxied to {farmNames.join(', ')} by ARR
+          <ArrowRight size={12} aria-hidden="true" /> Site-level ARR rule → {site.routeTargets.join(', ')}
         </p>
       )}
 
@@ -336,28 +379,56 @@ export function DbCard({ db, context }: { db: DbNode; context: NodeContext }) {
 
 /* ---------- ARR ---------- */
 
-const scopeLabel = (route: RouteRule, architecture: Architecture) =>
-  route.global ? 'Server rule' : architecture.sites.find((site) => site.id === route.siteId)?.name ?? route.scope
+const levelNote: Record<RouteLevel, string> = {
+  global: 'IIS Home · applicationHost.config only',
+  server: 'Rules every site inherits',
+  site: 'Scoped to this site (web.config or its location in applicationHost.config)',
+}
+
+function routeGroups(architecture: Architecture) {
+  const groups: { key: string; level: RouteLevel; title: string; routes: RouteRule[] }[] = [
+    { key: 'global', level: 'global', title: 'Global · IIS Home', routes: [] },
+    { key: 'server', level: 'server', title: 'Server · inherited by all sites', routes: [] },
+  ]
+  architecture.routes.forEach((route) => {
+    if (route.level === 'site') {
+      const name = architecture.sites.find((site) => site.id === route.siteId)?.name ?? route.scope
+      const key = route.siteId ?? route.scope
+      let group = groups.find((candidate) => candidate.key === key)
+      if (!group) {
+        group = { key, level: 'site', title: `Site · ${name}`, routes: [] }
+        groups.push(group)
+      }
+      group.routes.push(route)
+    } else {
+      groups.find((candidate) => candidate.key === route.level)?.routes.push(route)
+    }
+  })
+  return groups.filter((group) => group.routes.length > 0)
+}
 
 export function ArrRulesCard({ architecture, context }: { architecture: Architecture; context: NodeContext }) {
   const selected = context.selectedId === 'layer:arr-routing'
-  const bypass = architecture.routes.find((route) => route.global && route.catchAll && route.enabled && route.farmId)
+  const bypass = architecture.routes.find((route) => route.global && route.catchAll && route.enabled)
+  const groups = routeGroups(architecture)
   return (
     <article
       className="arch-card arch-arr"
       data-arch-id="arr-rules"
+      data-selected={selected || undefined}
       data-dim={context.lit && !context.lit.has('arr-rules') ? true : undefined}
     >
       <button
         type="button"
         className="arch-arr__head"
+        data-arch-id="layer:arr-routing"
         aria-expanded={selected}
         aria-controls="arch-balloon"
         onClick={() => context.onSelect('layer:arr-routing')}
       >
         <img className="arch-icon" src={assetUrl('layer-arr-routing')} alt="" width={44} height={44} />
         <span>
-          <strong>ARR routing</strong>
+          <strong>ARR routing rules</strong>
           <small>
             Proxy {architecture.proxyEnabled ? 'enabled' : 'disabled'} · {architecture.routes.length} rule
             {architecture.routes.length === 1 ? '' : 's'}
@@ -369,34 +440,45 @@ export function ArrRulesCard({ architecture, context }: { architecture: Architec
       </button>
       {bypass && (
         <p className="arch-arr__note" role="note">
-          <ShieldAlert size={14} aria-hidden="true" /> Catch-all rule “{bypass.name}” forwards every request to the
-          farm, so site content is bypassed.
+          <ShieldAlert size={14} aria-hidden="true" /> Global rule “{bypass.name}” matches every request without a
+          condition, so requests that reach it are proxied instead of handled by site content.
         </p>
       )}
-      <ul className="arch-routes">
-        {architecture.routes.map((route) => (
-          <li key={route.id} data-enabled={route.enabled}>
-            <div className="arch-route__flow">
-              <code title={route.pattern}>{route.pattern}</code>
-              <ArrowRight size={12} aria-hidden="true" />
-              <code title={route.target}>{route.target}</code>
-            </div>
-            <div className="arch-route__meta">
-              <span>{route.name}</span>
-              <span className="arch-origin">{scopeLabel(route, architecture)}</span>
-              {route.catchAll && <span className="arch-tag arch-tag--medium">Catch-all</span>}
-              {route.stop && <span className="arch-tag arch-tag--info">Stop</span>}
-              {!route.enabled && <span className="arch-tag arch-tag--off">Disabled</span>}
-              {route.conditions.length > 0 && (
-                <span className="arch-tag arch-tag--info" title={route.conditions.join('\n')}>
-                  {route.conditions.length} condition{route.conditions.length === 1 ? '' : 's'}
-                </span>
-              )}
-            </div>
-          </li>
-        ))}
-        {!architecture.routes.length && <li className="arch-routes__empty">No rewrite rule points at a server farm.</li>}
-      </ul>
+      {groups.map((group) => (
+        <section key={group.key} className="arch-routegroup" data-level={group.level}>
+          <h4 className="arch-routegroup__title">
+            {group.title}
+            <small>{levelNote[group.level]}</small>
+          </h4>
+          <ul className="arch-routes">
+            {group.routes.map((route) => (
+              <li key={route.id} data-enabled={route.enabled}>
+                <div className="arch-route__flow">
+                  <code title={route.pattern}>{route.pattern}</code>
+                  <ArrowRight size={12} aria-hidden="true" />
+                  <code title={route.target}>{route.target}</code>
+                </div>
+                <div className="arch-route__meta">
+                  <span>{route.name}</span>
+                  {route.catchAll && <span className="arch-tag arch-tag--medium">Catch-all</span>}
+                  {route.stop && <span className="arch-tag arch-tag--info">Stop</span>}
+                  {!route.enabled && <span className="arch-tag arch-tag--off">Disabled</span>}
+                  {route.conditions.length > 0 && (
+                    <span className="arch-tag arch-tag--info" title={route.conditions.join('\n')}>
+                      {route.conditions.length} condition{route.conditions.length === 1 ? '' : 's'}
+                    </span>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      {!groups.length && (
+        <ul className="arch-routes">
+          <li className="arch-routes__empty">No URL Rewrite rule proxies requests to a server farm or host.</li>
+        </ul>
+      )}
     </article>
   )
 }
@@ -428,6 +510,11 @@ export function FarmCard({ farm, context }: { farm: FarmNode; context: NodeConte
         <span className={`arch-chip arch-chip--${farm.enabled ? 'ok' : 'off'}`}>{farm.enabled ? 'Enabled' : 'Disabled'}</span>
       </button>
       <ChipList chips={farm.chips} />
+      {farm.routeIds.length === 0 && (
+        <p className="arch-farm__idle" role="note">
+          No URL Rewrite rule in this configuration targets this farm.
+        </p>
+      )}
       <ul className="arch-servers" aria-label={`${farm.name} servers`}>
         {farm.servers.map((server) => (
           <li key={server.address} data-enabled={server.enabled}>

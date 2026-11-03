@@ -77,6 +77,7 @@ export interface ArchitectureDiagramProps {
 
 export function ArchitectureDiagram({ architecture, webConfigs, attachments, onAttach }: ArchitectureDiagramProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [anchorId, setAnchorId] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [layout, setLayout] = useState<Layout>(EMPTY_LAYOUT)
   const [balloonSize, setBalloonSize] = useState({ width: 0, height: 0 })
@@ -88,8 +89,9 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
   const target = selectedId ? architecture.target(selectedId) : undefined
 
   const select = useCallback(
-    (id: string) => {
+    (id: string, anchor?: string) => {
       setSelectedId((current) => (current === id ? null : id))
+      setAnchorId(anchor ?? null)
       const [kind, siteKey] = id.split(':')
       if (kind === 'app' || kind === 'vdir') {
         setExpanded((current) => (current.has(`site:${siteKey}`) ? current : new Set(current).add(`site:${siteKey}`)))
@@ -151,8 +153,8 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
         related.add(edge.to)
       }
     })
-    related.add('entry')
-    related.add('client')
+    // Global rules and server-level settings apply to every request, so both tiers stay lit with the gateway.
+    ;['entry', 'entry-global', 'entry-server', 'client'].forEach((id) => related.add(id))
     edges.forEach((edge) => {
       if (related.has(edge.from) && related.has(edge.to) && edge.kind !== 'secondary') active.add(edge.id)
     })
@@ -160,7 +162,7 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
   }, [selectedId, focus, edges])
 
   const geometry = useMemo<Geometry | null>(() => {
-    const entry = layout.rects['entry']
+    const entry = layout.rects['entry-stack'] ?? layout.rects['entry']
     const first = architecture.sites.map((site) => layout.rects[site.id]).find(Boolean)
     if (!entry || !first) return null
     const busX = first.left - 30
@@ -177,7 +179,9 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
   }, [mode, edges, layout.rects, geometry])
 
   /* ---------- balloon ---------- */
-  const anchorRect = selectedId ? layout.rects[selectedId] ?? layout.rects[focus[0] ?? ''] : undefined
+  const anchorRect = selectedId
+    ? (anchorId ? layout.rects[anchorId] : undefined) ?? layout.rects[selectedId] ?? layout.rects[focus[0] ?? '']
+    : undefined
   const box: BalloonBox | null = useMemo(() => {
     if (!target || mode !== 'wide') return null
     const board = { width: layout.width, height: layout.height }
@@ -258,9 +262,9 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
   }
 
   const summary = architecture.summary
-  const layers = architecture.layers.filter(
-    (layer) => layer.id !== 'arr-routing' || layer.count > 0 || architecture.proxyEnabled || architecture.farms.length > 0,
-  )
+  const arrCount = architecture.layers.find((layer) => layer.id === 'arr-routing')?.count ?? 0
+  const showArr =
+    architecture.farms.length > 0 || architecture.routes.length > 0 || architecture.proxyEnabled || arrCount > 0
   const packets = !reduceMotion
 
   return (
@@ -270,8 +274,10 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
           <span className="eyebrow">Server architecture</span>
           <h2 id="arch-title">IIS request architecture</h2>
           <p>
-            Follow a request from the client through the entry-point layers to each site, application pool and
-            data store. Select any element to see only the settings changed from IIS defaults.
+            Follow a request from the client through the IIS entry point. Global rules and server-level settings
+            apply to the whole server; each site card then shows what that site changes on its own. Requests that a
+            URL Rewrite rule proxies through ARR go to a server farm or host instead. Select any element to see
+            only the settings changed from IIS defaults.
           </p>
         </div>
         <ul className="arch__summary" aria-label="Inventory">
@@ -339,7 +345,7 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
 
           <div className="arch__col arch__col--entry">
             <h3 className="arch__caption">Entry point</h3>
-            <EntryStack layers={layers} context={context} />
+            <EntryStack entry={architecture.entry} context={context} />
           </div>
 
           <div className="arch__col arch__col--sites">
@@ -372,9 +378,16 @@ export function ArchitectureDiagram({ architecture, webConfigs, attachments, onA
             {!databases.length && <p className="arch__empty">No connection string or state server was found.</p>}
           </div>
 
-          {architecture.farms.length > 0 && (
+          {showArr && (
             <div className="arch__lane">
-              <h3 className="arch__caption">Application Request Routing</h3>
+              <h3 className="arch__caption">Application Request Routing · server level</h3>
+              <p className="arch__lane-note">
+                ARR is an HTTP-level reverse proxy and load balancer; its Enable proxy setting is server-wide. Its routing rule
+                is a URL Rewrite rule that targets a server farm or a proxy host: usually a global rule created by the
+                farm wizard, but a rule in a site’s web.config also works and is labelled as site-level below. The
+                request still arrives through the site that matches its binding; when a rule matches, ARR proxies it
+                instead of the site’s own content handler. A server farm on its own routes nothing.
+              </p>
               <div className="arch__lane-body">
                 <ArrRulesCard architecture={architecture} context={context} />
                 <div className="arch__farms">

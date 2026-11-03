@@ -86,20 +86,57 @@ describe('IIS architecture model', () => {
     expect(sample.routes.every((route) => !route.catchAll)).toBe(true)
   })
 
+  it('tells global, server and site-level routing rules apart', () => {
+    const level = (name: string) => sample.routes.find((route) => route.name === name)?.level
+    expect(level('API gateway to commerce-api-farm')).toBe('global')
+    expect(level('Proxy archive to legacy-reports-farm')).toBe('global')
+    expect(level('Proxy v3 to commerce-api-farm')).toBe('site')
+    expect(sample.routes.find((route) => route.level === 'site')?.siteId).toBe('site:3')
+    expect(sample.sites.find((site) => site.id === 'site:3')?.routeTargets).toEqual(['commerce-api-farm'])
+    expect(sample.sites.find((site) => site.id === 'site:4')?.routeTargets).toEqual([])
+  })
+
   it('flags a catch-all global ARR rule that bypasses site content', () => {
     const parsed = parseConfigText(arrHost, 'applicationHost.config', arrHost.length, 'config-applicationhost')
     const architecture = buildArchitecture(parsed.config!.model!)
     expect(architecture.farms).toHaveLength(1)
     const route = architecture.routes[0]
     expect(route).toMatchObject({ global: true, catchAll: true, enabled: true, farmId: 'farm:back' })
+    const layerCount = (id: string) => architecture.layers.find((layer) => layer.id === id)?.count
+    expect(layerCount('url-rewrite')).toBe(0)
+    expect(layerCount('arr-routing')).toBeGreaterThan(0)
   })
 
-  it('shows a farm-less server without an ARR lane', () => {
+  it('lists farm-routing rules under ARR only, never in the rewrite layers', () => {
+    const routed = new Set(sample.routes.map((route) => route.name))
+    expect(routed.size).toBeGreaterThan(0)
+    const global = sample.target('layer:global-rules')
+    expect(global?.changes.map((change) => change.label)).toContain('Retire legacy shop host')
+    ;[global, sample.target('layer:url-rewrite'), sample.target('layer:url-rewrite@site:3')].forEach((target) => {
+      expect(target?.changes.some((change) => routed.has(change.label))).toBe(false)
+    })
+    const arr = sample.target('layer:arr-routing')
+    expect(arr?.notes.join('\n')).toMatch(/Global — Proxy archive to legacy-reports-farm/)
+    expect(arr?.notes.join('\n')).toMatch(/Site · Commerce API — Proxy v3 to commerce-api-farm/)
+  })
+
+  it('shows a farm-less server without an ARR farm lane', () => {
     const plain = arrHost.replace(/<webFarms>[\s\S]*?<\/webFarms>/, '')
     const parsed = parseConfigText(plain, 'applicationHost.config', plain.length, 'config-applicationhost')
     const architecture = buildArchitecture(parsed.config!.model!)
     expect(architecture.farms).toHaveLength(0)
     expect(architecture.proxyEnabled).toBe(true)
+    // The same global rule still proxies, now straight to a host instead of a farm.
+    expect(architecture.routes[0]).toMatchObject({ level: 'global', proxyHost: 'back', farmId: undefined })
+  })
+
+  it('does not call a conditional rule a catch-all', () => {
+    const conditional = arrHost.replace(
+      '<match url="*" />',
+      '<match url="*" /><conditions><add input="{HTTP_HOST}" pattern="^api\\." /></conditions>',
+    )
+    const parsed = parseConfigText(conditional, 'applicationHost.config', conditional.length, 'config-applicationhost')
+    expect(buildArchitecture(parsed.config!.model!).routes[0]).toMatchObject({ catchAll: false, level: 'global' })
   })
 
   it('merges connection strings that differ only by default port', () => {
@@ -129,11 +166,43 @@ describe('IIS architecture model', () => {
     expect(everything).not.toContain('synthetic-secret-for-preview')
   })
 
-  it('summarises each entry layer from the customised sites', () => {
+  it('summarises server-level layers and leaves site overrides on their own sites', () => {
     const layers = Object.fromEntries(sample.layers.map((layer) => [layer.id, layer.count]))
+    expect(layers['global-rules']).toBeGreaterThan(0)
     expect(layers['ip-restrictions']).toBeGreaterThan(0)
-    expect(layers['url-rewrite']).toBeGreaterThan(0)
     expect(layers['request-filtering']).toBeGreaterThan(0)
     expect(layers['arr-routing']).toBeGreaterThan(0)
+
+    const serverRewrite = sample.target('layer:url-rewrite')
+    expect(serverRewrite?.subtitle).toBe('Server level · inherited by every site')
+    expect(serverRewrite?.changes.some((change) => change.label === 'Block scraper user agents')).toBe(false)
+    const siteRewrite = sample.target('layer:url-rewrite@site:4')
+    expect(siteRewrite?.subtitle).toBe('Site-level layer · Reports Legacy')
+    expect(siteRewrite?.changes.some((change) => change.label === 'Block scraper user agents')).toBe(true)
+  })
+
+  it('splits the entry tiers into global rules and inherited server-level settings', () => {
+    expect(sample.entry.global.map((layer) => layer.id)).toEqual(['global-rules', 'arr-routing'])
+    expect(sample.entry.global.every((layer) => layer.scope === 'global')).toBe(true)
+    expect(sample.entry.inherited.map((layer) => layer.id)).toEqual([
+      'ip-restrictions',
+      'request-filtering',
+      'redirect',
+      'url-rewrite',
+      'authentication',
+    ])
+    expect(sample.entry.inherited.every((layer) => layer.scope === 'inherited')).toBe(true)
+    expect(sample.layers.map((layer) => layer.id).sort()).toEqual(
+      [...sample.entry.global, ...sample.entry.inherited].map((layer) => layer.id).sort(),
+    )
+  })
+
+  it('omits the global ARR slab when no global rule routes into ARR and keeps the inherited tier', () => {
+    const noGlobal = arrHost.replace(/<globalRules>[\s\S]*?<\/globalRules>/, '')
+    const parsed = parseConfigText(noGlobal, 'applicationHost.config', noGlobal.length, 'config-applicationhost')
+    const architecture = buildArchitecture(parsed.config!.model!)
+    expect(architecture.routes).toHaveLength(0)
+    expect(architecture.entry.global).toEqual([])
+    expect(architecture.entry.inherited).toHaveLength(5)
   })
 })

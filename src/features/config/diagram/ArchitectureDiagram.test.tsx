@@ -24,7 +24,8 @@ describe('ArchitectureDiagram', () => {
   it('draws the entry layers, web and FTP sites, pools and ARR farms', () => {
     renderDiagram()
     expect(screen.getByRole('list', { name: 'Inventory' })).toHaveTextContent(/3\s*web.*2\s*FTP.*\d+\s*pools.*2\s*farms/i)
-    expect(screen.getByRole('list', { name: 'Entry point layers, in request order' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Global rules' })).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Server-level settings' })).toBeInTheDocument()
     expect(screen.getAllByText(/^FTP site · ID/)).toHaveLength(2)
     expect(screen.getAllByText('commerce-api-farm').length).toBeGreaterThan(0)
     expect(screen.getAllByText('legacy-reports-farm').length).toBeGreaterThan(0)
@@ -64,6 +65,56 @@ describe('ArchitectureDiagram', () => {
     expect(picker).toHaveValue(webConfig.id)
     fireEvent.change(picker, { target: { value: '' } })
     expect(onAttach).toHaveBeenCalledWith('site:4', '')
+  })
+
+  it('separates global rules from server-level settings and keeps ARR out of the inherited layers', () => {
+    const { container } = renderDiagram()
+    const layersIn = (region: HTMLElement) =>
+      [...region.querySelectorAll<HTMLElement>('.arch-slab')].map((slab) => slab.dataset.layer)
+
+    const global = screen.getByRole('region', { name: 'Global rules' })
+    expect(layersIn(global)).toEqual(['global-rules', 'arr-routing'])
+    expect(global).toHaveTextContent(/IIS Home/)
+    expect(global).toHaveTextContent(/evaluated before site-level rewrite rules/)
+
+    const server = screen.getByRole('region', { name: 'Server-level settings' })
+    expect(layersIn(server)).toEqual(['ip-restrictions', 'request-filtering', 'redirect', 'url-rewrite', 'authentication'])
+    expect(server).toHaveTextContent(/Inherited by every site unless the site overrides them/)
+
+    // The gateway comes first and both tiers hang below it.
+    const entry = container.querySelector<HTMLElement>('.arch-entry')!
+    expect([...entry.children].map((child) => (child as HTMLElement).dataset.archId)).toEqual([
+      'entry',
+      'entry-global',
+      'entry-server',
+    ])
+  })
+
+  it('describes ARR as a server-level proxy and labels each routing rule as global or site-level', () => {
+    const { container } = renderDiagram()
+    const lane = container.querySelector<HTMLElement>('.arch__lane')!
+    expect(within(lane).getByRole('heading', { name: 'Application Request Routing · server level' })).toBeInTheDocument()
+    expect(lane).toHaveTextContent(/HTTP-level reverse proxy and load balancer/)
+    expect(lane).toHaveTextContent(/A server farm on its own routes nothing/)
+
+    expect(within(lane).getByRole('heading', { name: /Global · IIS Home/ })).toBeInTheDocument()
+    expect(within(lane).getByRole('heading', { name: /Site · Commerce API/ })).toBeInTheDocument()
+    expect(within(lane).getByText('Proxy archive to legacy-reports-farm')).toBeInTheDocument()
+    expect(within(lane).getByText('Proxy v3 to commerce-api-farm')).toBeInTheDocument()
+
+    fireEvent.click(within(lane).getByRole('button', { name: /^ARR routing rules/ }))
+    expect(screen.getByRole('dialog', { name: /ARR routing settings changed from IIS defaults/ })).toBeInTheDocument()
+  })
+
+  it('shows the site-level ARR rule on its own site and keeps the global rule off every site', () => {
+    renderDiagram()
+    const api = screen.getByRole('button', { name: /^Commerce API/ }).closest('article')!
+    expect(api).toHaveTextContent('Site-level ARR rule → commerce-api-farm')
+    expect(within(api).getByText('Site-level layers')).toBeInTheDocument()
+
+    const legacy = screen.getByRole('button', { name: /^Reports Legacy/ }).closest('article')!
+    expect(legacy).not.toHaveTextContent(/Site-level ARR rule/)
+    expect(legacy).not.toHaveTextContent('Proxy archive to legacy-reports-farm')
   })
 
   it('shows the request flow without lens tabs or client port chips', () => {

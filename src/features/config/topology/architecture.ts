@@ -17,7 +17,7 @@ import type { Change, ChainBlock } from './changes'
 import { parseConnectionString, parseStateServer, defaultDatabasePort } from './databases'
 import type { DatabaseTarget } from './databases'
 import { getLayers } from './reference'
-import type { LayerId } from './reference'
+import type { LayerId, LayerScope } from './reference'
 import type { ConfigModel, Origin, XNode } from './types'
 import { xChild, xChildren, xPath } from './xnode'
 
@@ -59,6 +59,7 @@ export interface LayerStat {
   id: LayerId
   label: string
   icon: string
+  scope: LayerScope
   count: number
   lines: string[]
 }
@@ -97,6 +98,8 @@ export interface SiteNode {
   ftp?: FtpDetails
   layers: LayerStat[]
   farmIds: string[]
+  /** Farm names or proxy hosts that this site's own rewrite rules proxy to. */
+  routeTargets: string[]
   dbIds: string[]
 }
 
@@ -122,12 +125,16 @@ export interface FarmNode {
   global: boolean
 }
 
+/** Where a rewrite rule lives: IIS Home global rules, server-level rules every site inherits, or a site, application or directory. */
+export type RouteLevel = 'global' | 'server' | 'site'
+
 export interface RouteRule {
   id: string
   name: string
   scope: string
   /** Site that owns the rule, or undefined for server-wide rules. */
   siteId?: string
+  level: RouteLevel
   global: boolean
   pattern: string
   target: string
@@ -204,8 +211,10 @@ export interface Architecture {
   routes: RouteRule[]
   databases: DbNode[]
   dbLinks: DbLink[]
-  /** Server-wide state of each entry layer, aggregated from every site. */
+  /** Server-level layers (global rules and values inherited by every site); site overrides stay on each site. */
   layers: LayerStat[]
+  /** The same server-level layers split by scope for drawing: global rules first, then inherited settings. */
+  entry: { global: LayerStat[]; inherited: LayerStat[] }
   proxyEnabled: boolean
   target: (id: string) => TargetInfo | undefined
   /** Targets that can receive an attached web.config, keyed by id with their scope path. */
@@ -308,8 +317,9 @@ function layerLines(id: LayerId, changes: Change[]): string[] {
     add('Headers', subCount('headers'))
     add('Query', subCount('query'))
     add('Options', subCount('general'))
-  } else if (id === 'url-rewrite') {
+  } else if (id === 'global-rules') {
     add('Global rules', subCount('global'))
+  } else if (id === 'url-rewrite') {
     add('Inbound rules', subCount('inbound'))
     add('Outbound rules', subCount('outbound'))
     add('Rewrite maps', subCount('maps'))
@@ -348,7 +358,14 @@ function buildLayerStats(
     const count = changes.filter((change) => change.layer === layer.id).length
     const generated = summaryOnly.includes(layer.id) ? [] : layerLines(layer.id, changes)
     const lines = [...(extra[layer.id] ?? []), ...generated]
-    return { id: layer.id, label: layer.label, icon: layer.icon, count: count + (extra[layer.id]?.length ?? 0), lines }
+    return {
+      id: layer.id,
+      label: layer.label,
+      icon: layer.icon,
+      scope: layer.scope,
+      count: count + (extra[layer.id]?.length ?? 0),
+      lines,
+    }
   })
 }
 
@@ -692,22 +709,28 @@ export function buildArchitecture(
       const host = /^https?:\/\/([^/:{?\s]+)/i.exec(url)?.[1]
       if (!host) return
       const farm = farmByName.get(host.toLowerCase())
-      const pattern = xChild(rule, 'match')?.attrs.url ?? ''
+      const match = xChild(rule, 'match')
+      const pattern = match?.attrs.url ?? ''
       const conditions = xChildren(xChild(rule, 'conditions'), 'add').map(
         (condition) => `${condition.attrs.input ?? ''} ${isTrue(condition.attrs.negate) ? '!~' : '~'} ${condition.attrs.pattern ?? ''}`,
       )
       const route: RouteRule = {
-        id: `rule:${block.scope || 'server'}:${rule.attrs.name ?? routes.length}`,
+        id: `rule:${global ? 'global' : 'rules'}:${block.scope || 'server'}:${rule.attrs.name ?? routes.length}`,
         name: rule.attrs.name ?? 'Unnamed rule',
         scope: block.scope,
         siteId: block.siteId ? `site:${block.siteId}` : undefined,
+        level: global ? 'global' : block.siteId ? 'site' : 'server',
         global,
         pattern,
         target: url,
         farmId: farm?.id,
         proxyHost: farm ? undefined : host,
         enabled: rule.attrs.enabled === undefined || isTrue(rule.attrs.enabled),
-        catchAll: /^(\*|\.\*|\(\.\*\)|\^\(\.\*\)\$?|\^\.\*\$)$/.test(pattern.trim()),
+        // Only an unconditional match-everything pattern captures every request; a condition narrows it.
+        catchAll:
+          !isTrue(match?.attrs.negate) &&
+          conditions.length === 0 &&
+          /^(\*|\.\*|\(\.\*\)|\^\(\.\*\)\$?|\^\.\*\$)$/.test(pattern.trim()),
         stop: isTrue(rule.attrs.stopProcessing),
         conditions,
       }
@@ -732,6 +755,14 @@ export function buildArchitecture(
 
   const serverChain = chainFor('')
   const proxyEnabled = isTrue(effectiveAttribute(serverChain, 'system.webServer/proxy', 'enabled'))
+
+  // A rewrite rule that targets a farm or proxy host is an ARR routing rule; the ARR lane lists it, not the URL Rewrite layers.
+  const proxyRuleNames = new Set(routes.map((route) => route.name.toLowerCase()))
+  const isProxyRuleChange = (change: Change) =>
+    change.kind === 'entry' &&
+    (change.layer === 'global-rules' || (change.layer === 'url-rewrite' && change.sub === 'inbound')) &&
+    proxyRuleNames.has(change.label.toLowerCase())
+  const withoutProxyRules = (changes: Change[]) => changes.filter((change) => !isProxyRuleChange(change))
 
   /* ---------- databases ---------- */
   const databaseNodes = new Map<string, DbNode>()
@@ -999,9 +1030,21 @@ export function buildArchitecture(
       })
     }
 
-    const siteRoutes = routes.filter((route) => route.siteId === root.id && route.farmId)
-    const farmIds = [...new Set(siteRoutes.map((route) => route.farmId as string))]
-    if (farmIds.length) chips.push({ id: 'arr', label: 'ARR route', tone: 'info', title: 'A site rule forwards requests to a server farm' })
+    const siteRoutes = routes.filter((route) => route.siteId === root.id)
+    const farmIds = [...new Set(siteRoutes.flatMap((route) => (route.farmId ? [route.farmId] : [])))]
+    const routeTargets = [
+      ...new Set(
+        siteRoutes.map((route) => farms.find((farm) => farm.id === route.farmId)?.name ?? route.proxyHost ?? route.target),
+      ),
+    ]
+    if (siteRoutes.length) {
+      chips.push({
+        id: 'arr',
+        label: 'ARR rule',
+        tone: 'info',
+        title: 'A site-level URL Rewrite rule proxies matching requests to a server farm or host through ARR',
+      })
+    }
 
     const dbIds = [...new Set(dbLinks.filter((link) => link.siteIds.includes(root.id)).map((link) => link.dbId))]
     const applications =
@@ -1034,10 +1077,11 @@ export function buildArchitecture(
               isolation: xPath(node, 'ftpServer', 'userIsolation')?.attrs.mode ?? 'None',
             }
           : undefined,
-      layers: buildLayerStats(siteLayerChanges(changes), {
-        'arr-routing': farmIds.map((farmId) => `Routes to ${farms.find((farm) => farm.id === farmId)?.name ?? farmId}`),
+      layers: buildLayerStats(withoutProxyRules(siteLayerChanges(changes)), {
+        'arr-routing': routeTargets.map((name) => `Site rule → ${name}`),
       }),
       farmIds,
+      routeTargets,
       dbIds,
     }
   })
@@ -1057,31 +1101,38 @@ export function buildArchitecture(
     : []
 
   const serverChanges = dedupe([...chainChanges(''), ...arrGlobalChanges])
-  const allSiteChanges = dedupe(
-    sites.flatMap((site) => (targetFor(site.id)?.changes ?? []).filter((change) => change.category === 'iis')),
-  )
   const allFarmChanges = farmNodes.flatMap(farmChanges)
-  const layerPool = dedupe([...serverChanges, ...allSiteChanges, ...allFarmChanges])
+  // Only server-level values: what each site overrides stays on its own card.
+  const serverLayerChanges = dedupe([...serverChanges, ...allFarmChanges])
 
-  const authSummary: string[] = []
-  const webSites = sites.filter((site) => site.kind === 'web')
-  ;[...new Set(webSites.flatMap((site) => site.auth.map((chip) => chip.label)))].forEach((label) => {
-    const count = webSites.filter((site) => site.auth.some((chip) => chip.label === label)).length
-    authSummary.push(`${label} · ${count} site${count === 1 ? '' : 's'}`)
-  })
-  const authChangeCount = layerPool.filter((change) => change.layer === 'authentication').length
+  const plural = (count: number, word: string) => `${count} ${word}${count === 1 ? '' : 's'}`
+  const routesAt = (level: RouteLevel) => routes.filter((route) => route.level === level)
+  const globalRoutes = routesAt('global')
+  const hasArr = farms.length > 0 || routes.length > 0 || proxyEnabled
+  const arrLines = [
+    ...(globalRoutes.length ? [plural(globalRoutes.length, 'global rule')] : []),
+    ...(farms.length ? [plural(farms.length, 'server farm')] : []),
+    ...(hasArr ? [proxyEnabled ? 'Proxy enabled' : 'Proxy disabled'] : []),
+    ...(routesAt('site').length ? [plural(routesAt('site').length, 'site-level rule')] : []),
+    ...(routesAt('server').length ? [plural(routesAt('server').length, 'server-level rule')] : []),
+  ]
+  const enabledAuth = IIS_AUTH_METHODS.filter((method) =>
+    isTrue(effectiveAttribute(serverChain, `${AUTH_PATH}/${method.node}`, 'enabled'), method.fallback),
+  ).map((method) => method.label)
+  const authLines = [enabledAuth.length ? `Enabled: ${enabledAuth.join(', ')}` : 'No method enabled']
+  const authChangeCount = serverLayerChanges.filter((change) => change.layer === 'authentication').length
   const layers = buildLayerStats(
-    layerPool,
-    {
-      'authentication': authSummary,
-      'arr-routing': farms.length
-        ? [`${farms.length} server farm${farms.length === 1 ? '' : 's'}`, ...(proxyEnabled ? ['Proxy enabled'] : [])]
-        : proxyEnabled
-          ? ['Proxy enabled, no farm']
-          : [],
-    },
+    withoutProxyRules(serverLayerChanges),
+    { authentication: authLines, 'arr-routing': arrLines },
     ['authentication'],
   ).map((layer) => (layer.id === 'authentication' ? { ...layer, count: authChangeCount } : layer))
+  const entry = {
+    // The ARR slab sits with the global rules only when a global rule actually routes into ARR.
+    global: layers
+      .filter((layer) => layer.scope === 'global' && (layer.id === 'arr-routing' ? globalRoutes.length > 0 : layer.count > 0))
+      .map((layer) => (layer.id === 'arr-routing' ? { ...layer, count: globalRoutes.length } : layer)),
+    inherited: layers.filter((layer) => layer.scope === 'inherited'),
+  }
 
   /* ---------- targets ---------- */
   const attachable: Record<string, string> = Object.fromEntries(containers.map((container) => [container.id, container.path]))
@@ -1201,18 +1252,35 @@ export function buildArchitecture(
       const [layerId, scopeId] = id.slice('layer:'.length).split('@')
       const definition = getLayers().find((layer) => layer.id === layerId)
       if (!definition) return undefined
-      const source = scopeId ? targetFor(scopeId)?.changes ?? [] : layerPool
       const scopeSite = scopeId ? siteById.get(scopeId) : undefined
+      const source = scopeId ? siteLayerChanges(targetFor(scopeId)?.changes ?? []) : serverLayerChanges
+      const levelName: Record<RouteLevel, string> = { global: 'Global', server: 'Server', site: 'Site' }
+      const routeNotes =
+        definition.id === 'arr-routing'
+          ? routes
+              .filter((route) => (scopeId ? route.siteId === scopeId : true))
+              .map(
+                (route) =>
+                  `${levelName[route.level]}${route.siteId ? ` · ${siteById.get(route.siteId)?.name ?? route.scope}` : ''} — ${route.name}: ${route.pattern} → ${route.target}`,
+              )
+          : []
+      const subtitle = scopeSite
+        ? `Site-level layer · ${scopeSite.name}`
+        : definition.id === 'global-rules'
+          ? 'Server level · global rules (applicationHost.config only)'
+          : definition.id === 'arr-routing'
+            ? 'Server level · ARR routing'
+            : 'Server level · inherited by every site'
       return {
         id,
         kind: 'layer',
         title: definition.label,
-        subtitle: scopeSite ? `Layer on ${scopeSite.name}` : 'Entry layer · all sites',
+        subtitle,
         urls: [],
         facts: [],
         chips: [],
-        changes: source.filter((change) => change.layer === definition.id),
-        notes: [definition.description],
+        changes: source.filter((change) => change.layer === definition.id && !isProxyRuleChange(change)),
+        notes: [definition.description, ...routeNotes],
       }
     }
     return undefined
@@ -1237,6 +1305,7 @@ export function buildArchitecture(
     databases,
     dbLinks,
     layers,
+    entry,
     proxyEnabled,
     target: targetFor,
     attachable,

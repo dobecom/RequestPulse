@@ -1,6 +1,7 @@
 import architectureXml from '../reference/architecture-reference.xml?raw'
 
 export type LayerId =
+  | 'global-rules'
   | 'ip-restrictions'
   | 'request-filtering'
   | 'redirect'
@@ -8,12 +9,16 @@ export type LayerId =
   | 'authentication'
   | 'arr-routing'
 
+/** `global` layers are server-wide rules evaluated first; `inherited` layers are server values each site may override. */
+export type LayerScope = 'global' | 'inherited'
+
 export type ChangeCategory = 'pool' | 'aspnet' | 'iis'
 
 export interface LayerDefinition {
   id: LayerId
   label: string
   order: number
+  scope: LayerScope
   icon: string
   learn: string
   description: string
@@ -47,6 +52,7 @@ const parse = () => {
       id: layer.getAttribute('id') as LayerId,
       label: layer.getAttribute('label') || '',
       order: Number(layer.getAttribute('order') || 0),
+      scope: (layer.getAttribute('scope') === 'global' ? 'global' : 'inherited') as LayerScope,
       icon: layer.getAttribute('icon') || '',
       learn: layer.getAttribute('learn') || '',
       description: layer.textContent?.trim() || '',

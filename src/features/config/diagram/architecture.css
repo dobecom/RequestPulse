@@ -262,8 +262,15 @@
   min-width: 0;
 }
 
+.arch__lane-note {
+  max-width: 78ch;
+  margin: -4px 0 0;
+  color: var(--a-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .arch__lane-body {
-  display: grid;
   grid-template-columns: minmax(250px, 1fr) minmax(0, 1.25fr);
   column-gap: 44px;
   row-gap: 14px;
@@ -705,15 +712,81 @@ button.arch-card {
 .arch-entry {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 14px;
   min-width: 0;
+}
+
+/* A tier groups the entry layers that share a scope: global rules, then settings every site inherits. */
+.arch-tier {
+  position: relative;
+  padding: 10px 10px 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #d3dbe4;
+  border-radius: 12px;
+}
+
+.arch-tier[data-tier='global'] {
+  background: linear-gradient(180deg, #f3f9ff, #eaf3fb);
+  border-color: #9cc6ea;
+}
+
+.arch-tier[data-tier='server'] {
+  border-style: dashed;
+}
+
+/* Short arrow from the previous box into this tier. */
+.arch-tier::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  background: #8aa7c4;
+  transform: translateX(-1px);
+}
+
+.arch-tier::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  border: 4px solid transparent;
+  border-top-color: #8aa7c4;
+  border-bottom-width: 0;
+  transform: translateX(-4px);
+}
+
+.arch-tier__head {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: 10px;
+}
+
+.arch-tier__head strong {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a-blue);
+}
+
+.arch-tier[data-tier='server'] .arch-tier__head strong {
+  color: var(--a-muted);
+}
+
+.arch-tier__head small {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--a-muted);
 }
 
 .arch-slabs {
   display: flex;
   flex-direction: column;
   gap: 9px;
-  margin: 0 0 14px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -755,18 +828,19 @@ button.arch-card {
   --accent: #0e7c78;
   --side: #b4e0dc;
 }
+.arch-slab[data-layer='global-rules'],
 .arch-slab[data-layer='redirect'],
 .arch-slab[data-layer='url-rewrite'] {
   --accent: #0f6cbd;
   --side: #b7d5ee;
 }
+.arch-slab[data-layer='arr-routing'] {
+  --accent: #ca5010;
+  --side: #f2cdb4;
+}
 .arch-slab[data-layer='authentication'] {
   --accent: #8764b8;
   --side: #d6c9ea;
-}
-.arch-slab[data-layer='arr-routing'] {
-  --accent: #ca5010;
-  --side: #f0cdb5;
 }
 
 .arch-slab[data-state='custom'] {
@@ -930,6 +1004,15 @@ button.arch-card {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+}
+
+.arch-site__caption {
+  flex-basis: 100%;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-muted);
 }
 
 .arch-layerchip {
@@ -1295,6 +1378,50 @@ button.arch-card {
 .arch-routes__empty {
   font-size: 12px;
   color: var(--a-muted);
+}
+
+.arch-routegroup {
+  display: grid;
+  gap: 6px;
+}
+
+.arch-routegroup + .arch-routegroup {
+  margin-top: 6px;
+}
+
+.arch-routegroup__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  margin: 0;
+  padding-left: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  border-left: 3px solid var(--a-orange);
+}
+
+.arch-routegroup[data-level='global'] .arch-routegroup__title {
+  border-left-color: var(--a-blue);
+}
+
+.arch-routegroup[data-level='server'] .arch-routegroup__title {
+  border-left-color: #8aa7c4;
+}
+
+.arch-routegroup__title small {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--a-muted);
+}
+
+.arch-farm__idle {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--a-muted);
+  background: #f3f2f1;
+  border-radius: 8px;
 }
 
 .arch-route__flow {

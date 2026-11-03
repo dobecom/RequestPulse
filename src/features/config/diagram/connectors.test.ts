@@ -65,6 +65,19 @@ describe('connector geometry', () => {
     expect(route.end).toEqual({ x: 200, y: 127 })
   })
 
+  it('drops from the wide ARR card to a farm stacked below it through the left lane', () => {
+    const rects = {
+      'arr-rules': { left: 200, top: 0, width: 600, height: 200 },
+      'farm:a': { left: 200, top: 240, width: 600, height: 160 },
+    }
+    const edge: EdgeSpec = { id: 'd', from: 'arr-rules', to: 'farm:a', kind: 'farm', style: 'drop', related: [] }
+    const route = routeEdge(edge, rects, { busX: 150, laneX: 186 })!
+    expect(route.start).toEqual({ x: 200, y: 100 })
+    expect(route.end).toEqual({ x: 200, y: 267 })
+    expect(route.d).toContain('V')
+    expect(route.d).not.toContain('C')
+  })
+
   it('does not route edges whose endpoints are not laid out yet', () => {
     const edge: EdgeSpec = { id: 'e', from: 'a', to: 'b', kind: 'site', style: 'curve', related: [] }
     expect(routeEdge(edge, { a: { left: 0, top: 0, width: 10, height: 10 } }, { busX: 0, laneX: 0 })).toBeNull()
@@ -108,12 +121,16 @@ describe('balloon placement', () => {
 })
 
 describe('diagram edges', () => {
-  it('wires the client into the entry stack and every site from the entry bus', () => {
+  const parse = (text: string) =>
+    parseConfigText(text, 'applicationHost.config', text.length, 'config-applicationhost').config!.model!
+  const withoutRewrite = (text: string) => text.replace(/<rewrite>[\s\S]*?<\/rewrite>/, '')
+
+  it('wires the client into the entry stack and every site from the server-level tier', () => {
     const edges = buildEdges(architecture)
     expect(edges[0]).toMatchObject({ from: 'client', to: 'entry-stack', related: [ALWAYS] })
-    const siteEdges = edges.filter((edge) => edge.id.startsWith('entry>site:'))
+    const siteEdges = edges.filter((edge) => edge.id.startsWith('entry-server>site:'))
     expect(siteEdges).toHaveLength(architecture.sites.length)
-    expect(siteEdges.every((edge) => !edge.muted)).toBe(true)
+    expect(siteEdges.every((edge) => edge.from === 'entry-server' && !edge.muted)).toBe(true)
     expect(new Set(edges.map((edge) => edge.id)).size).toBe(edges.length)
   })
 
@@ -126,28 +143,43 @@ describe('diagram edges', () => {
       .forEach((edge) => expect(edge.from.startsWith('pool:')).toBe(true))
   })
 
-  it('adds an ARR lane only when farms exist and links each farm', () => {
+  it('reaches ARR from the global tier and from the one site that owns a site-level rule', () => {
     const edges = buildEdges(architecture)
-    expect(edges.some((edge) => edge.id === 'entry>arr-rules')).toBe(true)
+    expect(edges.some((edge) => edge.id === 'entry-global>arr-rules' && edge.from === 'entry-global')).toBe(true)
+    expect(edges.filter((edge) => edge.style === 'lane').map((edge) => edge.from)).toEqual(['site:3'])
     architecture.farms.forEach((farm) => {
-      expect(edges.some((edge) => edge.id === `arr-rules>${farm.id}`)).toBe(true)
+      expect(edges.some((edge) => edge.id === `arr-rules>${farm.id}`)).toBe(farm.routeIds.length > 0)
     })
-    expect(edges.some((edge) => edge.style === 'lane')).toBe(true)
-
-    const noFarm = parseConfigText(
-      catchAllConfig.replace(/<webFarms>[\s\S]*?<\/webFarms>/, ''),
-      'applicationHost.config',
-      10,
-      'config-applicationhost',
-    ).config!.model!
-    expect(buildEdges(buildArchitecture(noFarm)).some((edge) => edge.kind === 'arr' || edge.kind === 'farm')).toBe(false)
   })
 
-  it('mutes the direct site wires when a catch-all rule sends everything to a farm', () => {
-    const parsed = parseConfigText(catchAllConfig, 'applicationHost.config', catchAllConfig.length, 'config-applicationhost')
-    const edges = buildEdges(buildArchitecture(parsed.config!.model!))
-    const siteEdge = edges.find((edge) => edge.id === 'entry>site:1')
-    expect(siteEdge?.muted).toBe(true)
+  it('draws no ARR wire for a farm that no rewrite rule targets', () => {
+    const edges = buildEdges(buildArchitecture(parse(withoutRewrite(catchAllConfig))))
+    expect(edges.some((edge) => edge.kind === 'arr' || edge.kind === 'farm')).toBe(false)
+  })
+
+  it('wires a global rule that proxies to a host without any server farm', () => {
+    const edges = buildEdges(buildArchitecture(parse(catchAllConfig.replace(/<webFarms>[\s\S]*?<\/webFarms>/, ''))))
+    expect(edges.some((edge) => edge.id === 'entry-global>arr-rules')).toBe(true)
+    expect(edges.some((edge) => edge.kind === 'farm')).toBe(false)
+  })
+
+  it('wires a site-level rule from its own site even when it proxies to a plain host', () => {
+    const siteRule = withoutRewrite(catchAllConfig).replace(
+      '</configuration>',
+      `<location path="Default Web Site"><system.webServer><rewrite><rules>
+        <rule name="api"><match url="^api/(.*)" /><action type="Rewrite" url="http://10.0.0.9:8080/{R:1}" /></rule>
+      </rules></rewrite></system.webServer></location></configuration>`,
+    )
+    const built = buildArchitecture(parse(siteRule))
+    expect(built.routes.map((route) => [route.level, route.proxyHost])).toEqual([['site', '10.0.0.9']])
+    const edges = buildEdges(built)
+    expect(edges.filter((edge) => edge.style === 'lane').map((edge) => edge.from)).toEqual(['site:1'])
+    expect(edges.some((edge) => edge.id === 'entry-global>arr-rules')).toBe(false)
+  })
+
+  it('mutes the direct site wires when an unconditional global rule sends everything to a farm', () => {
+    const edges = buildEdges(buildArchitecture(parse(catchAllConfig)))
+    expect(edges.find((edge) => edge.id === 'entry-server>site:1')?.muted).toBe(true)
   })
 })
 
@@ -168,6 +200,10 @@ describe('focus ids', () => {
   it('lights the site that a scoped layer belongs to and nothing for a global layer', () => {
     expect(focusIdsFor('layer:url-rewrite@site:2', architecture)).toEqual(['site:2'])
     expect(focusIdsFor('layer:url-rewrite', architecture)).toEqual([])
+  })
+
+  it('lights the ARR lane and its farms when ARR routing is selected', () => {
+    expect(focusIdsFor('layer:arr-routing', architecture)).toEqual(['arr-rules', ...architecture.farms.map((farm) => farm.id)])
   })
 
   it('lights the selected node itself otherwise', () => {

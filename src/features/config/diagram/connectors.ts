@@ -12,7 +12,7 @@ export interface BoxRect {
   height: number
 }
 
-export type EdgeStyle = 'bus' | 'curve' | 'lane'
+export type EdgeStyle = 'bus' | 'curve' | 'lane' | 'drop'
 export type EdgeKind = 'client' | 'site' | 'pool' | 'secondary' | 'database' | 'arr' | 'farm'
 
 export interface EdgeSpec {
@@ -94,9 +94,11 @@ export function routeEdge(
   const target = rects[edge.to]
   if (!hasArea(source) || !hasArea(target)) return null
   const headSource = edge.from.startsWith('site:')
-  const headTarget = edge.to.startsWith('site:') || edge.to === 'arr-rules' || edge.to === 'entry-stack'
+  const headTarget =
+    edge.to.startsWith('site:') || edge.to === 'arr-rules' || edge.to === 'entry-stack' || edge.kind === 'farm'
 
-  if (edge.style === 'lane') {
+  // Lane and drop edges both run down the left gutter; drop leaves the ARR card toward the stacked farms.
+  if (edge.style === 'lane' || edge.style === 'drop') {
     const start = edgeAnchors(source, 'left', headSource)
     const end = edgeAnchors(target, 'left', headTarget)
     return { d: elbowPath(start, end, geometry.laneX), start, end }
@@ -144,9 +146,7 @@ export function placeBalloon(
 export function buildEdges(architecture: Architecture): EdgeSpec[] {
   const poolIds = new Map(architecture.pools.map((pool) => [pool.name.toLowerCase(), pool.id]))
   const poolId = (name: string) => poolIds.get(name.toLowerCase()) ?? `pool:${name}`
-  const bypass = architecture.routes.some(
-    (route) => route.global && route.catchAll && route.enabled && route.farmId,
-  )
+  const bypass = architecture.routes.some((route) => route.global && route.catchAll && route.enabled)
 
   const edges: EdgeSpec[] = [
     { id: 'client>entry', from: 'client', to: 'entry-stack', kind: 'client', style: 'curve', related: [ALWAYS] },
@@ -154,8 +154,8 @@ export function buildEdges(architecture: Architecture): EdgeSpec[] {
 
   architecture.sites.forEach((site) => {
     edges.push({
-      id: `entry>${site.id}`,
-      from: 'entry',
+      id: `entry-server>${site.id}`,
+      from: 'entry-server',
       to: site.id,
       kind: 'site',
       style: 'bus',
@@ -187,39 +187,58 @@ export function buildEdges(architecture: Architecture): EdgeSpec[] {
     })
   })
 
-  if (architecture.farms.length) {
+  // A farm alone routes nothing: ARR is reached only through a rewrite rule, so wires follow the rules.
+  const farmIdsOf = (routes: Architecture['routes']) => [...new Set(routes.flatMap((route) => (route.farmId ? [route.farmId] : [])))]
+  const globalRoutes = architecture.routes.filter((route) => route.level === 'global')
+  if (globalRoutes.length) {
     edges.push({
-      id: 'entry>arr-rules',
-      from: 'entry',
+      id: 'entry-global>arr-rules',
+      from: 'entry-global',
       to: 'arr-rules',
       kind: 'arr',
       style: 'bus',
-      related: ['arr-rules', ...architecture.farms.map((farm) => farm.id)],
+      related: ['arr-rules', ...farmIdsOf(globalRoutes)],
     })
-    const sitesWithRules = new Set<string>()
-    architecture.routes.forEach((route) => {
-      if (!route.siteId || !route.farmId || sitesWithRules.has(`${route.siteId}>${route.farmId}`)) return
-      sitesWithRules.add(`${route.siteId}>${route.farmId}`)
-      edges.push({
-        id: `${route.siteId}>arr-rules:${route.farmId}`,
-        from: route.siteId,
-        to: 'arr-rules',
-        kind: 'arr',
-        style: 'lane',
-        related: [route.siteId, route.farmId],
-      })
+  }
+  const serverRoutes = architecture.routes.filter((route) => route.level === 'server')
+  if (serverRoutes.length) {
+    edges.push({
+      id: 'entry-server>arr-rules',
+      from: 'entry-server',
+      to: 'arr-rules',
+      kind: 'arr',
+      style: 'bus',
+      related: ['arr-rules', ...farmIdsOf(serverRoutes)],
     })
-    architecture.farms.forEach((farm) => {
+  }
+  const siteRuleEdges = new Set<string>()
+  architecture.routes.forEach((route) => {
+    const destination = route.farmId ?? route.proxyHost
+    if (route.level !== 'site' || !route.siteId || !destination) return
+    const id = `${route.siteId}>arr-rules:${destination}`
+    if (siteRuleEdges.has(id)) return
+    siteRuleEdges.add(id)
+    edges.push({
+      id,
+      from: route.siteId,
+      to: 'arr-rules',
+      kind: 'arr',
+      style: 'lane',
+      related: [route.siteId, ...(route.farmId ? [route.farmId] : [])],
+    })
+  })
+  architecture.farms
+    .filter((farm) => farm.routeIds.length > 0)
+    .forEach((farm) => {
       edges.push({
         id: `arr-rules>${farm.id}`,
         from: 'arr-rules',
         to: farm.id,
         kind: 'farm',
-        style: 'curve',
+        style: 'drop',
         related: [farm.id, 'arr-rules', ...farm.siteIds],
       })
     })
-  }
 
   return edges
 }
@@ -237,7 +256,8 @@ export function focusIdsFor(selectedId: string | null, architecture: Architectur
   }
   if (kind === 'layer') {
     const at = selectedId.indexOf('@')
-    return at >= 0 ? [selectedId.slice(at + 1)] : []
+    if (at >= 0) return [selectedId.slice(at + 1)]
+    return selectedId === 'layer:arr-routing' ? ['arr-rules', ...architecture.farms.map((farm) => farm.id)] : []
   }
   return [selectedId]
 }
